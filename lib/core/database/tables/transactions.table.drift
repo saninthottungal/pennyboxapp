@@ -1,7 +1,0 @@
--- CREATE TABLE transactions(
---     id INTEGER PRIMARY KEY,
---     account_type INTEGER REFERENCES account_types(id),
---     transaction_type INTEGER REFERENCES transaction_types(id),
---     amount NUMERIC(10,2) NOT NULL,
---     time_of_transaction DATETIME DEFAULT CURRENT_TIMESTAMP
--- );

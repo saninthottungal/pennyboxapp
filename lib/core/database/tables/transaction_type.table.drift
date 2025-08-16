@@ -1,4 +1,0 @@
-CREATE TABLE transaction_types (
-    id INTEGER PRIMARY KEY,
-    kind TEXT UNIQUE NOT NULL
-);

@@ -9,13 +9,7 @@ import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase(
-  include: {
-    'tables/transactions.table.drift',
-    'tables/transaction_type.table.drift',
-    'tables/account_type.table.drift',
-  },
-)
+@DriftDatabase()
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
