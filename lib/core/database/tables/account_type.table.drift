@@ -1,0 +1,4 @@
+CREATE TABLE account_types(
+    id INTEGER PRIMARY KEY,
+    kind TEXT UNIQUE NOT NULL
+);
