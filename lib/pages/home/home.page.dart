@@ -55,11 +55,40 @@ class HomePage extends StatelessWidget {
               ),
             ].expanded(),
           ).asSliver(),
-          const Gutter().asSliver(),
+          const Gutter.large().asSliver(),
           Text(
             "People",
-            style: context.textTheme.headlineMedium,
+            style: context.textTheme.headlineSmall,
           ).asSliver(),
+          const Gutter().asSliver(),
+          SliverGrid.builder(
+            itemCount: 8,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              childAspectRatio: 3 / 4,
+            ),
+            itemBuilder: (context, index) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CircleAvatar(
+                    radius: 32,
+                    backgroundColor: context.colorScheme.secondary,
+                    child: Icon(
+                      Icons.person_2_outlined,
+                      size: 28,
+                      color: context.colorScheme.onSecondary,
+                    ),
+                  ),
+                  const Gutter.small(),
+                  Text(
+                    "Mohamed",
+                    style: context.textTheme.labelLarge,
+                  ),
+                ],
+              );
+            },
+          ),
         ],
       ),
     );
@@ -84,7 +113,7 @@ class _QuickAction extends StatelessWidget {
           width: 64,
           decoration: ShapeDecoration(
             shape: UiConsts.shapeBoder,
-            color: context.colorScheme.secondaryContainer,
+            color: context.colorScheme.secondary,
           ),
           child: Icon(
             icon,
