@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pennyboxapp/core/theme/app_theme.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 void main() {
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ShadApp(
-      title: 'Penny Box',
+      theme: AppTheme.themeData,
       home: const MyHomePage(),
     );
   }
