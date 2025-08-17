@@ -1,0 +1,10 @@
+import 'package:flutter/material.dart';
+
+extension ContextEXT on BuildContext {
+  // Theme-related
+  ThemeData get theme => Theme.of(this);
+  TextTheme get textTheme => theme.textTheme;
+
+  /// equirevilent to [MediaQuery.sizeOf(context)]
+  Size get mdSize => MediaQuery.sizeOf(this);
+}
