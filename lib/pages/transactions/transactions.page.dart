@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:pennyboxapp/core/extensions/context.ext.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class TransactionsPage extends StatelessWidget {
+  const TransactionsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        'Home Page',
+        'Transactions',
         style: context.textTheme.bodyLarge,
       ),
     );

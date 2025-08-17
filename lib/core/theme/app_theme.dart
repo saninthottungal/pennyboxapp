@@ -8,7 +8,7 @@ class AppTheme {
   static ShadThemeData get themeData {
     return ShadThemeData(
       brightness: Brightness.dark,
-      colorScheme: ShadNeutralColorScheme.dark(),
+      colorScheme: const ShadNeutralColorScheme.dark(),
     );
   }
 }
