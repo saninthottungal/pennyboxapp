@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/pages/home/home.page.dart';
 import 'package:pennyboxapp/pages/profile/profile.page.dart';
 import 'package:pennyboxapp/pages/transactions/transactions.page.dart';
@@ -24,6 +25,7 @@ class _ShellPageState extends State<ShellPage> {
     return Scaffold(
       body: _pages[_currentIndex],
       bottomNavigationBar: NavigationBar(
+        indicatorShape: UiConsts.shapeBoder,
         selectedIndex: _currentIndex,
         onDestinationSelected: (value) {
           setState(() {
