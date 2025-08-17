@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/theme/app_theme.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -26,76 +31,52 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String? accountType;
-  String? transactionType;
-  final amountController = TextEditingController();
-  DateTime selectedDate = DateTime.now();
+  int _currentIndex = 0;
 
-  final List<String> accountTypes = ["Cash", "Bank", "Credit", "Wallet"];
-  final List<String> transactionTypes = ["Income", "Expense", "Transfer"];
-
-  void _saveTransaction() {
-    debugPrint("AccountType: $accountType");
-    debugPrint("TransactionType: $transactionType");
-    debugPrint("Amount: ${amountController.text}");
-    debugPrint("Date: $selectedDate");
-    // TODO: Insert into Drift database
-  }
+  final List<String> _pages = [
+    "Income",
+    "Expense",
+    "Profile",
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Penny Box'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Account Type Dropdown
-            ShadSelect<String>(
-              placeholder: const Text("Select Account Type"),
-              selectedOptionBuilder: (context, value) {
-                return Text(value);
-              },
-              options: accountTypes
-                  .map((type) => ShadOption(value: type, child: Text(type)))
-                  .toList(),
-              onChanged: (val) => setState(() => accountType = val),
-            ),
-            const SizedBox(height: 16),
-
-            // Transaction Type Dropdown
-            ShadSelect<String>(
-              selectedOptionBuilder: (context, value) {
-                return Text(value);
-              },
-              placeholder: const Text("Select Transaction Type"),
-              options: transactionTypes
-                  .map((type) => ShadOption(value: type, child: Text(type)))
-                  .toList(),
-              onChanged: (val) => setState(() => transactionType = val),
-            ),
-            const SizedBox(height: 16),
-
-            // Amount Input
-            ShadInput(
-              controller: amountController,
-              placeholder: const Text("Enter Amount"),
-              keyboardType: TextInputType.number,
-            ),
-            const SizedBox(height: 16),
-
-            const SizedBox(height: 24),
-
-            // Save Button
-            ShadButton(
-              onPressed: _saveTransaction,
-              child: const Text("Save Transaction"),
-            ),
-          ],
+      body: Center(
+        child: Text(
+          _pages[_currentIndex],
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
+      ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentIndex,
+        onDestinationSelected: (value) {
+          setState(() {
+            _currentIndex = value;
+          });
+        },
+        destinations: [
+          NavigationDestination(
+            icon: Icon(
+              _currentIndex == 0 ? Icons.home : Icons.home_outlined,
+            ),
+            label: "Home",
+          ),
+          NavigationDestination(
+            icon: Icon(
+              _currentIndex == 1
+                  ? Icons.receipt_rounded
+                  : Icons.receipt_outlined,
+            ),
+            label: "Transactions",
+          ),
+          NavigationDestination(
+            icon: Icon(
+              _currentIndex == 2 ? Icons.person : Icons.person_outline,
+            ),
+            label: "Profile",
+          ),
+        ],
       ),
     );
   }
