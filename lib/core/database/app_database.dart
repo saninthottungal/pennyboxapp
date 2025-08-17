@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart' as p;
 import 'package:path/path.dart';
 import 'package:pennyboxapp/core/database/app_database.steps.dart';
@@ -25,14 +26,36 @@ class AppDatabase extends _$AppDatabase {
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
-      onUpgrade: stepByStep(
-        from1To2: (m, schema) async {
-          await m.addColumn(
-            schema.transactions,
-            schema.transactions.description,
+      onUpgrade: (m, from, to) async {
+        await customStatement('PRAGMA foreign_keys = OFF');
+
+        await transaction(() async {
+          await m.runMigrationSteps(
+            from: from,
+            to: to,
+            steps: migrationSteps(
+              from1To2: (m, schema) async {
+                await m.addColumn(
+                  schema.transactions,
+                  schema.transactions.description,
+                );
+              },
+            ),
           );
-        },
-      ),
+        });
+
+        if (kDebugMode) {
+          // Fail if the migration broke foreign keys
+          final wrongForeignKeys = await customSelect(
+            'PRAGMA foreign_key_check',
+          ).get();
+          assert(
+            wrongForeignKeys.isEmpty,
+            '${wrongForeignKeys.map((e) => e.data)}',
+          );
+        }
+        await customStatement('PRAGMA foreign_keys = ON');
+      },
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
       },
