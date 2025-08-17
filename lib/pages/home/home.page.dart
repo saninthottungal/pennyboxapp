@@ -33,7 +33,7 @@ class HomePage extends StatelessWidget {
               ),
             ],
           ).asSliver(),
-          const Gutter().asSliver(),
+          const Gutter.large().asSliver(),
           Row(
             spacing: context.gutter,
             children: [
