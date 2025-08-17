@@ -4,12 +4,17 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart' as p;
 import 'package:path/path.dart';
+import 'package:pennyboxapp/core/database/tables/account_types.table.dart';
+import 'package:pennyboxapp/core/database/tables/transaction_types.table.dart';
+import 'package:pennyboxapp/core/database/tables/transactions.table.dart';
 import 'package:sqlite3/sqlite3.dart';
 import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase()
+@DriftDatabase(
+  tables: [AccountTypes, TransactionTypes, Transactions],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
