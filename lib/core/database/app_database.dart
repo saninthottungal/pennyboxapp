@@ -4,6 +4,7 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart' as p;
 import 'package:path/path.dart';
+import 'package:pennyboxapp/core/database/app_database.steps.dart';
 import 'package:pennyboxapp/core/database/tables/account_types.table.dart';
 import 'package:pennyboxapp/core/database/tables/transaction_types.table.dart';
 import 'package:pennyboxapp/core/database/tables/transactions.table.dart';
@@ -16,10 +17,24 @@ part 'app_database.g.dart';
   tables: [AccountTypes, TransactionTypes, Transactions],
 )
 class AppDatabase extends _$AppDatabase {
-  AppDatabase() : super(_openConnection());
+  AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onUpgrade: stepByStep(
+        from1To2: (m, schema) async {
+          await m.addColumn(
+            schema.transactions,
+            schema.transactions.description,
+          );
+        },
+      ),
+    );
+  }
 
   static LazyDatabase _openConnection() {
     return LazyDatabase(() async {
