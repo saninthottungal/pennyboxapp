@@ -35,23 +35,22 @@ class HomePage extends StatelessWidget {
           ).asSliver(),
           const Gutter.large().asSliver(),
           Row(
-            spacing: context.gutter,
             children: [
               const _QuickAction(
                 icon: Icons.qr_code_scanner,
-                label: 'Scan any\n QR code',
+                label: 'Scan any\nQR code',
               ),
               const _QuickAction(
                 icon: Icons.payment,
-                label: 'Pay\n anyone',
+                label: 'Pay\nanyone',
               ),
               const _QuickAction(
                 icon: Icons.account_balance,
-                label: 'Bank\n Transfer',
+                label: 'Bank\nTransfer',
               ),
               const _QuickAction(
                 icon: Icons.charging_station_outlined,
-                label: 'Mobile\n recharge',
+                label: 'Mobile\nrecharge',
               ),
             ].expanded(),
           ).asSliver(),
@@ -68,27 +67,42 @@ class HomePage extends StatelessWidget {
               childAspectRatio: 3 / 4,
             ),
             itemBuilder: (context, index) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CircleAvatar(
-                    radius: 32,
-                    backgroundColor: context.colorScheme.secondary,
-                    child: Icon(
-                      Icons.person_2_outlined,
-                      size: 28,
-                      color: context.colorScheme.onSecondary,
-                    ),
-                  ),
-                  const Gutter.small(),
-                  Text(
-                    "Mohamed",
-                    style: context.textTheme.labelLarge,
-                  ),
-                ],
+              return const _CircleAction(
+                icon: Icons.person_2_outlined,
+                label: 'Mohamed',
               );
             },
           ),
+
+          const Gutter.small().asSliver(),
+
+          Text(
+            "Bills & recharges",
+            style: context.textTheme.headlineSmall,
+          ).asSliver(),
+          const Gutter().asSliver(),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              _CircleAction(
+                icon: Icons.charging_station_outlined,
+                label: 'Mobile\nrecharge',
+              ),
+              _CircleAction(
+                icon: Icons.tv,
+                label: 'DTH / Cable\nTV',
+              ),
+              _CircleAction(
+                icon: Icons.emoji_objects_outlined,
+                label: 'Electricity',
+              ),
+              _CircleAction(
+                icon: Icons.minor_crash_outlined,
+                label: 'FASTag\nrecharge',
+              ),
+            ].expanded(),
+          ).asSliver(),
+          const Gutter.extraLarge().asSliver(),
         ],
       ),
     );
@@ -124,6 +138,40 @@ class _QuickAction extends StatelessWidget {
         const Gutter.small(),
         Text(
           label,
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+}
+
+class _CircleAction extends StatelessWidget {
+  const _CircleAction({
+    required this.icon,
+    required this.label,
+  });
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        CircleAvatar(
+          radius: 32,
+          backgroundColor: context.colorScheme.secondary,
+          child: Icon(
+            icon,
+            size: 28,
+            color: context.colorScheme.onSecondary,
+          ),
+        ),
+        const Gutter.small(),
+        Text(
+          label,
+          style: context.textTheme.labelLarge,
           textAlign: TextAlign.center,
         ),
       ],
