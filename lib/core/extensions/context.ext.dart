@@ -7,4 +7,5 @@ extension ContextEXT on BuildContext {
 
   /// equirevilent to [MediaQuery.sizeOf(context)]
   Size get mdSize => MediaQuery.sizeOf(this);
+  EdgeInsets get mdPadding => MediaQuery.paddingOf(this);
 }
