@@ -7,3 +7,8 @@ targets:
             app_database: lib/core/database/app_database.dart
           schema_dir: lib/core/database/schema/
           store_date_time_values_as_text: true
+
+      riverpod_generator:
+        options:
+          provider_name_suffix: "pod"
+          provider_family_name_suffix: "pod"
