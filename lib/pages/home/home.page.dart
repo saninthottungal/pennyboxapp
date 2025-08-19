@@ -39,18 +39,22 @@ class HomePage extends StatelessWidget {
               const _QuickAction(
                 icon: Icons.qr_code_scanner,
                 label: 'Scan any\nQR code',
+                variant: ShadButtonVariant.primary,
               ),
               const _QuickAction(
                 icon: Icons.payment,
                 label: 'Pay\nanyone',
+                variant: ShadButtonVariant.primary,
               ),
               const _QuickAction(
                 icon: Icons.account_balance,
                 label: 'Bank\nTransfer',
+                variant: ShadButtonVariant.primary,
               ),
               const _QuickAction(
                 icon: Icons.charging_station_outlined,
                 label: 'Mobile\nrecharge',
+                variant: ShadButtonVariant.primary,
               ),
             ].expanded(),
           ).asSliver(),
@@ -67,9 +71,10 @@ class HomePage extends StatelessWidget {
               childAspectRatio: 3 / 4,
             ),
             itemBuilder: (context, index) {
-              return const _CircleAction(
+              return const _QuickAction(
                 icon: Icons.person_2_outlined,
                 label: 'Mohamed',
+                variant: ShadButtonVariant.secondary,
               );
             },
           ),
@@ -84,21 +89,25 @@ class HomePage extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: const [
-              _CircleAction(
+              _QuickAction(
                 icon: Icons.charging_station_outlined,
                 label: 'Mobile\nrecharge',
+                variant: ShadButtonVariant.outline,
               ),
-              _CircleAction(
+              _QuickAction(
                 icon: Icons.tv,
                 label: 'DTH / Cable\nTV',
+                variant: ShadButtonVariant.outline,
               ),
-              _CircleAction(
+              _QuickAction(
                 icon: Icons.emoji_objects_outlined,
+                variant: ShadButtonVariant.outline,
                 label: 'Electricity',
               ),
-              _CircleAction(
+              _QuickAction(
                 icon: Icons.minor_crash_outlined,
                 label: 'FASTag\nrecharge',
+                variant: ShadButtonVariant.outline,
               ),
             ].expanded(),
           ).asSliver(),
@@ -113,65 +122,29 @@ class _QuickAction extends StatelessWidget {
   const _QuickAction({
     required this.icon,
     required this.label,
+    required this.variant,
   });
 
   final IconData icon;
   final String label;
+  final ShadButtonVariant variant;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
+        ShadIconButton.raw(
+          variant: variant,
           height: 64,
           width: 64,
-          decoration: ShapeDecoration(
-            shape: UiConsts.shapeBoder,
-            color: context.colorScheme.secondary,
-          ),
-          child: Icon(
+          icon: Icon(
             icon,
-            color: context.colorScheme.onSecondary,
             size: 30,
           ),
         ),
         const Gutter.small(),
         Text(
           label,
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
-}
-
-class _CircleAction extends StatelessWidget {
-  const _CircleAction({
-    required this.icon,
-    required this.label,
-  });
-
-  final IconData icon;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        CircleAvatar(
-          radius: 32,
-          backgroundColor: context.colorScheme.secondary,
-          child: Icon(
-            icon,
-            size: 28,
-            color: context.colorScheme.onSecondary,
-          ),
-        ),
-        const Gutter.small(),
-        Text(
-          label,
-          style: context.textTheme.labelLarge,
           textAlign: TextAlign.center,
         ),
       ],

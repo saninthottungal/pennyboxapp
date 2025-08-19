@@ -8,6 +8,19 @@ class AppTheme {
   static ShadThemeData get themeData {
     return ShadThemeData(
       brightness: Brightness.dark,
+
+      // Available Options:
+      // ShadGrayColorScheme
+      // ShadGreenColorScheme
+      // ShadNeutralColorScheme
+      // ShadOrangeColorScheme
+      // ShadRedColorScheme
+      // ShadRoseColorScheme
+      // ShadSlateColorScheme
+      // ShadStoneColorScheme
+      // ShadVioletColorScheme
+      // ShadYellowColorScheme
+      // ShadZincColorScheme
       colorScheme: const ShadNeutralColorScheme.dark(),
     );
   }
