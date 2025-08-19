@@ -16,15 +16,15 @@ class HomePage extends StatelessWidget {
         slivers: [
           SizedBox(height: context.mdPadding.top).asSliver(),
           const Gutter().asSliver(),
-          const Row(
-            children: [
+          Row(
+            spacing: context.gutter,
+            children: const [
               Expanded(
                 child: ShadCard(
                   title: Text("\$450000"),
                   description: Text("Cash"),
                 ),
               ),
-              Gutter(),
               Expanded(
                 child: ShadCard(
                   title: Text("\$64.07"),
