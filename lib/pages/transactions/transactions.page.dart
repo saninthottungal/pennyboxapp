@@ -20,7 +20,9 @@ class TransactionsPage extends StatelessWidget {
           Align(
             alignment: Alignment.centerRight,
             child: ShadIconButton(
-              onPressed: () {},
+              onPressed: () {
+                showAddSheet(context);
+              },
               icon: const Icon(Icons.add),
             ),
           ),
@@ -43,6 +45,40 @@ class TransactionsPage extends StatelessWidget {
               },
               separatorBuilder: (_, __) => const Divider(),
               itemCount: 24,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void showAddSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      useSafeArea: true,
+      isScrollControlled: true,
+      builder: (context) {
+        return const _SheetContent();
+      },
+    );
+  }
+}
+
+class _SheetContent extends StatelessWidget {
+  const _SheetContent();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: UiConsts.bodyHorizPadding,
+      child: Column(
+        children: [
+          SizedBox(height: context.gutter),
+          Align(
+            alignment: Alignment.centerRight,
+            child: ShadIconButton.outline(
+              onPressed: Navigator.of(context).pop,
+              icon: const Icon(Icons.close),
             ),
           ),
         ],
