@@ -3,12 +3,14 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path_provider/path_provider.dart' as p;
 import 'package:path/path.dart';
 import 'package:pennyboxapp/core/database/app_database.steps.dart';
 import 'package:pennyboxapp/core/database/tables/account_types.table.dart';
 import 'package:pennyboxapp/core/database/tables/transaction_types.table.dart';
 import 'package:pennyboxapp/core/database/tables/transactions.table.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqlite3/sqlite3.dart';
 import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
@@ -82,3 +84,6 @@ class AppDatabase extends _$AppDatabase {
     });
   }
 }
+
+@Riverpod(keepAlive: true)
+AppDatabase appDb(Ref ref) => AppDatabase();

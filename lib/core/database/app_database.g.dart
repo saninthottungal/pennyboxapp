@@ -399,6 +399,17 @@ class $TransactionsTable extends Transactions
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+    'description',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _accountTypeMeta = const VerificationMeta(
     'accountType',
   );
@@ -451,6 +462,7 @@ class $TransactionsTable extends Transactions
   @override
   List<GeneratedColumn> get $columns => [
     id,
+    description,
     accountType,
     transactionType,
     amount,
@@ -470,6 +482,15 @@ class $TransactionsTable extends Transactions
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
+          _descriptionMeta,
+        ),
+      );
     }
     if (data.containsKey('account_type')) {
       context.handle(
@@ -520,6 +541,10 @@ class $TransactionsTable extends Transactions
         DriftSqlType.int,
         data['${effectivePrefix}id'],
       )!,
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      ),
       accountType: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}account_type'],
@@ -547,12 +572,14 @@ class $TransactionsTable extends Transactions
 
 class Transaction extends DataClass implements Insertable<Transaction> {
   final int id;
+  final String? description;
   final int accountType;
   final int transactionType;
   final double amount;
   final DateTime createdAt;
   const Transaction({
     required this.id,
+    this.description,
     required this.accountType,
     required this.transactionType,
     required this.amount,
@@ -562,6 +589,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
     map['account_type'] = Variable<int>(accountType);
     map['transaction_type'] = Variable<int>(transactionType);
     map['amount'] = Variable<double>(amount);
@@ -572,6 +602,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   TransactionsCompanion toCompanion(bool nullToAbsent) {
     return TransactionsCompanion(
       id: Value(id),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
       accountType: Value(accountType),
       transactionType: Value(transactionType),
       amount: Value(amount),
@@ -586,6 +619,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Transaction(
       id: serializer.fromJson<int>(json['id']),
+      description: serializer.fromJson<String?>(json['description']),
       accountType: serializer.fromJson<int>(json['accountType']),
       transactionType: serializer.fromJson<int>(json['transactionType']),
       amount: serializer.fromJson<double>(json['amount']),
@@ -597,6 +631,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'description': serializer.toJson<String?>(description),
       'accountType': serializer.toJson<int>(accountType),
       'transactionType': serializer.toJson<int>(transactionType),
       'amount': serializer.toJson<double>(amount),
@@ -606,12 +641,14 @@ class Transaction extends DataClass implements Insertable<Transaction> {
 
   Transaction copyWith({
     int? id,
+    Value<String?> description = const Value.absent(),
     int? accountType,
     int? transactionType,
     double? amount,
     DateTime? createdAt,
   }) => Transaction(
     id: id ?? this.id,
+    description: description.present ? description.value : this.description,
     accountType: accountType ?? this.accountType,
     transactionType: transactionType ?? this.transactionType,
     amount: amount ?? this.amount,
@@ -620,6 +657,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   Transaction copyWithCompanion(TransactionsCompanion data) {
     return Transaction(
       id: data.id.present ? data.id.value : this.id,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
       accountType: data.accountType.present
           ? data.accountType.value
           : this.accountType,
@@ -635,6 +675,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   String toString() {
     return (StringBuffer('Transaction(')
           ..write('id: $id, ')
+          ..write('description: $description, ')
           ..write('accountType: $accountType, ')
           ..write('transactionType: $transactionType, ')
           ..write('amount: $amount, ')
@@ -644,13 +685,20 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, accountType, transactionType, amount, createdAt);
+  int get hashCode => Object.hash(
+    id,
+    description,
+    accountType,
+    transactionType,
+    amount,
+    createdAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Transaction &&
           other.id == this.id &&
+          other.description == this.description &&
           other.accountType == this.accountType &&
           other.transactionType == this.transactionType &&
           other.amount == this.amount &&
@@ -659,12 +707,14 @@ class Transaction extends DataClass implements Insertable<Transaction> {
 
 class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<int> id;
+  final Value<String?> description;
   final Value<int> accountType;
   final Value<int> transactionType;
   final Value<double> amount;
   final Value<DateTime> createdAt;
   const TransactionsCompanion({
     this.id = const Value.absent(),
+    this.description = const Value.absent(),
     this.accountType = const Value.absent(),
     this.transactionType = const Value.absent(),
     this.amount = const Value.absent(),
@@ -672,6 +722,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   });
   TransactionsCompanion.insert({
     this.id = const Value.absent(),
+    this.description = const Value.absent(),
     required int accountType,
     required int transactionType,
     required double amount,
@@ -681,6 +732,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
        amount = Value(amount);
   static Insertable<Transaction> custom({
     Expression<int>? id,
+    Expression<String>? description,
     Expression<int>? accountType,
     Expression<int>? transactionType,
     Expression<double>? amount,
@@ -688,6 +740,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (description != null) 'description': description,
       if (accountType != null) 'account_type': accountType,
       if (transactionType != null) 'transaction_type': transactionType,
       if (amount != null) 'amount': amount,
@@ -697,6 +750,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
 
   TransactionsCompanion copyWith({
     Value<int>? id,
+    Value<String?>? description,
     Value<int>? accountType,
     Value<int>? transactionType,
     Value<double>? amount,
@@ -704,6 +758,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   }) {
     return TransactionsCompanion(
       id: id ?? this.id,
+      description: description ?? this.description,
       accountType: accountType ?? this.accountType,
       transactionType: transactionType ?? this.transactionType,
       amount: amount ?? this.amount,
@@ -716,6 +771,9 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
     }
     if (accountType.present) {
       map['account_type'] = Variable<int>(accountType.value);
@@ -736,6 +794,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   String toString() {
     return (StringBuffer('TransactionsCompanion(')
           ..write('id: $id, ')
+          ..write('description: $description, ')
           ..write('accountType: $accountType, ')
           ..write('transactionType: $transactionType, ')
           ..write('amount: $amount, ')
@@ -779,6 +838,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       result: [TableUpdate('transactions', kind: UpdateKind.delete)],
     ),
   ]);
+  @override
+  DriftDatabaseOptions get options =>
+      const DriftDatabaseOptions(storeDateTimeAsText: true);
 }
 
 typedef $$AccountTypesTableCreateCompanionBuilder =
@@ -1249,6 +1311,7 @@ typedef $$TransactionTypesTableProcessedTableManager =
 typedef $$TransactionsTableCreateCompanionBuilder =
     TransactionsCompanion Function({
       Value<int> id,
+      Value<String?> description,
       required int accountType,
       required int transactionType,
       required double amount,
@@ -1257,6 +1320,7 @@ typedef $$TransactionsTableCreateCompanionBuilder =
 typedef $$TransactionsTableUpdateCompanionBuilder =
     TransactionsCompanion Function({
       Value<int> id,
+      Value<String?> description,
       Value<int> accountType,
       Value<int> transactionType,
       Value<double> amount,
@@ -1320,6 +1384,11 @@ class $$TransactionsTableFilterComposer
   });
   ColumnFilters<int> get id => $composableBuilder(
     column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get description => $composableBuilder(
+    column: $table.description,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1394,6 +1463,11 @@ class $$TransactionsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<double> get amount => $composableBuilder(
     column: $table.amount,
     builder: (column) => ColumnOrderings(column),
@@ -1462,6 +1536,11 @@ class $$TransactionsTableAnnotationComposer
   });
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<double> get amount =>
       $composableBuilder(column: $table.amount, builder: (column) => column);
@@ -1545,12 +1624,14 @@ class $$TransactionsTableTableManager
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
+                Value<String?> description = const Value.absent(),
                 Value<int> accountType = const Value.absent(),
                 Value<int> transactionType = const Value.absent(),
                 Value<double> amount = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
               }) => TransactionsCompanion(
                 id: id,
+                description: description,
                 accountType: accountType,
                 transactionType: transactionType,
                 amount: amount,
@@ -1559,12 +1640,14 @@ class $$TransactionsTableTableManager
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
+                Value<String?> description = const Value.absent(),
                 required int accountType,
                 required int transactionType,
                 required double amount,
                 Value<DateTime> createdAt = const Value.absent(),
               }) => TransactionsCompanion.insert(
                 id: id,
+                description: description,
                 accountType: accountType,
                 transactionType: transactionType,
                 amount: amount,
@@ -1666,3 +1749,27 @@ class $AppDatabaseManager {
   $$TransactionsTableTableManager get transactions =>
       $$TransactionsTableTableManager(_db, _db.transactions);
 }
+
+// **************************************************************************
+// RiverpodGenerator
+// **************************************************************************
+
+String _$appDbHash() => r'eebbbc0c259645d9635b64c13ab42313f8111da9';
+
+/// See also [appDb].
+@ProviderFor(appDb)
+final appDbpod = Provider<AppDatabase>.internal(
+  appDb,
+  name: r'appDbpod',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$appDbHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef AppDbRef = ProviderRef<AppDatabase>;
+// ignore_for_file: type=lint
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
