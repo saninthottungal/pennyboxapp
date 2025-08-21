@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:pennyboxapp/core/database/tables/account_types.table.dart';
-import 'package:pennyboxapp/core/database/tables/transaction_types.table.dart';
+import 'package:pennyboxapp/services/database/tables/account_types.table.dart';
+import 'package:pennyboxapp/services/database/tables/transaction_types.table.dart';
 
 class Transactions extends Table {
   late final id = integer()();
