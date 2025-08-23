@@ -11,41 +11,50 @@ class TransactionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: UiConsts.bodyHorizPadding,
+      padding: UiConsts.bodyHorizPadding.copyWith(
+        top: context.mdPadding.top,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: context.gutter,
         children: [
-          SizedBox(height: context.mdPadding.top),
-
+          /// Add button
           Align(
             alignment: Alignment.centerRight,
             child: ShadIconButton(
-              onPressed: () {
-                showAddSheet(context);
-              },
+              onPressed: () => _showAddSheet(context),
               icon: const Icon(Icons.add),
             ),
           ),
 
           const Divider(),
 
+          /// Title
           Text(
             "Transaction History",
             style: context.textTheme.headlineSmall,
-            textAlign: TextAlign.start,
           ),
 
+          /// List
           Expanded(
             child: ListView.separated(
               padding: EdgeInsets.zero,
+              itemCount: 24,
+              separatorBuilder: (_, __) => const Divider(),
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text("Data $index"),
+                  leading: const Icon(Icons.receipt_long),
+                  title: Text("Transaction $index"),
+                  subtitle: const Text("Some details here"),
+                  trailing: Text(
+                    "-\$${(index + 1) * 5}",
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      color: context.colorScheme.error,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 );
               },
-              separatorBuilder: (_, __) => const Divider(),
-              itemCount: 24,
             ),
           ),
         ],
@@ -53,98 +62,104 @@ class TransactionsPage extends StatelessWidget {
     );
   }
 
-  void showAddSheet(BuildContext context) {
+  void _showAddSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       useSafeArea: true,
       isScrollControlled: true,
-      builder: (context) {
-        return const _SheetContent();
-      },
+      builder: (_) => const _AddTransactionSheet(),
     );
   }
 }
 
-class _SheetContent extends StatelessWidget {
-  const _SheetContent();
+/// Bottom Sheet
+class _AddTransactionSheet extends StatelessWidget {
+  const _AddTransactionSheet();
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: UiConsts.bodyHorizPadding,
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.centerRight,
-            child: ShadIconButton.outline(
-              onPressed: Navigator.of(context).pop,
-              icon: const Icon(Icons.close),
-            ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      spacing: context.gutter,
+      children: [
+        /// Close button
+        Align(
+          alignment: Alignment.centerRight,
+          child: ShadIconButton.outline(
+            onPressed: Navigator.of(context).pop,
+            icon: const Icon(Icons.close),
           ),
-          const Gutter(),
+        ),
 
-          Text(
-            "Amount",
-            style: context.textTheme.displayLarge?.copyWith(
-              color: context.colorScheme.secondary,
-            ),
+        /// Amount text
+        Text(
+          "Amount",
+          style: context.textTheme.displayLarge?.copyWith(
+            color: context.colorScheme.secondary,
           ),
-          const Spacer(),
-          Row(
-            spacing: context.gutter,
-            children: [
-              ShadButton.outline(
-                child: Text(
-                  'AC',
-                  style: context.textTheme.bodyLarge,
-                ),
+        ),
+
+        const Spacer(),
+
+        /// Actions row
+        Row(
+          spacing: context.gutter,
+          children: [
+            ShadButton.outline(
+              onPressed: () {},
+              child: Text(
+                'AC',
+                style: context.textTheme.bodyLarge,
               ),
-              const ShadButton.outline(),
-              const ShadIconButton.outline(
-                icon: Icon(Icons.backspace_outlined),
-              ),
-            ].expanded(),
-          ),
-          const Gutter(),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: context.gutter,
-              crossAxisSpacing: context.gutter,
-              mainAxisExtent: 80,
             ),
-            itemCount: chars.length,
-            itemBuilder: (context, index) {
-              return ShadButton.raw(
-                onPressed: () {},
-                variant: index == chars.length - 1
-                    ? ShadButtonVariant.secondary
-                    : ShadButtonVariant.outline,
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: index == chars.length - 1
-                      ? const Icon(
-                          Icons.done,
-                          size: 34,
-                        )
-                      : Text(
-                          chars[index],
-                          style: context.textTheme.displayMedium?.copyWith(
-                            color: context.colorScheme.primary,
-                          ),
+            const ShadButton.outline(),
+            const ShadIconButton.outline(
+              icon: Icon(Icons.backspace_outlined),
+            ),
+          ].expanded(),
+        ),
+
+        const Gutter(),
+
+        /// Number pad
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            mainAxisSpacing: context.gutter,
+            crossAxisSpacing: context.gutter,
+            mainAxisExtent: 80,
+          ),
+          itemCount: _chars.length,
+          itemBuilder: (context, index) {
+            final char = _chars[index];
+            final isDone = index == _chars.length - 1;
+
+            return ShadButton.raw(
+              onPressed: () {},
+              variant: isDone
+                  ? ShadButtonVariant.secondary
+                  : ShadButtonVariant.outline,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: isDone
+                    ? const Icon(Icons.done, size: 34)
+                    : Text(
+                        char,
+                        style: context.textTheme.displayMedium?.copyWith(
+                          color: context.colorScheme.primary,
                         ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
+                      ),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 
-  static const chars = [
+  static const List<String> _chars = [
     '1',
     '2',
     '3',
