@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path_provider/path_provider.dart' as p;
 import 'package:path/path.dart';
 import 'package:pennyboxapp/services/database/app_database.steps.dart';
+import 'package:pennyboxapp/services/database/daos/transactions.dao.dart';
 import 'package:pennyboxapp/services/database/tables/account_types.table.dart';
 import 'package:pennyboxapp/services/database/tables/transaction_types.table.dart';
 import 'package:pennyboxapp/services/database/tables/transactions.table.dart';
@@ -18,6 +19,7 @@ part 'app_database.g.dart';
 
 @DriftDatabase(
   tables: [AccountTypes, TransactionTypes, Transactions],
+  daos: [TransactionsDao],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
