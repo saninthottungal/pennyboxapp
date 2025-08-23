@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/extensions/context.ext.dart';
+import 'package:pennyboxapp/core/extensions/widget.ext.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class TransactionsPage extends StatelessWidget {
@@ -73,7 +74,6 @@ class _SheetContent extends StatelessWidget {
       padding: UiConsts.bodyHorizPadding,
       child: Column(
         children: [
-          SizedBox(height: context.gutter),
           Align(
             alignment: Alignment.centerRight,
             child: ShadIconButton.outline(
@@ -81,8 +81,81 @@ class _SheetContent extends StatelessWidget {
               icon: const Icon(Icons.close),
             ),
           ),
+          const Gutter(),
+
+          Text(
+            "Amount",
+            style: context.textTheme.displayLarge?.copyWith(
+              color: context.colorScheme.secondary,
+            ),
+          ),
+          const Spacer(),
+          Row(
+            spacing: context.gutter,
+            children: [
+              ShadButton.outline(
+                child: Text(
+                  'AC',
+                  style: context.textTheme.bodyLarge,
+                ),
+              ),
+              const ShadButton.outline(),
+              const ShadIconButton.outline(
+                icon: Icon(Icons.backspace_outlined),
+              ),
+            ].expanded(),
+          ),
+          const Gutter(),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              mainAxisSpacing: context.gutter,
+              crossAxisSpacing: context.gutter,
+              mainAxisExtent: 80,
+            ),
+            itemCount: chars.length,
+            itemBuilder: (context, index) {
+              return ShadButton.raw(
+                onPressed: () {},
+                variant: index == chars.length - 1
+                    ? ShadButtonVariant.secondary
+                    : ShadButtonVariant.outline,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: index == chars.length - 1
+                      ? const Icon(
+                          Icons.done,
+                          size: 34,
+                        )
+                      : Text(
+                          chars[index],
+                          style: context.textTheme.displayMedium?.copyWith(
+                            color: context.colorScheme.primary,
+                          ),
+                        ),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
   }
+
+  static const chars = [
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '.',
+    '0',
+    '',
+  ];
 }
