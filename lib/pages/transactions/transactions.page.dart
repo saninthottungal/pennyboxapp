@@ -78,84 +78,89 @@ class _AddTransactionSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      spacing: context.gutter,
-      children: [
-        /// Close button
-        Align(
-          alignment: Alignment.centerRight,
-          child: ShadIconButton.outline(
-            onPressed: Navigator.of(context).pop,
-            icon: const Icon(Icons.close),
+    return Padding(
+      padding: UiConsts.bodyHorizPadding,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        spacing: context.gutter,
+        children: [
+          /// Close button
+          Align(
+            alignment: Alignment.centerRight,
+            child: ShadIconButton.outline(
+              onPressed: Navigator.of(context).pop,
+              icon: const Icon(Icons.close),
+            ),
           ),
-        ),
 
-        /// Amount text
-        Text(
-          "Amount",
-          style: context.textTheme.displayLarge?.copyWith(
-            color: context.colorScheme.secondary,
-          ),
-        ),
-
-        const Spacer(),
-
-        /// Actions row
-        Row(
-          spacing: context.gutter,
-          children: [
-            ShadButton.outline(
-              onPressed: () {},
+          /// Amount text
+          Expanded(
+            child: Center(
               child: Text(
-                'AC',
-                style: context.textTheme.bodyLarge,
+                "Amount",
+                style: context.textTheme.displayLarge?.copyWith(
+                  color: context.colorScheme.secondary,
+                ),
               ),
             ),
-            const ShadButton.outline(),
-            const ShadIconButton.outline(
-              icon: Icon(Icons.backspace_outlined),
-            ),
-          ].expanded(),
-        ),
-
-        const Gutter(),
-
-        /// Number pad
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            mainAxisSpacing: context.gutter,
-            crossAxisSpacing: context.gutter,
-            mainAxisExtent: 80,
           ),
-          itemCount: _chars.length,
-          itemBuilder: (context, index) {
-            final char = _chars[index];
-            final isDone = index == _chars.length - 1;
 
-            return ShadButton.raw(
-              onPressed: () {},
-              variant: isDone
-                  ? ShadButtonVariant.secondary
-                  : ShadButtonVariant.outline,
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: isDone
-                    ? const Icon(Icons.done, size: 34)
-                    : Text(
-                        char,
-                        style: context.textTheme.displayMedium?.copyWith(
-                          color: context.colorScheme.primary,
-                        ),
-                      ),
+          /// Actions row
+          Row(
+            spacing: context.gutter,
+            children: [
+              ShadButton.outline(
+                onPressed: () {},
+                child: Text(
+                  'AC',
+                  style: context.textTheme.bodyLarge,
+                ),
               ),
-            );
-          },
-        ),
-      ],
+              const ShadButton.outline(),
+              const ShadIconButton.outline(
+                icon: Icon(Icons.backspace_outlined),
+              ),
+            ].expanded(),
+          ),
+
+          const Gutter(),
+
+          /// Number pad
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              mainAxisSpacing: context.gutter,
+              crossAxisSpacing: context.gutter,
+              mainAxisExtent: 80,
+            ),
+            itemCount: _chars.length,
+            itemBuilder: (context, index) {
+              final char = _chars[index];
+              final isDone = index == _chars.length - 1;
+
+              return ShadButton.raw(
+                onPressed: () {},
+                variant: isDone
+                    ? ShadButtonVariant.secondary
+                    : ShadButtonVariant.outline,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: isDone
+                      ? const Icon(Icons.done, size: 34)
+                      : Text(
+                          char,
+                          style: context.textTheme.displayMedium?.copyWith(
+                            color: context.colorScheme.primary,
+                          ),
+                        ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 
