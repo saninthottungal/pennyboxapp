@@ -29,7 +29,7 @@ class SelectedAccountType extends _$SelectedAccountType {
     return null;
   }
 
-  void update(AccountType account) {
+  void update(AccountType? account) {
     state = account;
   }
 }
@@ -45,7 +45,7 @@ class SelectedTransactionType extends _$SelectedTransactionType {
     return null;
   }
 
-  void update(TransactionType account) {
+  void update(TransactionType? account) {
     state = account;
   }
 }

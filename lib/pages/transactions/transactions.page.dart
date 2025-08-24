@@ -21,13 +21,12 @@ class TransactionsPage extends StatelessWidget {
         spacing: context.gutter,
         children: [
           /// Add button
-          Row(
-            children: [
-              ShadIconButton(
-                onPressed: () => _showAddSheet(context),
-                icon: const Icon(Icons.add),
-              ),
-            ],
+          Align(
+            alignment: Alignment.centerRight,
+            child: ShadIconButton(
+              onPressed: () => _showAddSheet(context),
+              icon: const Icon(Icons.add),
+            ),
           ),
 
           const Divider(),

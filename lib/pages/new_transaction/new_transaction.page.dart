@@ -5,6 +5,8 @@ import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/extensions/context.ext.dart';
 import 'package:pennyboxapp/core/extensions/widget.ext.dart';
 import 'package:pennyboxapp/pages/new_transaction/new_transaction.logic.dart';
+import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
+import 'package:pennyboxapp/services/database/app_database.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class NewTransactionPage extends ConsumerWidget {
@@ -20,12 +22,72 @@ class NewTransactionPage extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         spacing: context.gutter,
         children: [
-          Align(
-            alignment: Alignment.centerRight,
-            child: ShadIconButton.outline(
-              onPressed: Navigator.of(context).pop,
-              icon: const Icon(Icons.close),
-            ),
+          Row(
+            spacing: context.gutter,
+            children: [
+              //* Account Types
+              Consumer(
+                builder: (context, ref, _) {
+                  final snapShot = ref.watch(accountTypespod);
+                  final selected = ref.watch(selectedAccountTypepod);
+
+                  switch (snapShot) {
+                    case AsyncValue(value: final accounts?):
+                      return DropdownButton<AccountType>(
+                        value: selected,
+                        items: accounts.map((e) {
+                          return DropdownMenuItem<AccountType>(
+                            value: e,
+                            child: Text(e.kind),
+                          );
+                        }).toList(),
+                        onChanged: ref
+                            .read(selectedAccountTypepod.notifier)
+                            .update,
+                      );
+                    case AsyncValue(error: != null):
+                      return const SizedBox.shrink();
+                    default:
+                      return const CircularProgressIndicator();
+                  }
+                },
+              ),
+
+              //* TransactionTypes
+              Consumer(
+                builder: (context, ref, _) {
+                  final snapShot = ref.watch(transactionTypespod);
+                  final selected = ref.watch(selectedTransactionTypepod);
+
+                  switch (snapShot) {
+                    case AsyncValue(value: final transaction?):
+                      return DropdownButton<TransactionType>(
+                        value: selected,
+                        items: transaction.map((e) {
+                          return DropdownMenuItem<TransactionType>(
+                            value: e,
+                            child: Text(e.kind),
+                          );
+                        }).toList(),
+                        onChanged: ref
+                            .read(selectedTransactionTypepod.notifier)
+                            .update,
+                      );
+                    case AsyncValue(error: != null):
+                      return const SizedBox.shrink();
+                    default:
+                      return const CircularProgressIndicator();
+                  }
+                },
+              ),
+
+              const Spacer(),
+
+              ShadIconButton.outline(
+                onPressed: Navigator.of(context).pop,
+                icon: const Icon(Icons.close),
+              ),
+            ],
           ),
 
           Expanded(
