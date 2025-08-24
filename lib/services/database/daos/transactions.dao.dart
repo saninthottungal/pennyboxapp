@@ -21,6 +21,14 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
     return select(transactions).watch();
   }
 
+  Stream<List<AccountType>> accountTypesStream() {
+    return select(accountTypes).watch();
+  }
+
+  Stream<List<TransactionType>> transactionTypesStream() {
+    return select(transactionTypes).watch();
+  }
+
   Future<void> addTransaction(double amount) async {
     final query = select(accountTypes)..limit(1);
     final accountType = await query.get();
