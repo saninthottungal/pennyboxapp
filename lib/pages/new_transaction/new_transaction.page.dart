@@ -29,14 +29,16 @@ class NewTransactionPage extends ConsumerWidget {
               Consumer(
                 builder: (context, ref, _) {
                   final snapShot = ref.watch(accountTypespod);
-                  final selected = ref.watch(selectedAccountTypepod);
 
                   switch (snapShot) {
                     case AsyncValue(value: final accounts?):
-                      return DropdownButton<AccountType>(
-                        value: selected,
-                        items: accounts.map((e) {
-                          return DropdownMenuItem<AccountType>(
+                      return ShadSelect<AccountType>(
+                        placeholder: const Text("Account"),
+                        selectedOptionBuilder: (context, value) {
+                          return Text(value.kind);
+                        },
+                        options: accounts.map((e) {
+                          return ShadOption(
                             value: e,
                             child: Text(e.kind),
                           );
@@ -57,14 +59,16 @@ class NewTransactionPage extends ConsumerWidget {
               Consumer(
                 builder: (context, ref, _) {
                   final snapShot = ref.watch(transactionTypespod);
-                  final selected = ref.watch(selectedTransactionTypepod);
 
                   switch (snapShot) {
-                    case AsyncValue(value: final transaction?):
-                      return DropdownButton<TransactionType>(
-                        value: selected,
-                        items: transaction.map((e) {
-                          return DropdownMenuItem<TransactionType>(
+                    case AsyncValue(value: final transactions?):
+                      return ShadSelect<TransactionType>(
+                        placeholder: const Text("Transaction"),
+                        selectedOptionBuilder: (context, value) {
+                          return Text(value.kind);
+                        },
+                        options: transactions.map((e) {
+                          return ShadOption(
                             value: e,
                             child: Text(e.kind),
                           );
