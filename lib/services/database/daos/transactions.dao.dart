@@ -29,15 +29,15 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
     return select(transactionTypes).get();
   }
 
-  Future<void> addTransaction(double amount) async {
-    final query = select(accountTypes)..limit(1);
-    final accountType = await query.get();
-    final query2 = select(transactionTypes)..limit(1);
-    final transactionType = await query2.get();
+  Future<void> addTransaction({
+    required double amount,
+    required int accountTypeId,
+    required int transactionTypeId,
+  }) async {
     final data = TransactionsCompanion.insert(
-      accountType: accountType.first.id,
-      transactionType: transactionType.first.id,
       amount: amount,
+      accountType: accountTypeId,
+      transactionType: transactionTypeId,
     );
 
     await transactions.insertOnConflictUpdate(data);

@@ -30,6 +30,7 @@ class NewTransactionPage extends ConsumerWidget {
               Consumer(
                 builder: (context, ref, _) {
                   final snapShot = ref.watch(accountTypespod);
+                  ref.watch(selectedAccountTypepod);
 
                   switch (snapShot) {
                     case AsyncValue(value: final accounts?):
@@ -60,6 +61,7 @@ class NewTransactionPage extends ConsumerWidget {
               Consumer(
                 builder: (context, ref, _) {
                   final snapShot = ref.watch(transactionTypespod);
+                  ref.watch(selectedTransactionTypepod);
 
                   switch (snapShot) {
                     case AsyncValue(value: final transactions?):
@@ -149,11 +151,31 @@ class NewTransactionPage extends ConsumerWidget {
               final isDoneBtn = index == _chars.length - 1;
 
               return ShadButton.raw(
-                onPressed: () {
+                onPressed: () async {
                   if (isDoneBtn) {
-                    // final value = ref.read(pod.notifier).state;
-                    // final amount = double.parse(value);
-                    // ref.read(appDbpod).transactionsDao.addTransaction(amount);
+                    final selectedAcc = ref.read(selectedAccountTypepod);
+                    final selectedTnType = ref.read(
+                      selectedTransactionTypepod,
+                    );
+                    final value = ref.read(newTransactionAmountpod);
+                    final amount = double.tryParse(value);
+
+                    if (selectedAcc == null ||
+                        selectedTnType == null ||
+                        amount == null ||
+                        amount == 0) {
+                      return;
+                    }
+
+                    await ref
+                        .read(appDbpod)
+                        .transactionsDao
+                        .addTransaction(
+                          amount: amount,
+                          accountTypeId: selectedAcc.id,
+                          transactionTypeId: selectedTnType.id,
+                        );
+                    if (context.mounted) Navigator.pop(context);
                   } else {
                     ref.read(pod.notifier).append(char);
                   }
