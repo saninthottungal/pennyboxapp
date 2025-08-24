@@ -16,4 +16,22 @@ part 'transactions.dao.g.dart';
 class TransactionsDao extends DatabaseAccessor<AppDatabase>
     with _$TransactionsDaoMixin {
   TransactionsDao(super.attachedDatabase);
+
+  Stream<List<Transaction>> transactionsStream() {
+    return select(transactions).watch();
+  }
+
+  Future<void> addTransaction(double amount) async {
+    final query = select(accountTypes)..limit(1);
+    final accountType = await query.get();
+    final query2 = select(transactionTypes)..limit(1);
+    final transactionType = await query2.get();
+    final data = TransactionsCompanion.insert(
+      accountType: accountType.first.id,
+      transactionType: transactionType.first.id,
+      amount: amount,
+    );
+
+    await transactions.insertOnConflictUpdate(data);
+  }
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/extensions/context.ext.dart';
 import 'package:pennyboxapp/core/extensions/widget.ext.dart';
+import 'package:pennyboxapp/services/database/app_database.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class TransactionsPage extends StatelessWidget {
@@ -37,22 +40,34 @@ class TransactionsPage extends StatelessWidget {
 
           /// List
           Expanded(
-            child: ListView.separated(
-              padding: EdgeInsets.zero,
-              itemCount: 24,
-              separatorBuilder: (_, __) => const Divider(),
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: const Icon(Icons.receipt_long),
-                  title: Text("Transaction $index"),
-                  subtitle: const Text("Some details here"),
-                  trailing: Text(
-                    "-\$${(index + 1) * 5}",
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      color: context.colorScheme.error,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+            child: Consumer(
+              builder: (context, ref, child) {
+                final transactions = ref.watch(transactionsPod).valueOrNull;
+
+                if (transactions == null) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                return ListView.separated(
+                  padding: EdgeInsets.zero,
+                  itemCount: transactions.length,
+                  separatorBuilder: (_, __) => const Divider(),
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      leading: const Icon(Icons.receipt_long),
+                      title: Text("Transaction $index"),
+                      subtitle: const Text("Some details here"),
+                      trailing: Text(
+                        "-\$${(index + 1) * 5}",
+                        style: context.textTheme.bodyMedium?.copyWith(
+                          color: context.colorScheme.error,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             ),
@@ -73,11 +88,11 @@ class TransactionsPage extends StatelessWidget {
 }
 
 /// Bottom Sheet
-class _AddTransactionSheet extends StatelessWidget {
+class _AddTransactionSheet extends ConsumerWidget {
   const _AddTransactionSheet();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: UiConsts.bodyHorizPadding,
       child: Column(
@@ -96,11 +111,17 @@ class _AddTransactionSheet extends StatelessWidget {
           /// Amount text
           Expanded(
             child: Center(
-              child: Text(
-                "Amount",
-                style: context.textTheme.displayLarge?.copyWith(
-                  color: context.colorScheme.secondary,
-                ),
+              child: Consumer(
+                builder: (context, ref, child) {
+                  final amount = ref.watch(amountPod);
+
+                  return Text(
+                    amount.isEmpty ? "Amount" : amount,
+                    style: context.textTheme.displayLarge?.copyWith(
+                      color: context.colorScheme.secondary,
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -138,16 +159,25 @@ class _AddTransactionSheet extends StatelessWidget {
             itemCount: _chars.length,
             itemBuilder: (context, index) {
               final char = _chars[index];
-              final isDone = index == _chars.length - 1;
+              final isDoneBtn = index == _chars.length - 1;
 
               return ShadButton.raw(
-                onPressed: () {},
-                variant: isDone
+                onPressed: () {
+                  if (isDoneBtn) {
+                    final value = ref.read(amountPod.notifier).state;
+                    final amount = double.parse(value);
+                    ref.read(appDbpod).transactionsDao.addTransaction(amount);
+                  } else {
+                    final pod = ref.read(amountPod.notifier);
+                    pod.state = '${pod.state}$char';
+                  }
+                },
+                variant: isDoneBtn
                     ? ShadButtonVariant.secondary
                     : ShadButtonVariant.outline,
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
-                  child: isDone
+                  child: isDoneBtn
                       ? const Icon(Icons.done, size: 34)
                       : Text(
                           char,
@@ -179,3 +209,12 @@ class _AddTransactionSheet extends StatelessWidget {
     '',
   ];
 }
+
+final transactionsPod = StreamProvider((ref) {
+  final db = ref.watch(appDbpod);
+  return db.transactionsDao.transactionsStream();
+});
+
+final amountPod = StateProvider((ref) {
+  return '';
+});

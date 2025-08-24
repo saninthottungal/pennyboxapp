@@ -63,13 +63,32 @@ class AppDatabase extends _$AppDatabase {
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
       },
+      onCreate: (m) async {
+        await m.createAll();
+
+        await batch((batch) {
+          batch.insert(
+            accountTypes,
+            AccountTypesCompanion.insert(kind: 'Cash'),
+          );
+
+          batch.insertAll(
+            transactionTypes,
+            [
+              TransactionTypesCompanion.insert(kind: 'Income'),
+              TransactionTypesCompanion.insert(kind: 'Expense'),
+              TransactionTypesCompanion.insert(kind: 'Transfer'),
+            ],
+          );
+        });
+      },
     );
   }
 
   static LazyDatabase _openConnection() {
     return LazyDatabase(() async {
       final dbFolder = await p.getApplicationDocumentsDirectory();
-      final file = File(join(dbFolder.path, 'db.sqlite'));
+      final file = File(join(dbFolder.path, 'pennyboxdb.sqlite'));
       // Also work around limitations on old Android versions
 
       if (Platform.isAndroid) {
