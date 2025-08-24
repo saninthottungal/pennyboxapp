@@ -54,14 +54,15 @@ class TransactionsPage extends StatelessWidget {
                   itemCount: transactions.length,
                   separatorBuilder: (_, __) => const Divider(),
                   itemBuilder: (context, index) {
+                    final transaction = transactions[index];
+
                     return ListTile(
                       leading: const Icon(Icons.receipt_long),
-                      title: Text("Transaction $index"),
-                      subtitle: const Text("Some details here"),
+                      title: Text(transaction.id.toString()),
                       trailing: Text(
-                        "-\$${(index + 1) * 5}",
+                        '\$${transaction.amount}',
                         style: context.textTheme.bodyMedium?.copyWith(
-                          color: context.colorScheme.error,
+                          color: Colors.lightGreen,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
