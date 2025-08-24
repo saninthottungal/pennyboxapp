@@ -10,3 +10,10 @@ Stream<List<TransactionType>> transactionTypes(Ref ref) {
 
   return db.transactionsDao.transactionTypesStream();
 }
+
+@riverpod
+Stream<List<AccountType>> accountTypes(Ref ref) {
+  final db = ref.watch(appDbpod);
+
+  return db.transactionsDao.accountTypesStream();
+}
