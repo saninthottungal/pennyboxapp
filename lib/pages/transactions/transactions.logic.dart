@@ -1,3 +1,4 @@
+import 'package:pennyboxapp/pages/transactions/transactions.page.dart';
 import 'package:pennyboxapp/services/database/app_database.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -22,11 +23,9 @@ Future<List<AccountType>> accountTypes(Ref ref) {
 class SelectedAccountType extends _$SelectedAccountType {
   @override
   AccountType? build() {
-    ref.watch(accountTypespod).whenData((data) {
-      state = data.firstOrNull;
-    });
+    final transactions = ref.watch(transactionsPod).value;
 
-    return null;
+    return transactions?.firstOrNull?.account;
   }
 
   void update(AccountType? account) {
@@ -38,11 +37,9 @@ class SelectedAccountType extends _$SelectedAccountType {
 class SelectedTransactionType extends _$SelectedTransactionType {
   @override
   TransactionType? build() {
-    ref.watch(transactionTypespod).whenData((data) {
-      state = data.firstOrNull;
-    });
+    final transactions = ref.watch(transactionsPod).value;
 
-    return null;
+    return transactions?.firstOrNull?.transactionType;
   }
 
   void update(TransactionType? account) {

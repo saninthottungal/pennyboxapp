@@ -30,11 +30,12 @@ class NewTransactionPage extends ConsumerWidget {
               Consumer(
                 builder: (context, ref, _) {
                   final snapShot = ref.watch(accountTypespod);
-                  ref.watch(selectedAccountTypepod);
+                  final selected = ref.watch(selectedAccountTypepod);
 
                   switch (snapShot) {
                     case AsyncValue(value: final accounts?):
                       return ShadSelect<AccountType>(
+                        initialValue: selected,
                         placeholder: const Text("Account"),
                         selectedOptionBuilder: (context, value) {
                           return Text(value.kind);
@@ -61,11 +62,12 @@ class NewTransactionPage extends ConsumerWidget {
               Consumer(
                 builder: (context, ref, _) {
                   final snapShot = ref.watch(transactionTypespod);
-                  ref.watch(selectedTransactionTypepod);
+                  final selected = ref.watch(selectedTransactionTypepod);
 
                   switch (snapShot) {
                     case AsyncValue(value: final transactions?):
                       return ShadSelect<TransactionType>(
+                        initialValue: selected,
                         placeholder: const Text("Transaction"),
                         selectedOptionBuilder: (context, value) {
                           return Text(value.kind);
