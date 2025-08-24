@@ -18,7 +18,12 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
   TransactionsDao(super.attachedDatabase);
 
   Stream<List<Transaction>> transactionsStream() {
-    return select(transactions).watch();
+    final query = select(transactions)
+      ..orderBy([
+        (t) => OrderingTerm.desc(t.createdAt),
+      ]);
+
+    return query.watch();
   }
 
   Future<List<AccountType>> getAccountTypes() {
