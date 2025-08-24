@@ -5,15 +5,47 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 part 'transactions.logic.g.dart';
 
 @riverpod
-Stream<List<TransactionType>> transactionTypes(Ref ref) {
+Future<List<TransactionType>> transactionTypes(Ref ref) {
   final db = ref.watch(appDbpod);
 
-  return db.transactionsDao.transactionTypesStream();
+  return db.transactionsDao.geTransactionTypes();
 }
 
 @riverpod
-Stream<List<AccountType>> accountTypes(Ref ref) {
+Future<List<AccountType>> accountTypes(Ref ref) {
   final db = ref.watch(appDbpod);
 
-  return db.transactionsDao.accountTypesStream();
+  return db.transactionsDao.getAccountTypes();
+}
+
+@riverpod
+class SelectedAccountType extends _$SelectedAccountType {
+  @override
+  AccountType? build() {
+    ref.watch(accountTypespod).whenData((data) {
+      state = data.firstOrNull;
+    });
+
+    return null;
+  }
+
+  void update(AccountType account) {
+    state = account;
+  }
+}
+
+@riverpod
+class SelectedTransactionType extends _$SelectedTransactionType {
+  @override
+  TransactionType? build() {
+    ref.watch(transactionTypespod).whenData((data) {
+      state = data.firstOrNull;
+    });
+
+    return null;
+  }
+
+  void update(TransactionType account) {
+    state = account;
+  }
 }
