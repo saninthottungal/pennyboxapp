@@ -10,7 +10,7 @@ class Transaction {
     required this.description,
   });
 
-  final String id;
+  final int id;
   final double amount;
   final String? description;
   final AccountType account;
