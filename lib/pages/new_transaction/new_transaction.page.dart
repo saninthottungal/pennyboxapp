@@ -22,6 +22,7 @@ class NewTransactionPage extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         spacing: context.gutter,
         children: [
+          const Gutter(),
           Row(
             spacing: context.gutter,
             children: [
