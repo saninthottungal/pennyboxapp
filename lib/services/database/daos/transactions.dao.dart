@@ -17,11 +17,12 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
     with _$TransactionsDaoMixin {
   TransactionsDao(super.attachedDatabase);
 
-  Stream<List<Transaction>> transactionsStream() {
+  Stream<List<TransactionRaw>> transactionsStream() {
     final query = select(transactions)
       ..orderBy([
         (t) => OrderingTerm.desc(t.createdAt),
-      ]);
+      ])
+      ..join([]);
 
     return query.watch();
   }
@@ -39,7 +40,7 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
     required int accountTypeId,
     required int transactionTypeId,
   }) async {
-    final data = TransactionsCompanion.insert(
+    final data = TransactionRawCompanion.insert(
       amount: amount,
       accountType: accountTypeId,
       transactionType: transactionTypeId,
