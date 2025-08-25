@@ -34,16 +34,16 @@ class NewTransactionPage extends ConsumerWidget {
 
                   switch (snapShot) {
                     case AsyncValue(value: final accounts?):
-                      return ShadSelect<AccountType>(
+                      return ShadSelect<Account>(
                         initialValue: selected,
                         placeholder: const Text("Account"),
                         selectedOptionBuilder: (context, value) {
-                          return Text(value.kind);
+                          return Text(value.name);
                         },
                         options: accounts.map((e) {
                           return ShadOption(
                             value: e,
-                            child: Text(e.kind),
+                            child: Text(e.name),
                           );
                         }).toList(),
                         onChanged: ref

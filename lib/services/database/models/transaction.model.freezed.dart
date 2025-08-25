@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Transaction {
 
- int get id; double get amount; String? get description; AccountType get account; TransactionType get transactionType; DateTime get createdAt;
+ int get id; double get amount; String? get description; Account get account; TransactionType get transactionType; DateTime get createdAt;
 /// Create a copy of Transaction
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $TransactionCopyWith<$Res>  {
   factory $TransactionCopyWith(Transaction value, $Res Function(Transaction) _then) = _$TransactionCopyWithImpl;
 @useResult
 $Res call({
- int id, double amount, String? description, AccountType account, TransactionType transactionType, DateTime createdAt
+ int id, double amount, String? description, Account account, TransactionType transactionType, DateTime createdAt
 });
 
 
@@ -68,7 +68,7 @@ id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as double,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,account: freezed == account ? _self.account : account // ignore: cast_nullable_to_non_nullable
-as AccountType,transactionType: freezed == transactionType ? _self.transactionType : transactionType // ignore: cast_nullable_to_non_nullable
+as Account,transactionType: freezed == transactionType ? _self.transactionType : transactionType // ignore: cast_nullable_to_non_nullable
 as TransactionType,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
@@ -155,7 +155,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  double amount,  String? description,  AccountType account,  TransactionType transactionType,  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  double amount,  String? description,  Account account,  TransactionType transactionType,  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Transaction() when $default != null:
 return $default(_that.id,_that.amount,_that.description,_that.account,_that.transactionType,_that.createdAt);case _:
@@ -176,7 +176,7 @@ return $default(_that.id,_that.amount,_that.description,_that.account,_that.tran
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  double amount,  String? description,  AccountType account,  TransactionType transactionType,  DateTime createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  double amount,  String? description,  Account account,  TransactionType transactionType,  DateTime createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _Transaction():
 return $default(_that.id,_that.amount,_that.description,_that.account,_that.transactionType,_that.createdAt);case _:
@@ -196,7 +196,7 @@ return $default(_that.id,_that.amount,_that.description,_that.account,_that.tran
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  double amount,  String? description,  AccountType account,  TransactionType transactionType,  DateTime createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  double amount,  String? description,  Account account,  TransactionType transactionType,  DateTime createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Transaction() when $default != null:
 return $default(_that.id,_that.amount,_that.description,_that.account,_that.transactionType,_that.createdAt);case _:
@@ -217,7 +217,7 @@ class _Transaction implements Transaction {
 @override final  int id;
 @override final  double amount;
 @override final  String? description;
-@override final  AccountType account;
+@override final  Account account;
 @override final  TransactionType transactionType;
 @override final  DateTime createdAt;
 
@@ -251,7 +251,7 @@ abstract mixin class _$TransactionCopyWith<$Res> implements $TransactionCopyWith
   factory _$TransactionCopyWith(_Transaction value, $Res Function(_Transaction) _then) = __$TransactionCopyWithImpl;
 @override @useResult
 $Res call({
- int id, double amount, String? description, AccountType account, TransactionType transactionType, DateTime createdAt
+ int id, double amount, String? description, Account account, TransactionType transactionType, DateTime createdAt
 });
 
 
@@ -274,7 +274,7 @@ id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as double,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,account: freezed == account ? _self.account : account // ignore: cast_nullable_to_non_nullable
-as AccountType,transactionType: freezed == transactionType ? _self.transactionType : transactionType // ignore: cast_nullable_to_non_nullable
+as Account,transactionType: freezed == transactionType ? _self.transactionType : transactionType // ignore: cast_nullable_to_non_nullable
 as TransactionType,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));

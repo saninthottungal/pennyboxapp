@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart' as p;
 import 'package:path/path.dart';
 import 'package:pennyboxapp/services/database/app_database.steps.dart';
 import 'package:pennyboxapp/services/database/daos/transactions.dao.dart';
-import 'package:pennyboxapp/services/database/tables/account_types.table.dart';
+import 'package:pennyboxapp/services/database/tables/accounts.table.dart';
 import 'package:pennyboxapp/services/database/tables/transaction_types.table.dart';
 import 'package:pennyboxapp/services/database/tables/transactions.table.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -18,7 +18,7 @@ import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 part 'app_database.g.dart';
 
 @DriftDatabase(
-  tables: [AccountTypes, TransactionTypes, Transactions],
+  tables: [Accounts, TransactionTypes, Transactions],
   daos: [TransactionsDao],
 )
 class AppDatabase extends _$AppDatabase {
@@ -68,8 +68,8 @@ class AppDatabase extends _$AppDatabase {
 
         await batch((batch) {
           batch.insert(
-            accountTypes,
-            AccountTypesCompanion.insert(kind: 'Cash'),
+            accounts,
+            AccountsCompanion.insert(name: 'Cash'),
           );
 
           batch.insertAll(

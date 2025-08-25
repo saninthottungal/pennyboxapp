@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:pennyboxapp/services/database/app_database.dart';
 import 'package:pennyboxapp/services/database/models/transaction.model.dart';
-import 'package:pennyboxapp/services/database/tables/account_types.table.dart';
+import 'package:pennyboxapp/services/database/tables/accounts.table.dart';
 import 'package:pennyboxapp/services/database/tables/transaction_types.table.dart';
 import 'package:pennyboxapp/services/database/tables/transactions.table.dart';
 
@@ -9,7 +9,7 @@ part 'transactions.dao.g.dart';
 
 @DriftAccessor(
   tables: [
-    AccountTypes,
+    Accounts,
     TransactionTypes,
     Transactions,
   ],
@@ -22,8 +22,8 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
     final query =
         select(transactions).join([
           innerJoin(
-            accountTypes,
-            accountTypes.id.equalsExp(transactions.accountType),
+            accounts,
+            accounts.id.equalsExp(transactions.accountType),
           ),
           innerJoin(
             transactionTypes,
@@ -42,15 +42,15 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
           amount: t.amount,
           createdAt: t.createdAt,
           description: t.description,
-          account: row.readTable(accountTypes),
+          account: row.readTable(accounts),
           transactionType: row.readTable(transactionTypes),
         );
       }).toList();
     });
   }
 
-  Future<List<AccountType>> getAccountTypes() {
-    return select(accountTypes).get();
+  Future<List<Account>> getAccountTypes() {
+    return select(accounts).get();
   }
 
   Future<List<TransactionType>> geTransactionTypes() {
