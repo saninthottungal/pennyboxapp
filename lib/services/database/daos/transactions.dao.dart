@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:pennyboxapp/services/database/app_database.dart';
+import 'package:pennyboxapp/services/database/models/account_with_balance.model.dart';
 import 'package:pennyboxapp/services/database/models/transaction.model.dart';
 import 'package:pennyboxapp/services/database/tables/accounts.table.dart';
 import 'package:pennyboxapp/services/database/tables/transaction_types.table.dart';
@@ -89,7 +90,15 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
     await transactions.insertOnConflictUpdate(data);
   }
 
-  Future<void> getAccountBalances() async {
-    await queryGetAccountBalances().watch();
+  Future<Stream<List<AccountwBalance>>> getAccountBalances() async {
+    return queryGetAccountBalances().watch().map((accounts) {
+      return accounts.map((e) {
+        return AccountwBalance(
+          id: e.id,
+          accountName: e.name,
+          balance: e.balance ?? 0,
+        );
+      }).toList();
+    });
   }
 }
