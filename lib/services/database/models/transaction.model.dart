@@ -1,19 +1,16 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:pennyboxapp/services/database/app_database.dart';
 
-class Transaction {
-  Transaction({
-    required this.id,
-    required this.amount,
-    required this.account,
-    required this.transactionType,
-    required this.createdAt,
-    required this.description,
-  });
+part 'transaction.model.freezed.dart';
 
-  final int id;
-  final double amount;
-  final String? description;
-  final AccountType account;
-  final TransactionType transactionType;
-  final DateTime createdAt;
+@freezed
+sealed class Transaction with _$Transaction {
+  const factory Transaction({
+    required int id,
+    required double amount,
+    String? description,
+    required AccountType account,
+    required TransactionType transactionType,
+    required DateTime createdAt,
+  }) = _Transaction;
 }
