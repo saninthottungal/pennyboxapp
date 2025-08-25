@@ -13,6 +13,24 @@ part 'transactions.dao.g.dart';
     TransactionTypes,
     Transactions,
   ],
+  queries: {
+    'queryGetAccountBalances': ''' 
+     SELECT 
+     AC.id,
+     AC.name,
+     SUM(CASE WHEN AC.id = 1 THEN T.amount ELSE 0 END) - 
+     SUM(CASE WHEN AC.id != 1 THEN T.amount ELSE 0 END) as balance
+     
+     FROM transactions AS T
+     JOIN
+     accounts as AC
+     ON T.account_id = AC.id
+     JOIN
+     transaction_types as TY
+     ON T.transaction_type_id = TY.id
+     GROUP BY AC.id;
+    ''',
+  },
 )
 class TransactionsDao extends DatabaseAccessor<AppDatabase>
     with _$TransactionsDaoMixin {
@@ -69,5 +87,9 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
     );
 
     await transactions.insertOnConflictUpdate(data);
+  }
+
+  Future<void> getAccountBalances() async {
+    await queryGetAccountBalances().watch();
   }
 }

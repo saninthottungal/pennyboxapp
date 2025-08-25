@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/extensions/context.ext.dart';
 import 'package:pennyboxapp/core/extensions/widget.ext.dart';
+import 'package:pennyboxapp/services/database/app_database.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class HomePage extends StatelessWidget {
@@ -18,14 +20,23 @@ class HomePage extends StatelessWidget {
           const Gutter().asSliver(),
           Row(
             spacing: context.gutter,
-            children: const [
+            children: [
               Expanded(
-                child: ShadCard(
-                  title: Text("\$450000"),
-                  description: Text("Cash"),
+                child: Consumer(
+                  builder: (context, ref, child) {
+                    return GestureDetector(
+                      onTap: () {
+                        ref.read(appDbpod).transactionsDao.getAccountBalances();
+                      },
+                      child: const ShadCard(
+                        title: Text("\$450000"),
+                        description: Text("Cash"),
+                      ),
+                    );
+                  },
                 ),
               ),
-              Expanded(
+              const Expanded(
                 child: ShadCard(
                   title: Text("\$64.07"),
                   description: Text("SANIN T"),
