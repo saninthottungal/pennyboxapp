@@ -90,7 +90,7 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
     await transactions.insertOnConflictUpdate(data);
   }
 
-  Future<Stream<List<AccountwBalance>>> getAccountBalances() async {
+  Stream<List<AccountwBalance>> getAccountBalances() {
     return queryGetAccountBalances().watch().map((accounts) {
       return accounts.map((e) {
         return AccountwBalance(

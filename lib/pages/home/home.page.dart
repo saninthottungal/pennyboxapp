@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/extensions/context.ext.dart';
 import 'package:pennyboxapp/core/extensions/widget.ext.dart';
-import 'package:pennyboxapp/services/database/app_database.dart';
+import 'package:pennyboxapp/pages/home/home.logic.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class HomePage extends StatelessWidget {
@@ -18,31 +18,27 @@ class HomePage extends StatelessWidget {
         slivers: [
           SizedBox(height: context.mdPadding.top).asSliver(),
           const Gutter().asSliver(),
-          Row(
-            spacing: context.gutter,
-            children: [
-              Expanded(
-                child: Consumer(
-                  builder: (context, ref, child) {
-                    return GestureDetector(
-                      onTap: () {
-                        ref.read(appDbpod).transactionsDao.getAccountBalances();
-                      },
-                      child: const ShadCard(
-                        title: Text("\$450000"),
-                        description: Text("Cash"),
+          Consumer(
+            builder: (context, ref, child) {
+              final balances = ref.watch(getAccountBalancespod).value;
+              if (balances == null) {
+                //TODO: make A good loading UI
+                return const CircularProgressIndicator();
+              }
+
+              return Row(
+                spacing: context.gutter,
+                children: [
+                  for (final e in balances)
+                    Expanded(
+                      child: ShadCard(
+                        title: Text("\$${e.balance}"),
+                        description: Text(e.accountName),
                       ),
-                    );
-                  },
-                ),
-              ),
-              const Expanded(
-                child: ShadCard(
-                  title: Text("\$64.07"),
-                  description: Text("SANIN T"),
-                ),
-              ),
-            ],
+                    ),
+                ],
+              );
+            },
           ).asSliver(),
           const Gutter.large().asSliver(),
           Row(
