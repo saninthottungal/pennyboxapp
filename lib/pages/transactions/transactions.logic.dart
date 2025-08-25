@@ -1,5 +1,5 @@
-import 'package:pennyboxapp/pages/transactions/transactions.page.dart';
 import 'package:pennyboxapp/services/database/app_database.dart';
+import 'package:pennyboxapp/services/database/models/transaction.model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -23,7 +23,7 @@ Future<List<AccountType>> accountTypes(Ref ref) {
 class SelectedAccountType extends _$SelectedAccountType {
   @override
   AccountType? build() {
-    final transactions = ref.watch(transactionsPod).value;
+    final transactions = ref.watch(transactionspod).value;
 
     return transactions?.firstOrNull?.account;
   }
@@ -37,7 +37,7 @@ class SelectedAccountType extends _$SelectedAccountType {
 class SelectedTransactionType extends _$SelectedTransactionType {
   @override
   TransactionType? build() {
-    final transactions = ref.watch(transactionsPod).value;
+    final transactions = ref.watch(transactionspod).value;
 
     return transactions?.firstOrNull?.transactionType;
   }
@@ -45,4 +45,10 @@ class SelectedTransactionType extends _$SelectedTransactionType {
   void update(TransactionType? account) {
     state = account;
   }
+}
+
+@riverpod
+Stream<List<Transaction>> transactions(Ref ref) {
+  final db = ref.watch(appDbpod);
+  return db.transactionsDao.transactionsStream();
 }

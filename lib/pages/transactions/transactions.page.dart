@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/extensions/context.ext.dart';
 import 'package:pennyboxapp/pages/new_transaction/new_transaction.page.dart';
-import 'package:pennyboxapp/services/database/app_database.dart';
+import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class TransactionsPage extends StatelessWidget {
@@ -41,7 +41,7 @@ class TransactionsPage extends StatelessWidget {
           Expanded(
             child: Consumer(
               builder: (context, ref, child) {
-                final transactions = ref.watch(transactionsPod).valueOrNull;
+                final transactions = ref.watch(transactionspod).valueOrNull;
 
                 if (transactions == null) {
                   return const Center(
@@ -86,8 +86,3 @@ class TransactionsPage extends StatelessWidget {
     );
   }
 }
-
-final transactionsPod = StreamProvider((ref) {
-  final db = ref.watch(appDbpod);
-  return db.transactionsDao.transactionsStream();
-});
