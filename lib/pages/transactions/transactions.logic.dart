@@ -13,14 +13,14 @@ Future<List<TransactionType>> transactionTypes(Ref ref) {
 }
 
 @riverpod
-Future<List<Account>> accountTypes(Ref ref) {
+Future<List<Account>> getAccounts(Ref ref) {
   final db = ref.watch(appDbpod);
 
-  return db.transactionsDao.getAccountTypes();
+  return db.transactionsDao.getAccounts();
 }
 
 @riverpod
-class SelectedAccountType extends _$SelectedAccountType {
+class SelectedAccount extends _$SelectedAccount {
   @override
   Account? build() {
     final transactions = ref.watch(transactionspod).value;

@@ -29,26 +29,24 @@ class NewTransactionPage extends ConsumerWidget {
               //* Account Types
               Consumer(
                 builder: (context, ref, _) {
-                  final snapShot = ref.watch(accountTypespod);
-                  final selected = ref.watch(selectedAccountTypepod);
+                  final snapShot = ref.watch(getAccountspod);
+                  final selected = ref.watch(selectedAccountpod);
 
                   switch (snapShot) {
-                    case AsyncValue(value: final accounts?):
+                    case AsyncValue(value: final accounts, hasValue: true):
                       return ShadSelect<Account>(
                         initialValue: selected,
                         placeholder: const Text("Account"),
                         selectedOptionBuilder: (context, value) {
                           return Text(value.name);
                         },
-                        options: accounts.map((e) {
+                        options: accounts?.map((e) {
                           return ShadOption(
                             value: e,
                             child: Text(e.name),
                           );
                         }).toList(),
-                        onChanged: ref
-                            .read(selectedAccountTypepod.notifier)
-                            .update,
+                        onChanged: ref.read(selectedAccountpod.notifier).update,
                       );
                     case AsyncValue(error: != null):
                       return const SizedBox.shrink();
@@ -155,7 +153,7 @@ class NewTransactionPage extends ConsumerWidget {
               return ShadButton.raw(
                 onPressed: () async {
                   if (isDoneBtn) {
-                    final selectedAcc = ref.read(selectedAccountTypepod);
+                    final selectedAcc = ref.read(selectedAccountpod);
                     final selectedTnType = ref.read(
                       selectedTransactionTypepod,
                     );
@@ -174,7 +172,7 @@ class NewTransactionPage extends ConsumerWidget {
                         .transactionsDao
                         .addTransaction(
                           amount: amount,
-                          accountTypeId: selectedAcc.id,
+                          accountId: selectedAcc.id,
                           transactionTypeId: selectedTnType.id,
                         );
                     if (context.mounted) Navigator.pop(context);

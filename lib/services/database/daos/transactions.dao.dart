@@ -23,11 +23,11 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
         select(transactions).join([
           innerJoin(
             accounts,
-            accounts.id.equalsExp(transactions.accountType),
+            accounts.id.equalsExp(transactions.accountId),
           ),
           innerJoin(
             transactionTypes,
-            transactionTypes.id.equalsExp(transactions.transactionType),
+            transactionTypes.id.equalsExp(transactions.transactionTypeId),
           ),
         ])..orderBy([
           OrderingTerm.desc(transactions.createdAt),
@@ -49,7 +49,7 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
     });
   }
 
-  Future<List<Account>> getAccountTypes() {
+  Future<List<Account>> getAccounts() {
     return select(accounts).get();
   }
 
@@ -59,13 +59,13 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
 
   Future<void> addTransaction({
     required double amount,
-    required int accountTypeId,
+    required int accountId,
     required int transactionTypeId,
   }) async {
     final data = TransactionRawCompanion.insert(
       amount: amount,
-      accountType: accountTypeId,
-      transactionType: transactionTypeId,
+      accountId: accountId,
+      transactionTypeId: transactionTypeId,
     );
 
     await transactions.insertOnConflictUpdate(data);

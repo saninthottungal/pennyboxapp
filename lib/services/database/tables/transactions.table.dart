@@ -6,13 +6,13 @@ import 'package:pennyboxapp/services/database/tables/transaction_types.table.dar
 class Transactions extends Table {
   late final id = integer()();
   late final description = text().nullable()();
-  late final accountType = integer().references(
+  late final accountId = integer().references(
     Accounts,
     #id,
     onDelete: KeyAction.cascade,
   )();
 
-  late final transactionType = integer().references(
+  late final transactionTypeId = integer().references(
     TransactionTypes,
     #id,
     onDelete: KeyAction.cascade,
