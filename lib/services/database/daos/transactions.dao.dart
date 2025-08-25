@@ -19,8 +19,8 @@ part 'transactions.dao.g.dart';
      SELECT 
      AC.id,
      AC.name,
-     SUM(CASE WHEN AC.id = 1 THEN T.amount ELSE 0 END) - 
-     SUM(CASE WHEN AC.id != 1 THEN T.amount ELSE 0 END) as balance
+     SUM(CASE WHEN TY.id = 1 THEN T.amount ELSE 0 END) - 
+     SUM(CASE WHEN TY.id != 1 THEN T.amount ELSE 0 END) as balance
      
      FROM transactions AS T
      JOIN
