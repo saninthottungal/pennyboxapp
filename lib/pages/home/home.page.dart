@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pennyboxapp/core/constants/currency_consts.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/extensions/context.ext.dart';
 import 'package:pennyboxapp/core/extensions/widget.ext.dart';
@@ -32,7 +33,7 @@ class HomePage extends StatelessWidget {
                   for (final e in balances)
                     Expanded(
                       child: ShadCard(
-                        title: Text("\$${e.balance}"),
+                        title: Text("${AppCurrency.current}${e.balance}"),
                         description: Text(e.accountName),
                       ),
                     ),

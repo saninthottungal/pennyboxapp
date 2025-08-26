@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pennyboxapp/core/constants/currency_consts.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/extensions/context.ext.dart';
 import 'package:pennyboxapp/pages/new_transaction/new_transaction.page.dart';
@@ -60,7 +61,7 @@ class TransactionsPage extends StatelessWidget {
                       leading: const Icon(Icons.receipt_long),
                       title: Text(transaction.id.toString()),
                       trailing: Text(
-                        '${transaction.type.symbol}\$${transaction.amount}',
+                        '${transaction.type.symbol}${AppCurrency.current}${transaction.amount}',
                         style: context.textTheme.bodyMedium?.copyWith(
                           color: transaction.type.color,
                           fontWeight: FontWeight.w600,

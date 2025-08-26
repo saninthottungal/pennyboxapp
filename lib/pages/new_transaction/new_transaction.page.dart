@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pennyboxapp/core/constants/currency_consts.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
 import 'package:pennyboxapp/core/extensions/context.ext.dart';
@@ -105,7 +106,7 @@ class NewTransactionPage extends ConsumerWidget {
                   final amount = ref.watch(pod);
 
                   return Text(
-                    '\$${amount.isEmpty ? 0 : amount}',
+                    '${AppCurrency.current}${amount.isEmpty ? 0 : amount}',
                     style: context.textTheme.displayLarge?.copyWith(
                       color: amount.isEmpty
                           ? context.colorScheme.secondary
