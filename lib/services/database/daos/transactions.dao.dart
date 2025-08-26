@@ -63,7 +63,7 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
           createdAt: t.createdAt,
           description: t.description,
           account: row.readTable(accounts),
-          transactionType: row.readTable(transactionTypes).asType,
+          type: row.readTable(transactionTypes).asType,
         );
       }).toList();
     });
@@ -73,7 +73,7 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
     return select(accounts).get();
   }
 
-  Future<List<TransactionType>> geTransactionTypes() {
+  Future<List<TxnType>> geTransactionTypes() {
     return select(transactionTypes).map((raw) => raw.asType).get();
   }
 

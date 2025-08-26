@@ -60,9 +60,9 @@ class TransactionsPage extends StatelessWidget {
                       leading: const Icon(Icons.receipt_long),
                       title: Text(transaction.id.toString()),
                       trailing: Text(
-                        '\$${transaction.amount}',
+                        '${transaction.type.symbol}\$${transaction.amount}',
                         style: context.textTheme.bodyMedium?.copyWith(
-                          color: Colors.lightGreen,
+                          color: transaction.type.color,
                           fontWeight: FontWeight.w600,
                         ),
                       ),

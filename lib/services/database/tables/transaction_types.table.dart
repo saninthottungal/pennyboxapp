@@ -7,7 +7,7 @@ import 'package:pennyboxapp/services/database/tables/mixins/enum_table.mixin.dar
 class TransactionTypes extends Table with EnumTableMixin {}
 
 extension TransactionTypeRawX on TransactionTypeRaw {
-  TransactionType get asType {
-    return TransactionType.values.singleWhere((e) => e.id == id);
+  TxnType get asType {
+    return TxnType.values.singleWhere((e) => e.id == id);
   }
 }

@@ -7,7 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 part 'transactions.logic.g.dart';
 
 @riverpod
-Future<List<TransactionType>> transactionTypes(Ref ref) {
+Future<List<TxnType>> transactionTypes(Ref ref) {
   final db = ref.watch(appDbpod);
 
   return db.transactionsDao.geTransactionTypes();
@@ -37,13 +37,13 @@ class SelectedAccount extends _$SelectedAccount {
 @riverpod
 class SelectedTransactionType extends _$SelectedTransactionType {
   @override
-  TransactionType? build() {
+  TxnType? build() {
     final transactions = ref.watch(transactionspod).value;
 
-    return transactions?.firstOrNull?.transactionType;
+    return transactions?.firstOrNull?.type;
   }
 
-  void update(TransactionType? account) {
+  void update(TxnType? account) {
     state = account;
   }
 }

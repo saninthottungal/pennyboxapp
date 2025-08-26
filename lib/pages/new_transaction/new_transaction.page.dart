@@ -65,7 +65,7 @@ class NewTransactionPage extends ConsumerWidget {
 
                   switch (snapShot) {
                     case AsyncValue(value: final transactions?):
-                      return ShadSelect<TransactionType>(
+                      return ShadSelect<TxnType>(
                         initialValue: selected,
                         placeholder: const Text("Transaction"),
                         selectedOptionBuilder: (context, value) {
