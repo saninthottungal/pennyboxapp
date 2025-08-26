@@ -75,9 +75,9 @@ class AppDatabase extends _$AppDatabase {
           batch.insertAll(
             transactionTypes,
             [
-              TransactionTypesCompanion.insert(kind: 'Income'),
-              TransactionTypesCompanion.insert(kind: 'Expense'),
-              TransactionTypesCompanion.insert(kind: 'Transfer'),
+              TransactionTypeRawCompanion.insert(kind: 'Income'),
+              TransactionTypeRawCompanion.insert(kind: 'Expense'),
+              TransactionTypeRawCompanion.insert(kind: 'Transfer'),
             ],
           );
         });

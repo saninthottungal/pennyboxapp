@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
+import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
 import 'package:pennyboxapp/core/extensions/context.ext.dart';
 import 'package:pennyboxapp/core/extensions/widget.ext.dart';
 import 'package:pennyboxapp/pages/new_transaction/new_transaction.logic.dart';
@@ -68,12 +69,12 @@ class NewTransactionPage extends ConsumerWidget {
                         initialValue: selected,
                         placeholder: const Text("Transaction"),
                         selectedOptionBuilder: (context, value) {
-                          return Text(value.kind);
+                          return Text(value.asText);
                         },
                         options: transactions.map((e) {
                           return ShadOption(
                             value: e,
-                            child: Text(e.kind),
+                            child: Text(e.asText),
                           );
                         }).toList(),
                         onChanged: ref

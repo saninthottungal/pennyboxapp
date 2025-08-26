@@ -1,8 +1,10 @@
 enum TransactionType {
-  income(1),
-  expense(2),
-  transfer(3);
+  income(1, 'Income'),
+  expense(2, 'Expense'),
+  transfer(3, 'Transfer');
 
   final int id;
-  const TransactionType(this.id);
+  final String asText;
+
+  const TransactionType(this.id, this.asText);
 }

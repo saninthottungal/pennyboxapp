@@ -1,3 +1,4 @@
+import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
 import 'package:pennyboxapp/services/database/app_database.dart';
 import 'package:pennyboxapp/services/database/models/transaction.model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
 import 'package:pennyboxapp/services/database/app_database.dart';
 import 'package:pennyboxapp/services/database/models/account_with_balance.model.dart';
 import 'package:pennyboxapp/services/database/models/transaction.model.dart';
@@ -62,7 +63,7 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
           createdAt: t.createdAt,
           description: t.description,
           account: row.readTable(accounts),
-          transactionType: row.readTable(transactionTypes),
+          transactionType: row.readTable(transactionTypes).asType,
         );
       }).toList();
     });
@@ -73,7 +74,7 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
   }
 
   Future<List<TransactionType>> geTransactionTypes() {
-    return select(transactionTypes).get();
+    return select(transactionTypes).map((raw) => raw.asType).get();
   }
 
   Future<void> addTransaction({
