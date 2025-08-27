@@ -1,8 +1,8 @@
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
 import 'package:pennyboxapp/services/database/app_database.dart';
 import 'package:pennyboxapp/services/database/models/transaction.model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 part 'transactions.logic.g.dart';
 

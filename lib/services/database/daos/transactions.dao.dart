@@ -16,7 +16,7 @@ part 'transactions.dao.g.dart';
     Transactions,
   ],
   queries: {
-    'queryGetAccountBalances': ''' 
+    'queryGetAccountBalances': '''
      SELECT 
      AC.id,
      AC.name,

@@ -53,7 +53,7 @@ class TransactionsPage extends StatelessWidget {
                 return ListView.separated(
                   padding: EdgeInsets.zero,
                   itemCount: transactions.length,
-                  separatorBuilder: (_, __) => const Divider(),
+                  separatorBuilder: (_, _) => const Divider(),
                   itemBuilder: (context, index) {
                     final transaction = transactions[index];
 
@@ -79,7 +79,7 @@ class TransactionsPage extends StatelessWidget {
   }
 
   void _showAddSheet(BuildContext context) {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       useSafeArea: true,
       isScrollControlled: true,
