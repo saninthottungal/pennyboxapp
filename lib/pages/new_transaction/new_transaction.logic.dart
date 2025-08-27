@@ -14,6 +14,7 @@ class NewTransactionAmount extends _$NewTransactionAmount {
   void clear() => state = '';
 
   void backSpace() {
+    if (state.isEmpty) return;
     state = state.substring(0, state.length - 1);
   }
 }
