@@ -6,6 +6,7 @@ import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/core/utils/number.utils.dart';
 import 'package:pennyboxapp/core/utils/widget.utils.dart';
 import 'package:pennyboxapp/pages/home/home.logic.dart';
+import 'package:pennyboxapp/sheets/new_account/new_account.sheet.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class HomePage extends StatelessWidget {
@@ -29,17 +30,27 @@ class HomePage extends StatelessWidget {
                 );
               }
 
-              return Row(
-                spacing: context.gutter,
-                children: [
-                  for (final e in balances)
-                    Expanded(
-                      child: ShadCard(
-                        title: Text(e.balance.toMoney()),
-                        description: Text(e.accountName),
+              return IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: context.gutter,
+                  children: [
+                    for (final e in balances)
+                      Expanded(
+                        child: ShadCard(
+                          title: Text(e.balance.toMoney()),
+                          description: Text(e.accountName),
+                        ),
                       ),
+
+                    ShadIconButton.outline(
+                      onPressed: () {
+                        const NewAccountSheet().show(context);
+                      },
+                      icon: const Icon(Icons.add),
                     ),
-                ],
+                  ],
+                ),
               );
             },
           ).asSliver(),

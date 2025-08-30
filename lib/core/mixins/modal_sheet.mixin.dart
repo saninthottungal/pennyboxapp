@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pennyboxapp/core/constants/ui_conts.dart';
 
 mixin ModalSheetMixin on Widget {
   Future<T?> show<T extends Object>(BuildContext context) {
@@ -8,7 +9,14 @@ mixin ModalSheetMixin on Widget {
       isScrollControlled: true,
       useSafeArea: true,
       elevation: 0,
-      builder: (context) => this,
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: UiConsts.bodyHorizPadding.copyWith(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: this,
+        ),
+      ),
     );
   }
 }

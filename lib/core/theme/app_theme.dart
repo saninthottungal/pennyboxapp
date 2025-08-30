@@ -21,7 +21,7 @@ class AppTheme {
       // ShadVioletColorScheme
       // ShadYellowColorScheme
       // ShadZincColorScheme
-      colorScheme: const ShadNeutralColorScheme.light(),
+      colorScheme: const ShadNeutralColorScheme.dark(),
     );
   }
 }

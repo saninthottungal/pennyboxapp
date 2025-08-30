@@ -90,7 +90,7 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
       transactionAt: Value.absentIfNull(transactionAt),
     );
 
-    await transactions.insertOnConflictUpdate(data);
+    await transactions.insert().insert(data);
   }
 
   Stream<List<AccountwBalance>> getAccountBalances() {
@@ -103,5 +103,11 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
         );
       }).toList();
     });
+  }
+
+  Future<int> addAccount(String accountName) {
+    return accounts.insert().insert(
+      AccountsCompanion.insert(name: accountName),
+    );
   }
 }
