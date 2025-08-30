@@ -21,7 +21,16 @@ class MyApp extends StatelessWidget {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: ShadApp(
         theme: AppTheme.themeData,
-        home: const ShellPage(),
+        home: Builder(
+          builder: (context) {
+            return ScrollConfiguration(
+              behavior: ScrollConfiguration.of(context).copyWith(
+                scrollbars: false,
+              ),
+              child: const ShellPage(),
+            );
+          },
+        ),
       ),
     );
   }
