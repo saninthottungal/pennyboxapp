@@ -5,7 +5,6 @@ import 'package:pennyboxapp/core/constants/currency_consts.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
 import 'package:pennyboxapp/core/extensions/context.ext.dart';
-import 'package:pennyboxapp/core/extensions/widget.ext.dart';
 import 'package:pennyboxapp/pages/new_transaction/new_transaction.logic.dart';
 import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
 import 'package:pennyboxapp/services/database/app_database.dart';
@@ -102,7 +101,7 @@ class NewTransactionPage extends ConsumerWidget {
           //* Other Party
           Expanded(
             child: Column(
-              spacing: context.gutter,
+              spacing: context.gutterSmall,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Consumer(
@@ -111,14 +110,35 @@ class NewTransactionPage extends ConsumerWidget {
                     final party = ref.watch(otherPartypod);
                     if (type == null) return const SizedBox.shrink();
 
-                    return Text(
-                      '${type.actionLabel} ${party ?? '?'}',
-                      textAlign: TextAlign.center,
-                      style: context.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: party == null
-                            ? context.colorScheme.primary.withValues(alpha: 0.3)
-                            : context.colorScheme.primary,
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
+                      decoration: party != null
+                          ? null
+                          : BoxDecoration(
+                              border: Border.all(
+                                //! needs to define a color for this
+                                color: context.colorScheme.primary.withValues(
+                                  alpha: 0.2,
+                                ),
+                              ),
+                              borderRadius: UiConsts.borderRadius,
+                            ),
+                      child: Text(
+                        '${type.actionLabel} ${party ?? '?'}',
+                        textAlign: TextAlign.center,
+                        //! needs to define a color for this
+                        style: context.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: party == null
+                              //! needs to define a color for this
+                              ? context.colorScheme.primary.withValues(
+                                  alpha: 0.3,
+                                )
+                              : context.colorScheme.primary,
+                        ),
                       ),
                     );
                   },
@@ -144,22 +164,25 @@ class NewTransactionPage extends ConsumerWidget {
 
           /// Actions row
           Row(
-            spacing: context.gutter,
             children: [
-              ShadButton.outline(
-                onPressed: ref.read(pod.notifier).clear,
-                child: Text(
-                  'AC',
-                  style: context.textTheme.bodyLarge,
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: EdgeInsets.only(right: context.gutterSmall),
+                  child: const ShadDatePicker(),
                 ),
               ),
-              const ShadButton.outline(),
-              ShadIconButton.secondary(
-                onPressed: ref.read(pod.notifier).backSpace,
-                onLongPress: ref.read(pod.notifier).clear,
-                icon: const Icon(Icons.backspace_outlined),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(left: context.gutterSmall),
+                  child: ShadIconButton.secondary(
+                    onPressed: ref.read(pod.notifier).backSpace,
+                    onLongPress: ref.read(pod.notifier).clear,
+                    icon: const Icon(Icons.backspace_outlined),
+                  ),
+                ),
               ),
-            ].expanded(),
+            ],
           ),
 
           /// Number pad
