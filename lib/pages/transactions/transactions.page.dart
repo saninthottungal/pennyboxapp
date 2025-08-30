@@ -22,21 +22,38 @@ class TransactionsPage extends StatelessWidget {
         spacing: context.gutter,
         children: [
           /// Add button
-          Align(
-            alignment: Alignment.centerRight,
-            child: ShadIconButton(
-              onPressed: () => _showAddSheet(context),
-              icon: const Icon(Icons.add),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Transactions",
+                style: context.textTheme.headlineLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              ShadIconButton(
+                onPressed: () => _showAddSheet(context),
+                icon: const Icon(Icons.add),
+              ),
+            ],
+          ),
+          Row(
+            spacing: context.gutter,
+            children: const [
+              Expanded(
+                child: ShadInput(
+                  placeholder: Text("Search Transactions"),
+                  leading: Icon(Icons.search),
+                ),
+              ),
+
+              ShadIconButton.outline(
+                icon: Icon(Icons.filter_list),
+              ),
+            ],
           ),
 
           const Divider(),
-
-          /// Title
-          Text(
-            "Transaction History",
-            style: context.textTheme.headlineSmall,
-          ),
 
           /// List
           Expanded(

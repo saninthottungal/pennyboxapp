@@ -17,9 +17,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ShadApp(
-      theme: AppTheme.themeData,
-      home: const ShellPage(),
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: ShadApp(
+        theme: AppTheme.themeData,
+        home: const ShellPage(),
+      ),
     );
   }
 }
