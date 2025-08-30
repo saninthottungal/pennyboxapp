@@ -18,7 +18,7 @@ class NewTransactionPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pod = newTransactionAmountpod;
-    final dateTime = useRef<DateTime?>(null);
+    final transactionAt = useRef<DateTime?>(null);
 
     return Padding(
       padding: UiConsts.bodyHorizPadding,
@@ -172,7 +172,7 @@ class NewTransactionPage extends HookConsumerWidget {
                 flex: 2,
                 child: ShadDateTimePicker(
                   margin: EdgeInsets.only(right: context.gutterSmall),
-                  onSelected: (value) => dateTime.value = value,
+                  onSelected: (value) => transactionAt.value = value,
                 ),
               ),
 
@@ -228,6 +228,7 @@ class NewTransactionPage extends HookConsumerWidget {
                           amount: amount,
                           accountId: selectedAcc.id,
                           transactionTypeId: selectedTnType.id,
+                          transactionAt: transactionAt.value,
                         );
                     if (context.mounted) Navigator.pop(context);
                   } else {

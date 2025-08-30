@@ -81,11 +81,13 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
     required double amount,
     required int accountId,
     required int transactionTypeId,
+    required DateTime? transactionAt,
   }) async {
     final data = TransactionRawCompanion.insert(
       amount: amount,
       accountId: accountId,
       transactionTypeId: transactionTypeId,
+      transactionAt: Value.absentIfNull(transactionAt),
     );
 
     await transactions.insertOnConflictUpdate(data);
