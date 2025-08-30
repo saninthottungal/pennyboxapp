@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pennyboxapp/core/constants/currency_consts.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
-import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/core/utils/app_date.utils.dart';
-import 'package:pennyboxapp/core/utils/double.utils.dart';
+import 'package:pennyboxapp/core/utils/context.utils.dart';
+import 'package:pennyboxapp/core/utils/number.utils.dart';
 import 'package:pennyboxapp/pages/new_transaction/new_transaction.page.dart';
 import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -101,8 +100,7 @@ class TransactionsPage extends StatelessWidget {
                         ),
                       ),
                       trailing: Text(
-                        '${AppCurrency.current}'
-                        '${transaction.amount.removeZeroDecimal()}',
+                        transaction.amount.toMoney(),
                         style: context.textTheme.bodyLarge?.copyWith(
                           color: transaction.type.color,
                           fontWeight: FontWeight.w700,
