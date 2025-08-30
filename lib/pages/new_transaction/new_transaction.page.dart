@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/constants/currency_consts.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
-import 'package:pennyboxapp/core/extensions/context.ext.dart';
+import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/pages/new_transaction/new_transaction.logic.dart';
 import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
 import 'package:pennyboxapp/services/database/app_database.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pennyboxapp/core/extensions/context.ext.dart';
+import 'package:pennyboxapp/core/utils/context.utils.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
