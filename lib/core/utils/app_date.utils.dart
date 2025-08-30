@@ -29,6 +29,6 @@ extension DateTimeX on DateTime {
 
     final datePart = shortYearStr.isNotEmpty ? "$date  '$shortYearStr" : date;
 
-    return '$datePart,  $time';
+    return '$datePart, $time';
   }
 }

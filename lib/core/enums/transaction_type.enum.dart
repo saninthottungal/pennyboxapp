@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:flutter/material.dart';
 import 'package:pennyboxapp/core/constants/color_consts.dart';
 
 enum TxnType {
@@ -32,6 +31,12 @@ enum TxnType {
     income => AppColors.incomGreen,
     expense => AppColors.expenseRed,
     transfer => AppColors.transferBlue,
+  };
+
+  IconData get icon => switch (this) {
+    income => Icons.arrow_downward,
+    expense => Icons.arrow_upward,
+    transfer => Icons.compare_arrows,
   };
 
   const TxnType(this.id);

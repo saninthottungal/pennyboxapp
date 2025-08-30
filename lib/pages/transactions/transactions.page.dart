@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/constants/currency_consts.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/extensions/context.ext.dart';
+import 'package:pennyboxapp/core/utils/app_date.utils.dart';
 import 'package:pennyboxapp/pages/new_transaction/new_transaction.page.dart';
 import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -75,13 +76,34 @@ class TransactionsPage extends StatelessWidget {
                     final transaction = transactions[index];
 
                     return ListTile(
-                      leading: const Icon(Icons.receipt_long),
+                      leading: Container(
+                        decoration: ShapeDecoration(
+                          shape: UiConsts.shapeBoder,
+                          color: transaction.type.color,
+                        ),
+                        padding: const EdgeInsets.all(4),
+                        child: Icon(
+                          transaction.type.icon,
+                          size: 20,
+                        ),
+                      ),
                       title: Text(transaction.id.toString()),
+                      subtitle: Text(
+                        transaction.transactionAt.toSimple(),
+                        style: context.textTheme.bodySmall?.copyWith(
+                          fontWeight: FontWeight.w600,
+
+                          //! needs change
+                          color: context.colorScheme.primary.withValues(
+                            alpha: 0.5,
+                          ),
+                        ),
+                      ),
                       trailing: Text(
                         '${AppCurrency.current}${transaction.amount}',
-                        style: context.textTheme.bodyMedium?.copyWith(
+                        style: context.textTheme.bodyLarge?.copyWith(
                           color: transaction.type.color,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     );
