@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/constants/currency_consts.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
@@ -11,12 +12,13 @@ import 'package:pennyboxapp/services/database/app_database.dart';
 import 'package:pennyboxapp/widgets/date_time_picker.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-class NewTransactionPage extends ConsumerWidget {
+class NewTransactionPage extends HookConsumerWidget {
   const NewTransactionPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pod = newTransactionAmountpod;
+    final dateTime = useRef<DateTime?>(null);
 
     return Padding(
       padding: UiConsts.bodyHorizPadding,
@@ -168,9 +170,9 @@ class NewTransactionPage extends ConsumerWidget {
             children: [
               Expanded(
                 flex: 2,
-                child: Padding(
-                  padding: EdgeInsets.only(right: context.gutterSmall),
-                  child: const ShadDateTimePicker(),
+                child: ShadDateTimePicker(
+                  margin: EdgeInsets.only(right: context.gutterSmall),
+                  onSelected: (value) => dateTime.value = value,
                 ),
               ),
 
