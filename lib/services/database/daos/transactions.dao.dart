@@ -22,15 +22,15 @@ part 'transactions.dao.g.dart';
      AC.name,
      SUM(CASE WHEN TY.id = 1 THEN T.amount ELSE 0 END) - 
      SUM(CASE WHEN TY.id != 1 THEN T.amount ELSE 0 END) as balance
-     
-     FROM transactions AS T
-     JOIN
-     accounts as AC
-     ON T.account_id = AC.id
-     JOIN
+
+     FROM accounts as AC
+     LEFT OUTER JOIN
+     transactions as T
+     ON AC.id = T.account_id
+     LEFT OUTER JOIN
      transaction_types as TY
      ON T.transaction_type_id = TY.id
-     GROUP BY AC.id;
+     GROUP BY AC.id
     ''',
   },
 )
