@@ -18,3 +18,11 @@ class NewTransactionAmount extends _$NewTransactionAmount {
     state = state.substring(0, state.length - 1);
   }
 }
+
+@riverpod
+class OtherParty extends _$OtherParty {
+  @override
+  String? build() {
+    return null;
+  }
+}

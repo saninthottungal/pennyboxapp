@@ -99,6 +99,7 @@ class NewTransactionPage extends ConsumerWidget {
             ],
           ),
 
+          //* Other Party
           Expanded(
             child: Column(
               spacing: context.gutter,
@@ -107,13 +108,17 @@ class NewTransactionPage extends ConsumerWidget {
                 Consumer(
                   builder: (context, ref, child) {
                     final type = ref.watch(selectedTransactionTypepod);
+                    final party = ref.watch(otherPartypod);
                     if (type == null) return const SizedBox.shrink();
 
                     return Text(
-                      '${type.actionLabel} MOHAMMED SALIM N T',
+                      '${type.actionLabel} ${party ?? '?'}',
                       textAlign: TextAlign.center,
                       style: context.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
+                        color: party == null
+                            ? context.colorScheme.primary.withValues(alpha: 0.3)
+                            : context.colorScheme.primary,
                       ),
                     );
                   },
@@ -127,7 +132,7 @@ class NewTransactionPage extends ConsumerWidget {
                       '${AppCurrency.current}${amount.isEmpty ? 0 : amount}',
                       style: context.textTheme.displayLarge?.copyWith(
                         color: amount.isEmpty
-                            ? context.colorScheme.secondary
+                            ? context.colorScheme.primary.withValues(alpha: 0.3)
                             : context.colorScheme.primary,
                       ),
                     );
