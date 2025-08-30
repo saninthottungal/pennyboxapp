@@ -20,6 +20,7 @@ class Transactions extends Table {
 
   late final amount = real()();
   late final createdAt = dateTime().withDefault(currentDateAndTime)();
+  late final transactionAt = dateTime().withDefault(currentDateAndTime)();
 
   @override
   Set<Column<Object>>? get primaryKey => {id};

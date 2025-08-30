@@ -389,6 +389,15 @@ class Transactions extends Table
     requiredDuringInsert: false,
     defaultValue: const CustomExpression('CURRENT_TIMESTAMP'),
   );
+  late final GeneratedColumn<DateTime> transactionAt =
+      GeneratedColumn<DateTime>(
+        'transaction_at',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+        defaultValue: const CustomExpression('CURRENT_TIMESTAMP'),
+      );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -397,6 +406,7 @@ class Transactions extends Table
     transactionTypeId,
     amount,
     createdAt,
+    transactionAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -433,6 +443,10 @@ class Transactions extends Table
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
       )!,
+      transactionAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}transaction_at'],
+      )!,
     );
   }
 
@@ -450,6 +464,7 @@ class TransactionsData extends DataClass
   final int transactionTypeId;
   final double amount;
   final DateTime createdAt;
+  final DateTime transactionAt;
   const TransactionsData({
     required this.id,
     this.description,
@@ -457,6 +472,7 @@ class TransactionsData extends DataClass
     required this.transactionTypeId,
     required this.amount,
     required this.createdAt,
+    required this.transactionAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -469,6 +485,7 @@ class TransactionsData extends DataClass
     map['transaction_type_id'] = Variable<int>(transactionTypeId);
     map['amount'] = Variable<double>(amount);
     map['created_at'] = Variable<DateTime>(createdAt);
+    map['transaction_at'] = Variable<DateTime>(transactionAt);
     return map;
   }
 
@@ -482,6 +499,7 @@ class TransactionsData extends DataClass
       transactionTypeId: Value(transactionTypeId),
       amount: Value(amount),
       createdAt: Value(createdAt),
+      transactionAt: Value(transactionAt),
     );
   }
 
@@ -497,6 +515,7 @@ class TransactionsData extends DataClass
       transactionTypeId: serializer.fromJson<int>(json['transactionTypeId']),
       amount: serializer.fromJson<double>(json['amount']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      transactionAt: serializer.fromJson<DateTime>(json['transactionAt']),
     );
   }
   @override
@@ -509,6 +528,7 @@ class TransactionsData extends DataClass
       'transactionTypeId': serializer.toJson<int>(transactionTypeId),
       'amount': serializer.toJson<double>(amount),
       'createdAt': serializer.toJson<DateTime>(createdAt),
+      'transactionAt': serializer.toJson<DateTime>(transactionAt),
     };
   }
 
@@ -519,6 +539,7 @@ class TransactionsData extends DataClass
     int? transactionTypeId,
     double? amount,
     DateTime? createdAt,
+    DateTime? transactionAt,
   }) => TransactionsData(
     id: id ?? this.id,
     description: description.present ? description.value : this.description,
@@ -526,6 +547,7 @@ class TransactionsData extends DataClass
     transactionTypeId: transactionTypeId ?? this.transactionTypeId,
     amount: amount ?? this.amount,
     createdAt: createdAt ?? this.createdAt,
+    transactionAt: transactionAt ?? this.transactionAt,
   );
   TransactionsData copyWithCompanion(TransactionsCompanion data) {
     return TransactionsData(
@@ -539,6 +561,9 @@ class TransactionsData extends DataClass
           : this.transactionTypeId,
       amount: data.amount.present ? data.amount.value : this.amount,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      transactionAt: data.transactionAt.present
+          ? data.transactionAt.value
+          : this.transactionAt,
     );
   }
 
@@ -550,7 +575,8 @@ class TransactionsData extends DataClass
           ..write('accountId: $accountId, ')
           ..write('transactionTypeId: $transactionTypeId, ')
           ..write('amount: $amount, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('transactionAt: $transactionAt')
           ..write(')'))
         .toString();
   }
@@ -563,6 +589,7 @@ class TransactionsData extends DataClass
     transactionTypeId,
     amount,
     createdAt,
+    transactionAt,
   );
   @override
   bool operator ==(Object other) =>
@@ -573,7 +600,8 @@ class TransactionsData extends DataClass
           other.accountId == this.accountId &&
           other.transactionTypeId == this.transactionTypeId &&
           other.amount == this.amount &&
-          other.createdAt == this.createdAt);
+          other.createdAt == this.createdAt &&
+          other.transactionAt == this.transactionAt);
 }
 
 class TransactionsCompanion extends UpdateCompanion<TransactionsData> {
@@ -583,6 +611,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionsData> {
   final Value<int> transactionTypeId;
   final Value<double> amount;
   final Value<DateTime> createdAt;
+  final Value<DateTime> transactionAt;
   const TransactionsCompanion({
     this.id = const Value.absent(),
     this.description = const Value.absent(),
@@ -590,6 +619,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionsData> {
     this.transactionTypeId = const Value.absent(),
     this.amount = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.transactionAt = const Value.absent(),
   });
   TransactionsCompanion.insert({
     this.id = const Value.absent(),
@@ -598,6 +628,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionsData> {
     required int transactionTypeId,
     required double amount,
     this.createdAt = const Value.absent(),
+    this.transactionAt = const Value.absent(),
   }) : accountId = Value(accountId),
        transactionTypeId = Value(transactionTypeId),
        amount = Value(amount);
@@ -608,6 +639,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionsData> {
     Expression<int>? transactionTypeId,
     Expression<double>? amount,
     Expression<DateTime>? createdAt,
+    Expression<DateTime>? transactionAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -616,6 +648,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionsData> {
       if (transactionTypeId != null) 'transaction_type_id': transactionTypeId,
       if (amount != null) 'amount': amount,
       if (createdAt != null) 'created_at': createdAt,
+      if (transactionAt != null) 'transaction_at': transactionAt,
     });
   }
 
@@ -626,6 +659,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionsData> {
     Value<int>? transactionTypeId,
     Value<double>? amount,
     Value<DateTime>? createdAt,
+    Value<DateTime>? transactionAt,
   }) {
     return TransactionsCompanion(
       id: id ?? this.id,
@@ -634,6 +668,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionsData> {
       transactionTypeId: transactionTypeId ?? this.transactionTypeId,
       amount: amount ?? this.amount,
       createdAt: createdAt ?? this.createdAt,
+      transactionAt: transactionAt ?? this.transactionAt,
     );
   }
 
@@ -658,6 +693,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionsData> {
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
+    if (transactionAt.present) {
+      map['transaction_at'] = Variable<DateTime>(transactionAt.value);
+    }
     return map;
   }
 
@@ -669,14 +707,15 @@ class TransactionsCompanion extends UpdateCompanion<TransactionsData> {
           ..write('accountId: $accountId, ')
           ..write('transactionTypeId: $transactionTypeId, ')
           ..write('amount: $amount, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('transactionAt: $transactionAt')
           ..write(')'))
         .toString();
   }
 }
 
-class DatabaseAtV1 extends GeneratedDatabase {
-  DatabaseAtV1(QueryExecutor e) : super(e);
+class DatabaseAtV3 extends GeneratedDatabase {
+  DatabaseAtV3(QueryExecutor e) : super(e);
   late final Accounts accounts = Accounts(this);
   late final TransactionTypes transactionTypes = TransactionTypes(this);
   late final Transactions transactions = Transactions(this);
@@ -690,7 +729,7 @@ class DatabaseAtV1 extends GeneratedDatabase {
     transactions,
   ];
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 3;
   @override
   DriftDatabaseOptions get options =>
       const DriftDatabaseOptions(storeDateTimeAsText: true);

@@ -41,7 +41,7 @@ class AppDatabase extends _$AppDatabase {
               from1To2: (m, schema) async {
                 await m.addColumn(
                   schema.transactions,
-                  schema.transactions.description,
+                  schema.transactions.transactionAt,
                 );
               },
             ),

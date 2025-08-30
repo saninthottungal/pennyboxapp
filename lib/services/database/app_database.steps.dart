@@ -8,13 +8,13 @@ final class Schema2 extends i0.VersionedSchema {
   Schema2({required super.database}) : super(version: 2);
   @override
   late final List<i1.DatabaseSchemaEntity> entities = [
-    accountTypes,
+    accounts,
     transactionTypes,
     transactions,
   ];
-  late final Shape0 accountTypes = Shape0(
+  late final Shape0 accounts = Shape0(
     source: i0.VersionedTable(
-      entityName: 'account_types',
+      entityName: 'accounts',
       withoutRowId: false,
       isStrict: false,
       tableConstraints: [],
@@ -23,30 +23,31 @@ final class Schema2 extends i0.VersionedSchema {
     ),
     alias: null,
   );
-  late final Shape0 transactionTypes = Shape0(
+  late final Shape1 transactionTypes = Shape1(
     source: i0.VersionedTable(
       entityName: 'transaction_types',
       withoutRowId: false,
       isStrict: false,
       tableConstraints: [],
-      columns: [_column_0, _column_1],
+      columns: [_column_0, _column_2],
       attachedDatabase: database,
     ),
     alias: null,
   );
-  late final Shape1 transactions = Shape1(
+  late final Shape2 transactions = Shape2(
     source: i0.VersionedTable(
       entityName: 'transactions',
       withoutRowId: false,
       isStrict: false,
       tableConstraints: ['PRIMARY KEY(id)'],
       columns: [
-        _column_2,
         _column_3,
         _column_4,
         _column_5,
         _column_6,
         _column_7,
+        _column_8,
+        _column_9,
       ],
       attachedDatabase: database,
     ),
@@ -58,8 +59,8 @@ class Shape0 extends i0.VersionedTable {
   Shape0({required super.source, required super.alias}) : super.aliased();
   i1.GeneratedColumn<int> get id =>
       columnsByName['id']! as i1.GeneratedColumn<int>;
-  i1.GeneratedColumn<String> get kind =>
-      columnsByName['kind']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get name =>
+      columnsByName['name']! as i1.GeneratedColumn<String>;
 }
 
 i1.GeneratedColumn<int> _column_0(String aliasedName) =>
@@ -75,7 +76,7 @@ i1.GeneratedColumn<int> _column_0(String aliasedName) =>
     );
 i1.GeneratedColumn<String> _column_1(String aliasedName) =>
     i1.GeneratedColumn<String>(
-      'kind',
+      'name',
       aliasedName,
       false,
       type: i1.DriftSqlType.string,
@@ -86,45 +87,64 @@ class Shape1 extends i0.VersionedTable {
   Shape1({required super.source, required super.alias}) : super.aliased();
   i1.GeneratedColumn<int> get id =>
       columnsByName['id']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<String> get kind =>
+      columnsByName['kind']! as i1.GeneratedColumn<String>;
+}
+
+i1.GeneratedColumn<String> _column_2(String aliasedName) =>
+    i1.GeneratedColumn<String>(
+      'kind',
+      aliasedName,
+      false,
+      type: i1.DriftSqlType.string,
+      defaultConstraints: i1.GeneratedColumn.constraintIsAlways('UNIQUE'),
+    );
+
+class Shape2 extends i0.VersionedTable {
+  Shape2({required super.source, required super.alias}) : super.aliased();
+  i1.GeneratedColumn<int> get id =>
+      columnsByName['id']! as i1.GeneratedColumn<int>;
   i1.GeneratedColumn<String> get description =>
       columnsByName['description']! as i1.GeneratedColumn<String>;
-  i1.GeneratedColumn<int> get accountType =>
-      columnsByName['account_type']! as i1.GeneratedColumn<int>;
-  i1.GeneratedColumn<int> get transactionType =>
-      columnsByName['transaction_type']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<int> get accountId =>
+      columnsByName['account_id']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<int> get transactionTypeId =>
+      columnsByName['transaction_type_id']! as i1.GeneratedColumn<int>;
   i1.GeneratedColumn<double> get amount =>
       columnsByName['amount']! as i1.GeneratedColumn<double>;
   i1.GeneratedColumn<DateTime> get createdAt =>
       columnsByName['created_at']! as i1.GeneratedColumn<DateTime>;
+  i1.GeneratedColumn<DateTime> get transactionAt =>
+      columnsByName['transaction_at']! as i1.GeneratedColumn<DateTime>;
 }
 
-i1.GeneratedColumn<int> _column_2(String aliasedName) =>
+i1.GeneratedColumn<int> _column_3(String aliasedName) =>
     i1.GeneratedColumn<int>(
       'id',
       aliasedName,
       false,
       type: i1.DriftSqlType.int,
     );
-i1.GeneratedColumn<String> _column_3(String aliasedName) =>
+i1.GeneratedColumn<String> _column_4(String aliasedName) =>
     i1.GeneratedColumn<String>(
       'description',
       aliasedName,
       true,
       type: i1.DriftSqlType.string,
     );
-i1.GeneratedColumn<int> _column_4(String aliasedName) =>
+i1.GeneratedColumn<int> _column_5(String aliasedName) =>
     i1.GeneratedColumn<int>(
-      'account_type',
+      'account_id',
       aliasedName,
       false,
       type: i1.DriftSqlType.int,
       defaultConstraints: i1.GeneratedColumn.constraintIsAlways(
-        'REFERENCES account_types (id) ON DELETE CASCADE',
+        'REFERENCES accounts (id) ON DELETE CASCADE',
       ),
     );
-i1.GeneratedColumn<int> _column_5(String aliasedName) =>
+i1.GeneratedColumn<int> _column_6(String aliasedName) =>
     i1.GeneratedColumn<int>(
-      'transaction_type',
+      'transaction_type_id',
       aliasedName,
       false,
       type: i1.DriftSqlType.int,
@@ -132,16 +152,24 @@ i1.GeneratedColumn<int> _column_5(String aliasedName) =>
         'REFERENCES transaction_types (id) ON DELETE CASCADE',
       ),
     );
-i1.GeneratedColumn<double> _column_6(String aliasedName) =>
+i1.GeneratedColumn<double> _column_7(String aliasedName) =>
     i1.GeneratedColumn<double>(
       'amount',
       aliasedName,
       false,
       type: i1.DriftSqlType.double,
     );
-i1.GeneratedColumn<DateTime> _column_7(String aliasedName) =>
+i1.GeneratedColumn<DateTime> _column_8(String aliasedName) =>
     i1.GeneratedColumn<DateTime>(
       'created_at',
+      aliasedName,
+      false,
+      type: i1.DriftSqlType.dateTime,
+      defaultValue: const CustomExpression('CURRENT_TIMESTAMP'),
+    );
+i1.GeneratedColumn<DateTime> _column_9(String aliasedName) =>
+    i1.GeneratedColumn<DateTime>(
+      'transaction_at',
       aliasedName,
       false,
       type: i1.DriftSqlType.dateTime,
