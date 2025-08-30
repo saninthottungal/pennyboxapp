@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/constants/currency_consts.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
+import 'package:pennyboxapp/core/mixins/modal_sheet.mixin.dart';
 import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/pages/new_transaction/new_transaction.logic.dart';
 import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
@@ -12,7 +13,7 @@ import 'package:pennyboxapp/services/database/app_database.dart';
 import 'package:pennyboxapp/widgets/date_time_picker.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-class NewTransactionPage extends HookConsumerWidget {
+class NewTransactionPage extends HookConsumerWidget with ModalSheetMixin {
   const NewTransactionPage({super.key});
 
   @override

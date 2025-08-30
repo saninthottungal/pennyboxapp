@@ -33,7 +33,7 @@ class TransactionsPage extends StatelessWidget {
                 ),
               ),
               ShadIconButton(
-                onPressed: () => _showAddSheet(context),
+                onPressed: () => const NewTransactionPage().show(context),
                 icon: const Icon(Icons.add),
               ),
             ],
@@ -114,15 +114,6 @@ class TransactionsPage extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  void _showAddSheet(BuildContext context) {
-    showModalBottomSheet<void>(
-      context: context,
-      useSafeArea: true,
-      isScrollControlled: true,
-      builder: (_) => const NewTransactionPage(),
     );
   }
 }
