@@ -50,7 +50,7 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
             transactionTypes.id.equalsExp(transactions.transactionTypeId),
           ),
         ])..orderBy([
-          OrderingTerm.desc(transactions.createdAt),
+          OrderingTerm.desc(transactions.transactionAt),
         ]);
 
     return query.watch().map((rows) {
