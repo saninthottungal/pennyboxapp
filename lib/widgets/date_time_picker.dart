@@ -33,12 +33,14 @@ class _ShadDateTimePickerState extends State<ShadDateTimePicker> {
       controller: _controller,
       popover: (context) {
         return ShadCalendar(
+          showOutsideDays: false,
+          selectableDayPredicate: DateTime.now().isAfter,
           onChanged: (value) {
-            if (value == null) return;
-
             setState(() {
-              selected = value;
+              selected = value ?? DateTime.now();
             });
+
+            if (_controller.isOpen) _controller.toggle();
           },
         );
       },
