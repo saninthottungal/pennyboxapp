@@ -6,6 +6,7 @@ mixin ModalSheetMixin on Widget {
       context: context,
       useRootNavigator: true,
       isScrollControlled: true,
+      useSafeArea: true,
       elevation: 0,
       builder: (context) => this,
     );
