@@ -23,8 +23,10 @@ class HomePage extends StatelessWidget {
             builder: (context, ref, child) {
               final balances = ref.watch(getAccountBalancespod).value;
               if (balances == null) {
-                //TODO: make A good loading UI
-                return const CircularProgressIndicator();
+                return const ShadCard(
+                  title: Text("NIL"),
+                  description: Text("Loading..."),
+                );
               }
 
               return Row(
@@ -33,9 +35,7 @@ class HomePage extends StatelessWidget {
                   for (final e in balances)
                     Expanded(
                       child: ShadCard(
-                        title: Text(
-                          e.balance.toMoney(),
-                        ),
+                        title: Text(e.balance.toMoney()),
                         description: Text(e.accountName),
                       ),
                     ),
