@@ -27,8 +27,8 @@ extension DateTimeX on DateTime {
       _ => AppDate.monthDay.format(this),
     };
 
-    final datePart = shortYearStr.isNotEmpty ? "$date, '$shortYearStr" : date;
+    final datePart = shortYearStr.isNotEmpty ? "$date  '$shortYearStr" : date;
 
-    return '$datePart $time';
+    return '$datePart,  $time';
   }
 }

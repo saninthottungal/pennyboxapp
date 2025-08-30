@@ -8,6 +8,7 @@ import 'package:pennyboxapp/core/extensions/context.ext.dart';
 import 'package:pennyboxapp/pages/new_transaction/new_transaction.logic.dart';
 import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
 import 'package:pennyboxapp/services/database/app_database.dart';
+import 'package:pennyboxapp/widgets/date_time_picker.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class NewTransactionPage extends ConsumerWidget {
@@ -169,9 +170,10 @@ class NewTransactionPage extends ConsumerWidget {
                 flex: 2,
                 child: Padding(
                   padding: EdgeInsets.only(right: context.gutterSmall),
-                  child: const ShadDatePicker(),
+                  child: const ShadDateTimePicker(),
                 ),
               ),
+
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.only(left: context.gutterSmall),
