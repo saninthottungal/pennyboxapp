@@ -100,21 +100,40 @@ class NewTransactionPage extends ConsumerWidget {
           ),
 
           Expanded(
-            child: Center(
-              child: Consumer(
-                builder: (context, ref, child) {
-                  final amount = ref.watch(pod);
+            child: Column(
+              spacing: context.gutter,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Consumer(
+                  builder: (context, ref, child) {
+                    final type = ref.watch(selectedTransactionTypepod);
+                    if (type == null) return const SizedBox.shrink();
 
-                  return Text(
-                    '${AppCurrency.current}${amount.isEmpty ? 0 : amount}',
-                    style: context.textTheme.displayLarge?.copyWith(
-                      color: amount.isEmpty
-                          ? context.colorScheme.secondary
-                          : context.colorScheme.primary,
-                    ),
-                  );
-                },
-              ),
+                    return Text(
+                      '${type.actionLabel} MOHAMMED SALIM N T',
+                      textAlign: TextAlign.center,
+                      style: context.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    );
+                  },
+                ),
+
+                Consumer(
+                  builder: (context, ref, child) {
+                    final amount = ref.watch(pod);
+
+                    return Text(
+                      '${AppCurrency.current}${amount.isEmpty ? 0 : amount}',
+                      style: context.textTheme.displayLarge?.copyWith(
+                        color: amount.isEmpty
+                            ? context.colorScheme.secondary
+                            : context.colorScheme.primary,
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
 
@@ -130,8 +149,9 @@ class NewTransactionPage extends ConsumerWidget {
                 ),
               ),
               const ShadButton.outline(),
-              ShadIconButton.outline(
+              ShadIconButton.secondary(
                 onPressed: ref.read(pod.notifier).backSpace,
+                onLongPress: ref.read(pod.notifier).clear,
                 icon: const Icon(Icons.backspace_outlined),
               ),
             ].expanded(),

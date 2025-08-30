@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:pennyboxapp/core/constants/color_consts.dart';
 
 enum TxnType {
+  //! the id should not be changed at all.
   income(1),
   expense(2),
   transfer(3);
@@ -19,6 +20,12 @@ enum TxnType {
     income => '+',
     expense => '-',
     transfer => '\u21C4',
+  };
+
+  String get actionLabel => switch (this) {
+    income => 'Receiving from',
+    expense => 'Paying to',
+    transfer => 'Transferring to',
   };
 
   Color get color => switch (this) {
