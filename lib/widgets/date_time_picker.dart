@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:pennyboxapp/core/utils/app_date.utils.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -10,45 +12,29 @@ class ShadDateTimePicker extends StatefulWidget {
 }
 
 class _ShadDateTimePickerState extends State<ShadDateTimePicker> {
-  late final ShadPopoverController _controller;
-  DateTime selected = DateTime.now();
+  DateTime _selected = DateTime.now();
+  late final Timer _timer;
 
   @override
   void initState() {
+    _timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (_) => setState(() => _selected = DateTime.now()),
+    );
     super.initState();
-
-    _controller = ShadPopoverController();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _timer.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ShadPopover(
-      padding: EdgeInsets.zero,
-      controller: _controller,
-      popover: (context) {
-        return ShadCalendar(
-          showOutsideDays: false,
-          selectableDayPredicate: DateTime.now().isAfter,
-          onChanged: (value) {
-            setState(() {
-              selected = value ?? DateTime.now();
-            });
-
-            if (_controller.isOpen) _controller.toggle();
-          },
-        );
-      },
-      child: ShadButton.outline(
-        leading: const Icon(Icons.calendar_month_outlined),
-        onPressed: _controller.toggle,
-        child: Text(selected.toSimple()),
-      ),
+    return ShadButton.outline(
+      leading: const Icon(Icons.calendar_month_outlined),
+      child: Text(_selected.toSimple()),
     );
   }
 }
