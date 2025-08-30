@@ -60,7 +60,7 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
         return Transaction(
           id: t.id,
           amount: t.amount,
-          createdAt: t.createdAt,
+          transactionAt: t.transactionAt,
           description: t.description,
           account: row.readTable(accounts),
           type: row.readTable(transactionTypes).asType,

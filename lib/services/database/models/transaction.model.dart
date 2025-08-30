@@ -12,6 +12,6 @@ abstract class Transaction with _$Transaction {
     String? description,
     required Account account,
     required TxnType type,
-    required DateTime createdAt,
+    required DateTime transactionAt,
   }) = _Transaction;
 }

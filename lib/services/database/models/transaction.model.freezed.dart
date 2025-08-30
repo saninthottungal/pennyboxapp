@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Transaction {
 
- int get id; double get amount; String? get description; Account get account; TxnType get type; DateTime get createdAt;
+ int get id; double get amount; String? get description; Account get account; TxnType get type; DateTime get transactionAt;
 /// Create a copy of Transaction
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $TransactionCopyWith<Transaction> get copyWith => _$TransactionCopyWithImpl<Tran
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Transaction&&(identical(other.id, id) || other.id == id)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.description, description) || other.description == description)&&const DeepCollectionEquality().equals(other.account, account)&&(identical(other.type, type) || other.type == type)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Transaction&&(identical(other.id, id) || other.id == id)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.description, description) || other.description == description)&&const DeepCollectionEquality().equals(other.account, account)&&(identical(other.type, type) || other.type == type)&&(identical(other.transactionAt, transactionAt) || other.transactionAt == transactionAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,amount,description,const DeepCollectionEquality().hash(account),type,createdAt);
+int get hashCode => Object.hash(runtimeType,id,amount,description,const DeepCollectionEquality().hash(account),type,transactionAt);
 
 @override
 String toString() {
-  return 'Transaction(id: $id, amount: $amount, description: $description, account: $account, type: $type, createdAt: $createdAt)';
+  return 'Transaction(id: $id, amount: $amount, description: $description, account: $account, type: $type, transactionAt: $transactionAt)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $TransactionCopyWith<$Res>  {
   factory $TransactionCopyWith(Transaction value, $Res Function(Transaction) _then) = _$TransactionCopyWithImpl;
 @useResult
 $Res call({
- int id, double amount, String? description, Account account, TxnType type, DateTime createdAt
+ int id, double amount, String? description, Account account, TxnType type, DateTime transactionAt
 });
 
 
@@ -62,14 +62,14 @@ class _$TransactionCopyWithImpl<$Res>
 
 /// Create a copy of Transaction
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? amount = null,Object? description = freezed,Object? account = freezed,Object? type = null,Object? createdAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? amount = null,Object? description = freezed,Object? account = freezed,Object? type = null,Object? transactionAt = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as double,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,account: freezed == account ? _self.account : account // ignore: cast_nullable_to_non_nullable
 as Account,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
-as TxnType,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as TxnType,transactionAt: null == transactionAt ? _self.transactionAt : transactionAt // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
 }
@@ -155,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  double amount,  String? description,  Account account,  TxnType type,  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  double amount,  String? description,  Account account,  TxnType type,  DateTime transactionAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Transaction() when $default != null:
-return $default(_that.id,_that.amount,_that.description,_that.account,_that.type,_that.createdAt);case _:
+return $default(_that.id,_that.amount,_that.description,_that.account,_that.type,_that.transactionAt);case _:
   return orElse();
 
 }
@@ -176,10 +176,10 @@ return $default(_that.id,_that.amount,_that.description,_that.account,_that.type
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  double amount,  String? description,  Account account,  TxnType type,  DateTime createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  double amount,  String? description,  Account account,  TxnType type,  DateTime transactionAt)  $default,) {final _that = this;
 switch (_that) {
 case _Transaction():
-return $default(_that.id,_that.amount,_that.description,_that.account,_that.type,_that.createdAt);case _:
+return $default(_that.id,_that.amount,_that.description,_that.account,_that.type,_that.transactionAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +196,10 @@ return $default(_that.id,_that.amount,_that.description,_that.account,_that.type
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  double amount,  String? description,  Account account,  TxnType type,  DateTime createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  double amount,  String? description,  Account account,  TxnType type,  DateTime transactionAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Transaction() when $default != null:
-return $default(_that.id,_that.amount,_that.description,_that.account,_that.type,_that.createdAt);case _:
+return $default(_that.id,_that.amount,_that.description,_that.account,_that.type,_that.transactionAt);case _:
   return null;
 
 }
@@ -211,7 +211,7 @@ return $default(_that.id,_that.amount,_that.description,_that.account,_that.type
 
 
 class _Transaction implements Transaction {
-  const _Transaction({required this.id, required this.amount, this.description, required this.account, required this.type, required this.createdAt});
+  const _Transaction({required this.id, required this.amount, this.description, required this.account, required this.type, required this.transactionAt});
   
 
 @override final  int id;
@@ -219,7 +219,7 @@ class _Transaction implements Transaction {
 @override final  String? description;
 @override final  Account account;
 @override final  TxnType type;
-@override final  DateTime createdAt;
+@override final  DateTime transactionAt;
 
 /// Create a copy of Transaction
 /// with the given fields replaced by the non-null parameter values.
@@ -231,16 +231,16 @@ _$TransactionCopyWith<_Transaction> get copyWith => __$TransactionCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Transaction&&(identical(other.id, id) || other.id == id)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.description, description) || other.description == description)&&const DeepCollectionEquality().equals(other.account, account)&&(identical(other.type, type) || other.type == type)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Transaction&&(identical(other.id, id) || other.id == id)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.description, description) || other.description == description)&&const DeepCollectionEquality().equals(other.account, account)&&(identical(other.type, type) || other.type == type)&&(identical(other.transactionAt, transactionAt) || other.transactionAt == transactionAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,amount,description,const DeepCollectionEquality().hash(account),type,createdAt);
+int get hashCode => Object.hash(runtimeType,id,amount,description,const DeepCollectionEquality().hash(account),type,transactionAt);
 
 @override
 String toString() {
-  return 'Transaction(id: $id, amount: $amount, description: $description, account: $account, type: $type, createdAt: $createdAt)';
+  return 'Transaction(id: $id, amount: $amount, description: $description, account: $account, type: $type, transactionAt: $transactionAt)';
 }
 
 
@@ -251,7 +251,7 @@ abstract mixin class _$TransactionCopyWith<$Res> implements $TransactionCopyWith
   factory _$TransactionCopyWith(_Transaction value, $Res Function(_Transaction) _then) = __$TransactionCopyWithImpl;
 @override @useResult
 $Res call({
- int id, double amount, String? description, Account account, TxnType type, DateTime createdAt
+ int id, double amount, String? description, Account account, TxnType type, DateTime transactionAt
 });
 
 
@@ -268,14 +268,14 @@ class __$TransactionCopyWithImpl<$Res>
 
 /// Create a copy of Transaction
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? amount = null,Object? description = freezed,Object? account = freezed,Object? type = null,Object? createdAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? amount = null,Object? description = freezed,Object? account = freezed,Object? type = null,Object? transactionAt = null,}) {
   return _then(_Transaction(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as double,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,account: freezed == account ? _self.account : account // ignore: cast_nullable_to_non_nullable
 as Account,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
-as TxnType,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as TxnType,transactionAt: null == transactionAt ? _self.transactionAt : transactionAt // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
 }
