@@ -25,8 +25,9 @@ class SelectedAccount extends _$SelectedAccount {
   @override
   Account? build() {
     final transactions = ref.watch(transactionspod).value;
+    final accounts = ref.watch(getAccountspod).value;
 
-    return transactions?.firstOrNull?.account;
+    return transactions?.firstOrNull?.account ?? accounts?.firstOrNull;
   }
 
   void update(Account? account) {
@@ -39,8 +40,9 @@ class SelectedTransactionType extends _$SelectedTransactionType {
   @override
   TxnType? build() {
     final transactions = ref.watch(transactionspod).value;
+    final types = ref.watch(transactionTypespod).value;
 
-    return transactions?.firstOrNull?.type;
+    return transactions?.firstOrNull?.type ?? types?.firstOrNull;
   }
 
   void update(TxnType? account) {
