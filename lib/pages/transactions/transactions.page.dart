@@ -5,8 +5,8 @@ import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/utils/app_date.utils.dart';
 import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/core/utils/number.utils.dart';
-import 'package:pennyboxapp/pages/new_transaction/new_transaction.page.dart';
 import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
+import 'package:pennyboxapp/sheets/new_transaction/new_transaction.sheet.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class TransactionsPage extends StatelessWidget {
@@ -33,7 +33,7 @@ class TransactionsPage extends StatelessWidget {
                 ),
               ),
               ShadIconButton(
-                onPressed: () => const NewTransactionPage().show(context),
+                onPressed: () => const NewTransactionSheet().show(context),
                 icon: const Icon(Icons.add),
               ),
             ],

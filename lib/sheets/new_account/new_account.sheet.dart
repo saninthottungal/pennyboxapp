@@ -17,7 +17,7 @@ class NewAccountSheet extends HookConsumerWidget with ModalSheetMixin {
     final controller = useTextEditingController();
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: context.gutterLarge),
+      padding: EdgeInsets.symmetric(vertical: context.gutter),
       child: Form(
         key: _formKey,
         child: Column(
