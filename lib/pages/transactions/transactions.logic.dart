@@ -55,3 +55,9 @@ Stream<List<Transaction>> getTransactions(Ref ref) {
   final db = ref.watch(appDbpod);
   return db.transactionsDao.transactionsStream();
 }
+
+@riverpod
+Future<List<Party>> getParties(Ref ref) {
+  final db = ref.watch(appDbpod);
+  return db.transactionsDao.getParties();
+}

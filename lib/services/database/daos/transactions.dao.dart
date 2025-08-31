@@ -4,6 +4,7 @@ import 'package:pennyboxapp/services/database/app_database.dart';
 import 'package:pennyboxapp/services/database/models/account_with_balance.model.dart';
 import 'package:pennyboxapp/services/database/models/transaction.model.dart';
 import 'package:pennyboxapp/services/database/tables/accounts.table.dart';
+import 'package:pennyboxapp/services/database/tables/parties.table.dart';
 import 'package:pennyboxapp/services/database/tables/transaction_types.table.dart';
 import 'package:pennyboxapp/services/database/tables/transactions.table.dart';
 
@@ -14,6 +15,7 @@ part 'transactions.dao.g.dart';
     Accounts,
     TransactionTypes,
     Transactions,
+    Parties,
   ],
   queries: {
     'queryGetAccountBalances': '''
@@ -117,5 +119,9 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
 
   Future<int> deleteAccount(int id) {
     return accounts.deleteWhere((e) => e.id.equals(id));
+  }
+
+  Future<List<Party>> getParties() {
+    return select(parties).get();
   }
 }

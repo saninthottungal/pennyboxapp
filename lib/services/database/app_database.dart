@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart' as p;
 import 'package:pennyboxapp/services/database/app_database.steps.dart';
 import 'package:pennyboxapp/services/database/daos/transactions.dao.dart';
 import 'package:pennyboxapp/services/database/tables/accounts.table.dart';
+import 'package:pennyboxapp/services/database/tables/parties.table.dart';
 import 'package:pennyboxapp/services/database/tables/transaction_types.table.dart';
 import 'package:pennyboxapp/services/database/tables/transactions.table.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -18,7 +19,12 @@ import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 part 'app_database.g.dart';
 
 @DriftDatabase(
-  tables: [Accounts, TransactionTypes, Transactions],
+  tables: [
+    Accounts,
+    TransactionTypes,
+    Transactions,
+    Parties,
+  ],
   daos: [TransactionsDao],
 )
 class AppDatabase extends _$AppDatabase {
