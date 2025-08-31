@@ -114,4 +114,8 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
   Future<int> deleteTransaction(int id) {
     return transactions.deleteWhere((e) => e.id.equals(id));
   }
+
+  Future<int> deleteAccount(int id) {
+    return accounts.deleteWhere((e) => e.id.equals(id));
+  }
 }

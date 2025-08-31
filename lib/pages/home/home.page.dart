@@ -6,6 +6,8 @@ import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/core/utils/number.utils.dart';
 import 'package:pennyboxapp/core/utils/widget.utils.dart';
 import 'package:pennyboxapp/pages/home/home.logic.dart';
+import 'package:pennyboxapp/sheets/delete_account/delete_account.logic.dart';
+import 'package:pennyboxapp/sheets/delete_account/delete_account.sheet.dart';
 import 'package:pennyboxapp/sheets/new_account/new_account.sheet.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -34,11 +36,21 @@ class HomePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   spacing: context.gutter,
                   children: [
-                    for (final e in balances)
+                    for (final account in balances)
                       Expanded(
-                        child: ShadCard(
-                          title: Text(e.balance.toMoney()),
-                          description: Text(e.accountName),
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onLongPress: () => DeleteAccountSheet(
+                            onDelete: () {
+                              ref
+                                  .read(deleteAccountpod.notifier)
+                                  .delete(account.id);
+                            },
+                          ).show(context),
+                          child: ShadCard(
+                            title: Text(account.balance.toMoney()),
+                            description: Text(account.accountName),
+                          ),
                         ),
                       ),
 
