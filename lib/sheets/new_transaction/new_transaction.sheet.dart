@@ -21,6 +21,7 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
   Widget build(BuildContext context, WidgetRef ref) {
     final pod = newTransactionAmountpod;
     final transactionAt = useRef<DateTime?>(null);
+    final noteController = useTextEditingController();
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: context.gutter),
@@ -154,20 +155,44 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
                   },
                 ),
 
+                //* Amount
                 Consumer(
                   builder: (context, ref, child) {
                     final amountString = ref.watch(pod);
                     final amount = double.tryParse(amountString) ?? 0;
 
-                    return Text(
-                      amount.toMoney(),
-                      style: context.textTheme.displayLarge?.copyWith(
-                        color: amountString.isEmpty
-                            ? context.colorScheme.primary.withValues(alpha: 0.3)
-                            : context.colorScheme.primary,
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: context.gutter),
+                      child: Text(
+                        amount.toMoney(),
+                        style: context.textTheme.displayLarge?.copyWith(
+                          color: amountString.isEmpty
+                              ? context.colorScheme.primary.withValues(
+                                  alpha: 0.3,
+                                )
+                              : context.colorScheme.primary,
+                        ),
                       ),
                     );
                   },
+                ),
+
+                //* add a note
+                IntrinsicWidth(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minWidth: 100,
+                      maxWidth: context.mdSize.width * 0.7,
+                    ),
+                    child: ShadInput(
+                      controller: noteController,
+                      textCapitalization: TextCapitalization.sentences,
+                      placeholderAlignment: Alignment.center,
+                      placeholder: const Text("Add note"),
+                      minLines: 1,
+                      maxLines: 2,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -220,6 +245,7 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
                     final party = ref.read(selectedPartypod);
                     final value = ref.read(newTransactionAmountpod);
                     final amount = double.tryParse(value);
+                    final note = noteController.text.trim();
 
                     if (selectedAcc == null ||
                         selectedTnType == null ||
@@ -238,6 +264,7 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
                           transactionTypeId: selectedTnType.id,
                           transactionAt: transactionAt.value,
                           partyId: party.id,
+                          description: note.isNotEmpty ? note : null,
                         );
                     if (context.mounted) Navigator.pop(context);
                   } else {

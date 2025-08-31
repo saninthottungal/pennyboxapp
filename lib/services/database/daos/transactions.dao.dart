@@ -87,6 +87,7 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
     required int transactionTypeId,
     required DateTime? transactionAt,
     required int partyId,
+    required String? description,
   }) async {
     final data = TransactionRawCompanion.insert(
       amount: amount,
@@ -94,6 +95,7 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
       transactionTypeId: transactionTypeId,
       transactionAt: Value.absentIfNull(transactionAt),
       partyId: Value.absentIfNull(partyId),
+      description: Value.absentIfNull(description),
     );
 
     await transactions.insert().insert(data);
