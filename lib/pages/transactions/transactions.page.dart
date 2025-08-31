@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/utils/app_date.utils.dart';
@@ -75,35 +76,49 @@ class TransactionsPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final transaction = transactions[index];
 
-                    return ListTile(
-                      leading: Container(
-                        decoration: ShapeDecoration(
-                          shape: UiConsts.shapeBoder,
-                          color: transaction.type.color,
-                        ),
-                        padding: const EdgeInsets.all(4),
-                        child: Icon(
-                          transaction.type.icon,
-                          size: 20,
-                        ),
+                    return Slidable(
+                      key: ValueKey(index),
+                      endActionPane: ActionPane(
+                        extentRatio: 0.3,
+                        motion: const BehindMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (context) {},
+                            icon: Icons.delete_outline,
+                            backgroundColor: context.colorScheme.error,
+                          ),
+                        ],
                       ),
-                      title: Text(transaction.id.toString()),
-                      subtitle: Text(
-                        transaction.transactionAt.toSimple(),
-                        style: context.textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.w600,
-
-                          //! needs change
-                          color: context.colorScheme.primary.withValues(
-                            alpha: 0.5,
+                      child: ListTile(
+                        leading: Container(
+                          decoration: ShapeDecoration(
+                            shape: UiConsts.shapeBoder,
+                            color: transaction.type.color,
+                          ),
+                          padding: const EdgeInsets.all(4),
+                          child: Icon(
+                            transaction.type.icon,
+                            size: 20,
                           ),
                         ),
-                      ),
-                      trailing: Text(
-                        transaction.amount.toMoney(),
-                        style: context.textTheme.bodyLarge?.copyWith(
-                          color: transaction.type.color,
-                          fontWeight: FontWeight.w700,
+                        title: Text(transaction.id.toString()),
+                        subtitle: Text(
+                          transaction.transactionAt.toSimple(),
+                          style: context.textTheme.bodySmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+
+                            //! needs change
+                            color: context.colorScheme.primary.withValues(
+                              alpha: 0.5,
+                            ),
+                          ),
+                        ),
+                        trailing: Text(
+                          transaction.amount.toMoney(),
+                          style: context.textTheme.bodyLarge?.copyWith(
+                            color: transaction.type.color,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
                     );
