@@ -110,4 +110,8 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
       AccountsCompanion.insert(name: accountName),
     );
   }
+
+  Future<int> deleteTransaction(int id) {
+    return transactions.deleteWhere((e) => e.id.equals(id));
+  }
 }

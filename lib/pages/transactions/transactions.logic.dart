@@ -24,7 +24,7 @@ Future<List<Account>> getAccounts(Ref ref) {
 class SelectedAccount extends _$SelectedAccount {
   @override
   Account? build() {
-    final transactions = ref.watch(transactionspod).value;
+    final transactions = ref.watch(getTransactionspod).value;
     final accounts = ref.watch(getAccountspod).value;
 
     return transactions?.firstOrNull?.account ?? accounts?.firstOrNull;
@@ -39,7 +39,7 @@ class SelectedAccount extends _$SelectedAccount {
 class SelectedTransactionType extends _$SelectedTransactionType {
   @override
   TxnType? build() {
-    final transactions = ref.watch(transactionspod).value;
+    final transactions = ref.watch(getTransactionspod).value;
     final types = ref.watch(transactionTypespod).value;
 
     return transactions?.firstOrNull?.type ?? types?.firstOrNull;
@@ -51,7 +51,17 @@ class SelectedTransactionType extends _$SelectedTransactionType {
 }
 
 @riverpod
-Stream<List<Transaction>> transactions(Ref ref) {
+Stream<List<Transaction>> getTransactions(Ref ref) {
   final db = ref.watch(appDbpod);
   return db.transactionsDao.transactionsStream();
+}
+
+@riverpod
+class TransactionsLogic extends _$TransactionsLogic {
+  @override
+  void build() {}
+
+  Future<int> deleteTransaction(int id) {
+    return ref.read(appDbpod).transactionsDao.deleteTransaction(id);
+  }
 }
