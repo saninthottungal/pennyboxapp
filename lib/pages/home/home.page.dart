@@ -6,6 +6,7 @@ import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/core/utils/number.utils.dart';
 import 'package:pennyboxapp/core/utils/widget.utils.dart';
 import 'package:pennyboxapp/pages/home/home.logic.dart';
+import 'package:pennyboxapp/services/database/models/account_with_balance.model.dart';
 import 'package:pennyboxapp/sheets/delete_account/delete_account.logic.dart';
 import 'package:pennyboxapp/sheets/delete_account/delete_account.sheet.dart';
 import 'package:pennyboxapp/sheets/new_account/new_account.sheet.dart';
@@ -21,87 +22,9 @@ class HomePage extends StatelessWidget {
       child: CustomScrollView(
         slivers: [
           SizedBox(height: context.mdPadding.top + context.gutter).asSliver(),
-          Consumer(
-            builder: (context, ref, child) {
-              final accounts = ref.watch(getAccountBalancespod).value;
-              if (accounts == null) {
-                return const ShadCard(
-                  title: Text("NIL"),
-                  description: Text("Loading..."),
-                );
-              }
 
-              return ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxHeight: 105,
-                  minHeight: 105,
-                ),
-                child: Row(
-                  spacing: context.gutter,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if (accounts.length <= 2)
-                      for (final account in accounts)
-                        Expanded(
-                          child: GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            onLongPress: () => DeleteAccountSheet(
-                              onDelete: () {
-                                ref
-                                    .read(deleteAccountpod.notifier)
-                                    .delete(account.id);
-                              },
-                            ).show(context),
-                            child: ShadCard(
-                              title: Text(account.balance.toMoney()),
-                              description: Text(account.accountName),
-                            ),
-                          ),
-                        )
-                    else
-                      Expanded(
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: accounts.length,
-                          itemBuilder: (context, index) {
-                            final account = accounts[index];
+          const _Accounts(),
 
-                            return GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onLongPress: () => DeleteAccountSheet(
-                                onDelete: () {
-                                  ref
-                                      .read(deleteAccountpod.notifier)
-                                      .delete(account.id);
-                                },
-                              ).show(context),
-                              child: ConstrainedBox(
-                                constraints: const BoxConstraints(
-                                  minWidth: 140,
-                                ),
-                                child: ShadCard(
-                                  title: Text(account.balance.toMoney()),
-                                  description: Text(account.accountName),
-                                ),
-                              ),
-                            );
-                          },
-                          separatorBuilder: (_, _) => const Gutter(),
-                        ),
-                      ),
-
-                    ShadIconButton.outline(
-                      onPressed: () {
-                        const NewAccountSheet().show(context);
-                      },
-                      icon: const Icon(Icons.add),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ).asSliver(),
           const Gutter.large().asSliver(),
           Row(
             children: [
@@ -217,6 +140,103 @@ class _QuickAction extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
       ],
+    );
+  }
+}
+
+class _Accounts extends ConsumerWidget {
+  const _Accounts();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Consumer(
+      builder: (context, ref, child) {
+        final accounts = ref.watch(getAccountBalancespod).value;
+        if (accounts == null) {
+          return const ShadCard(
+            title: Text("NIL"),
+            description: Text("Loading..."),
+          );
+        }
+
+        return ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxHeight: 105,
+            minHeight: 105,
+          ),
+          child: Row(
+            spacing: context.gutter,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              if (accounts.length <= 2)
+                for (final account in accounts)
+                  Expanded(
+                    child: _AccountCard(
+                      account,
+                      onDelete: (id) {
+                        ref.read(deleteAccountpod.notifier).delete(id);
+                      },
+                    ),
+                  )
+              else
+                Expanded(
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: accounts.length,
+                    itemBuilder: (context, index) {
+                      final account = accounts[index];
+
+                      return _AccountCard(
+                        account,
+                        onDelete: (id) {
+                          ref.read(deleteAccountpod.notifier).delete(id);
+                        },
+                      );
+                    },
+                    separatorBuilder: (_, _) => const Gutter(),
+                  ),
+                ),
+
+              ShadButton.outline(
+                onPressed: () {
+                  const NewAccountSheet().show(context);
+                },
+                child: const Icon(Icons.add),
+              ),
+            ],
+          ),
+        );
+      },
+    ).asSliver();
+  }
+}
+
+class _AccountCard extends StatelessWidget {
+  const _AccountCard(
+    this.account, {
+    required this.onDelete,
+  });
+
+  final AccountwBalance account;
+  final ValueChanged<int> onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onLongPress: () => DeleteAccountSheet(
+        onDelete: () => onDelete(account.id),
+      ).show(context),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minWidth: 140,
+        ),
+        child: ShadCard(
+          title: Text(account.balance.toMoney()),
+          description: Text(account.accountName),
+        ),
+      ),
     );
   }
 }
