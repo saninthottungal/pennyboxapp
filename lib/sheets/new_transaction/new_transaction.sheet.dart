@@ -10,6 +10,7 @@ import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
 import 'package:pennyboxapp/services/database/app_database.dart';
 import 'package:pennyboxapp/sheets/new_transaction/new_transaction.logic.dart';
+import 'package:pennyboxapp/sheets/select_party/select_party.sheet.dart';
 import 'package:pennyboxapp/widgets/date_time_picker.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -113,34 +114,38 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
                     final party = ref.watch(selectedPartypod);
                     if (type == null) return const SizedBox.shrink();
 
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 2,
-                      ),
-                      decoration: party != null
-                          ? null
-                          : BoxDecoration(
-                              border: Border.all(
-                                //! needs to define a color for this
-                                color: context.colorScheme.primary.withValues(
-                                  alpha: 0.2,
+                    return GestureDetector(
+                      onTap: () => const SelectPartySheet().show(context),
+                      behavior: HitTestBehavior.translucent,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: party != null
+                            ? null
+                            : BoxDecoration(
+                                border: Border.all(
+                                  //! needs to define a color for this
+                                  color: context.colorScheme.primary.withValues(
+                                    alpha: 0.2,
+                                  ),
                                 ),
+                                borderRadius: UiConsts.borderRadius,
                               ),
-                              borderRadius: UiConsts.borderRadius,
-                            ),
-                      child: Text(
-                        '${type.actionLabel} ${party ?? '?'}',
-                        textAlign: TextAlign.center,
-                        //! needs to define a color for this
-                        style: context.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: party == null
-                              //! needs to define a color for this
-                              ? context.colorScheme.primary.withValues(
-                                  alpha: 0.3,
-                                )
-                              : context.colorScheme.primary,
+                        child: Text(
+                          '${type.actionLabel} ${party?.name ?? '?'}',
+                          textAlign: TextAlign.center,
+                          //! needs to define a color for this
+                          style: context.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: party == null
+                                //! needs to define a color for this
+                                ? context.colorScheme.primary.withValues(
+                                    alpha: 0.3,
+                                  )
+                                : context.colorScheme.primary,
+                          ),
                         ),
                       ),
                     );

@@ -124,4 +124,8 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
   Stream<List<Party>> getParties() {
     return select(parties).watch();
   }
+
+  Future<int> addParty(String name) {
+    return parties.insertOne(PartyCompanion.insert(name: name));
+  }
 }
