@@ -78,6 +78,7 @@ class TransactionsPage extends StatelessWidget {
                     final transaction = transactions[index];
 
                     return ListTile(
+                      //TODO: Delete should be SOFT
                       onLongPress: () => DeleteTransactionSheet(
                         onDelete: () => ref
                             .read(deleteTransactionpod.notifier)
