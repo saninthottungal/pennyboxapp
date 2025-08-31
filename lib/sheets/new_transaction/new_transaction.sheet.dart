@@ -236,6 +236,7 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
                           accountId: selectedAcc.id,
                           transactionTypeId: selectedTnType.id,
                           transactionAt: transactionAt.value,
+                          partyId: party.id,
                         );
                     if (context.mounted) Navigator.pop(context);
                   } else {
