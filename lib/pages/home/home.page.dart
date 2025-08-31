@@ -233,8 +233,15 @@ class _AccountCard extends StatelessWidget {
           minWidth: 140,
         ),
         child: ShadCard(
-          title: Text(account.balance.toMoney()),
-          description: Text(account.accountName),
+          title: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(account.balance.toMoney()),
+          ),
+          description: Text(
+            account.accountName,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ),
     );
