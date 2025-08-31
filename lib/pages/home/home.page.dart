@@ -23,34 +23,71 @@ class HomePage extends StatelessWidget {
           SizedBox(height: context.mdPadding.top + context.gutter).asSliver(),
           Consumer(
             builder: (context, ref, child) {
-              final balances = ref.watch(getAccountBalancespod).value;
-              if (balances == null) {
+              final accounts = ref.watch(getAccountBalancespod).value;
+              if (accounts == null) {
                 return const ShadCard(
                   title: Text("NIL"),
                   description: Text("Loading..."),
                 );
               }
 
-              return IntrinsicHeight(
+              return ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxHeight: 105,
+                  minHeight: 105,
+                ),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   spacing: context.gutter,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    for (final account in balances)
-                      Expanded(
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.translucent,
-                          onLongPress: () => DeleteAccountSheet(
-                            onDelete: () {
-                              ref
-                                  .read(deleteAccountpod.notifier)
-                                  .delete(account.id);
-                            },
-                          ).show(context),
-                          child: ShadCard(
-                            title: Text(account.balance.toMoney()),
-                            description: Text(account.accountName),
+                    if (accounts.length <= 2)
+                      for (final account in accounts)
+                        Expanded(
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onLongPress: () => DeleteAccountSheet(
+                              onDelete: () {
+                                ref
+                                    .read(deleteAccountpod.notifier)
+                                    .delete(account.id);
+                              },
+                            ).show(context),
+                            child: ShadCard(
+                              title: Text(account.balance.toMoney()),
+                              description: Text(account.accountName),
+                            ),
                           ),
+                        )
+                    else
+                      Expanded(
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: accounts.length,
+                          itemBuilder: (context, index) {
+                            final account = accounts[index];
+
+                            return GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onLongPress: () => DeleteAccountSheet(
+                                onDelete: () {
+                                  ref
+                                      .read(deleteAccountpod.notifier)
+                                      .delete(account.id);
+                                },
+                              ).show(context),
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(
+                                  minWidth: 140,
+                                ),
+                                child: ShadCard(
+                                  title: Text(account.balance.toMoney()),
+                                  description: Text(account.accountName),
+                                ),
+                              ),
+                            );
+                          },
+                          separatorBuilder: (_, _) => const Gutter(),
                         ),
                       ),
 
