@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: ShadApp(
-        theme: AppTheme.themeData,
+        themeMode: ThemeMode.light,
+        theme: AppTheme.getThemeData(isDarkMode: true),
         home: Builder(
           builder: (context) {
             return ScrollConfiguration(

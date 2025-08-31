@@ -5,9 +5,9 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 class AppTheme {
   const AppTheme._();
 
-  static ShadThemeData get themeData {
+  static ShadThemeData getThemeData({required bool isDarkMode}) {
     return ShadThemeData(
-      brightness: Brightness.dark,
+      brightness: isDarkMode ? Brightness.dark : Brightness.light,
 
       // Available Options:
       // ShadGrayColorScheme
@@ -21,7 +21,9 @@ class AppTheme {
       // ShadVioletColorScheme
       // ShadYellowColorScheme
       // ShadZincColorScheme
-      colorScheme: const ShadNeutralColorScheme.dark(),
+      colorScheme: isDarkMode
+          ? const ShadNeutralColorScheme.dark()
+          : const ShadNeutralColorScheme.light(),
     );
   }
 }
