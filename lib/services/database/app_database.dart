@@ -31,7 +31,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration {
@@ -48,6 +48,13 @@ class AppDatabase extends _$AppDatabase {
                 await m.addColumn(
                   schema.transactions,
                   schema.transactions.transactionAt,
+                );
+              },
+              from2To3: (m, schema) async {
+                await m.createTable(schema.parties);
+                await m.addColumn(
+                  schema.transactions,
+                  schema.transactions.partyId,
                 );
               },
             ),

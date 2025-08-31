@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:pennyboxapp/services/database/tables/accounts.table.dart';
+import 'package:pennyboxapp/services/database/tables/parties.table.dart';
 import 'package:pennyboxapp/services/database/tables/transaction_types.table.dart';
 
 @DataClassName('TransactionRaw', companion: 'TransactionRawCompanion')
@@ -16,6 +17,12 @@ class Transactions extends Table {
     TransactionTypes,
     #id,
     onDelete: KeyAction.cascade,
+  )();
+
+  late final partyId = integer().nullable().references(
+    Parties,
+    #id,
+    onDelete: KeyAction.setNull,
   )();
 
   late final amount = real()();

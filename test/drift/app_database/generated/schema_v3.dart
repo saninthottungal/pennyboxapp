@@ -334,6 +334,167 @@ class TransactionTypesCompanion extends UpdateCompanion<TransactionTypesData> {
   }
 }
 
+class Parties extends Table with TableInfo<Parties, PartiesData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  Parties(this.attachedDatabase, [this._alias]);
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, name];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'parties';
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  PartiesData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PartiesData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+    );
+  }
+
+  @override
+  Parties createAlias(String alias) {
+    return Parties(attachedDatabase, alias);
+  }
+}
+
+class PartiesData extends DataClass implements Insertable<PartiesData> {
+  final int id;
+  final String name;
+  const PartiesData({required this.id, required this.name});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    return map;
+  }
+
+  PartiesCompanion toCompanion(bool nullToAbsent) {
+    return PartiesCompanion(id: Value(id), name: Value(name));
+  }
+
+  factory PartiesData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PartiesData(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+    };
+  }
+
+  PartiesData copyWith({int? id, String? name}) =>
+      PartiesData(id: id ?? this.id, name: name ?? this.name);
+  PartiesData copyWithCompanion(PartiesCompanion data) {
+    return PartiesData(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PartiesData(')
+          ..write('id: $id, ')
+          ..write('name: $name')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PartiesData && other.id == this.id && other.name == this.name);
+}
+
+class PartiesCompanion extends UpdateCompanion<PartiesData> {
+  final Value<int> id;
+  final Value<String> name;
+  const PartiesCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+  });
+  PartiesCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+  }) : name = Value(name);
+  static Insertable<PartiesData> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+    });
+  }
+
+  PartiesCompanion copyWith({Value<int>? id, Value<String>? name}) {
+    return PartiesCompanion(id: id ?? this.id, name: name ?? this.name);
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PartiesCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class Transactions extends Table
     with TableInfo<Transactions, TransactionsData> {
   @override
@@ -374,6 +535,16 @@ class Transactions extends Table
       'REFERENCES transaction_types (id) ON DELETE CASCADE',
     ),
   );
+  late final GeneratedColumn<int> partyId = GeneratedColumn<int>(
+    'party_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES parties (id) ON DELETE SET NULL',
+    ),
+  );
   late final GeneratedColumn<double> amount = GeneratedColumn<double>(
     'amount',
     aliasedName,
@@ -404,6 +575,7 @@ class Transactions extends Table
     description,
     accountId,
     transactionTypeId,
+    partyId,
     amount,
     createdAt,
     transactionAt,
@@ -435,6 +607,10 @@ class Transactions extends Table
         DriftSqlType.int,
         data['${effectivePrefix}transaction_type_id'],
       )!,
+      partyId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}party_id'],
+      ),
       amount: attachedDatabase.typeMapping.read(
         DriftSqlType.double,
         data['${effectivePrefix}amount'],
@@ -462,6 +638,7 @@ class TransactionsData extends DataClass
   final String? description;
   final int accountId;
   final int transactionTypeId;
+  final int? partyId;
   final double amount;
   final DateTime createdAt;
   final DateTime transactionAt;
@@ -470,6 +647,7 @@ class TransactionsData extends DataClass
     this.description,
     required this.accountId,
     required this.transactionTypeId,
+    this.partyId,
     required this.amount,
     required this.createdAt,
     required this.transactionAt,
@@ -483,6 +661,9 @@ class TransactionsData extends DataClass
     }
     map['account_id'] = Variable<int>(accountId);
     map['transaction_type_id'] = Variable<int>(transactionTypeId);
+    if (!nullToAbsent || partyId != null) {
+      map['party_id'] = Variable<int>(partyId);
+    }
     map['amount'] = Variable<double>(amount);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['transaction_at'] = Variable<DateTime>(transactionAt);
@@ -497,6 +678,9 @@ class TransactionsData extends DataClass
           : Value(description),
       accountId: Value(accountId),
       transactionTypeId: Value(transactionTypeId),
+      partyId: partyId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(partyId),
       amount: Value(amount),
       createdAt: Value(createdAt),
       transactionAt: Value(transactionAt),
@@ -513,6 +697,7 @@ class TransactionsData extends DataClass
       description: serializer.fromJson<String?>(json['description']),
       accountId: serializer.fromJson<int>(json['accountId']),
       transactionTypeId: serializer.fromJson<int>(json['transactionTypeId']),
+      partyId: serializer.fromJson<int?>(json['partyId']),
       amount: serializer.fromJson<double>(json['amount']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       transactionAt: serializer.fromJson<DateTime>(json['transactionAt']),
@@ -526,6 +711,7 @@ class TransactionsData extends DataClass
       'description': serializer.toJson<String?>(description),
       'accountId': serializer.toJson<int>(accountId),
       'transactionTypeId': serializer.toJson<int>(transactionTypeId),
+      'partyId': serializer.toJson<int?>(partyId),
       'amount': serializer.toJson<double>(amount),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'transactionAt': serializer.toJson<DateTime>(transactionAt),
@@ -537,6 +723,7 @@ class TransactionsData extends DataClass
     Value<String?> description = const Value.absent(),
     int? accountId,
     int? transactionTypeId,
+    Value<int?> partyId = const Value.absent(),
     double? amount,
     DateTime? createdAt,
     DateTime? transactionAt,
@@ -545,6 +732,7 @@ class TransactionsData extends DataClass
     description: description.present ? description.value : this.description,
     accountId: accountId ?? this.accountId,
     transactionTypeId: transactionTypeId ?? this.transactionTypeId,
+    partyId: partyId.present ? partyId.value : this.partyId,
     amount: amount ?? this.amount,
     createdAt: createdAt ?? this.createdAt,
     transactionAt: transactionAt ?? this.transactionAt,
@@ -559,6 +747,7 @@ class TransactionsData extends DataClass
       transactionTypeId: data.transactionTypeId.present
           ? data.transactionTypeId.value
           : this.transactionTypeId,
+      partyId: data.partyId.present ? data.partyId.value : this.partyId,
       amount: data.amount.present ? data.amount.value : this.amount,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       transactionAt: data.transactionAt.present
@@ -574,6 +763,7 @@ class TransactionsData extends DataClass
           ..write('description: $description, ')
           ..write('accountId: $accountId, ')
           ..write('transactionTypeId: $transactionTypeId, ')
+          ..write('partyId: $partyId, ')
           ..write('amount: $amount, ')
           ..write('createdAt: $createdAt, ')
           ..write('transactionAt: $transactionAt')
@@ -587,6 +777,7 @@ class TransactionsData extends DataClass
     description,
     accountId,
     transactionTypeId,
+    partyId,
     amount,
     createdAt,
     transactionAt,
@@ -599,6 +790,7 @@ class TransactionsData extends DataClass
           other.description == this.description &&
           other.accountId == this.accountId &&
           other.transactionTypeId == this.transactionTypeId &&
+          other.partyId == this.partyId &&
           other.amount == this.amount &&
           other.createdAt == this.createdAt &&
           other.transactionAt == this.transactionAt);
@@ -609,6 +801,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionsData> {
   final Value<String?> description;
   final Value<int> accountId;
   final Value<int> transactionTypeId;
+  final Value<int?> partyId;
   final Value<double> amount;
   final Value<DateTime> createdAt;
   final Value<DateTime> transactionAt;
@@ -617,6 +810,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionsData> {
     this.description = const Value.absent(),
     this.accountId = const Value.absent(),
     this.transactionTypeId = const Value.absent(),
+    this.partyId = const Value.absent(),
     this.amount = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.transactionAt = const Value.absent(),
@@ -626,6 +820,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionsData> {
     this.description = const Value.absent(),
     required int accountId,
     required int transactionTypeId,
+    this.partyId = const Value.absent(),
     required double amount,
     this.createdAt = const Value.absent(),
     this.transactionAt = const Value.absent(),
@@ -637,6 +832,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionsData> {
     Expression<String>? description,
     Expression<int>? accountId,
     Expression<int>? transactionTypeId,
+    Expression<int>? partyId,
     Expression<double>? amount,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? transactionAt,
@@ -646,6 +842,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionsData> {
       if (description != null) 'description': description,
       if (accountId != null) 'account_id': accountId,
       if (transactionTypeId != null) 'transaction_type_id': transactionTypeId,
+      if (partyId != null) 'party_id': partyId,
       if (amount != null) 'amount': amount,
       if (createdAt != null) 'created_at': createdAt,
       if (transactionAt != null) 'transaction_at': transactionAt,
@@ -657,6 +854,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionsData> {
     Value<String?>? description,
     Value<int>? accountId,
     Value<int>? transactionTypeId,
+    Value<int?>? partyId,
     Value<double>? amount,
     Value<DateTime>? createdAt,
     Value<DateTime>? transactionAt,
@@ -666,6 +864,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionsData> {
       description: description ?? this.description,
       accountId: accountId ?? this.accountId,
       transactionTypeId: transactionTypeId ?? this.transactionTypeId,
+      partyId: partyId ?? this.partyId,
       amount: amount ?? this.amount,
       createdAt: createdAt ?? this.createdAt,
       transactionAt: transactionAt ?? this.transactionAt,
@@ -687,6 +886,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionsData> {
     if (transactionTypeId.present) {
       map['transaction_type_id'] = Variable<int>(transactionTypeId.value);
     }
+    if (partyId.present) {
+      map['party_id'] = Variable<int>(partyId.value);
+    }
     if (amount.present) {
       map['amount'] = Variable<double>(amount.value);
     }
@@ -706,6 +908,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionsData> {
           ..write('description: $description, ')
           ..write('accountId: $accountId, ')
           ..write('transactionTypeId: $transactionTypeId, ')
+          ..write('partyId: $partyId, ')
           ..write('amount: $amount, ')
           ..write('createdAt: $createdAt, ')
           ..write('transactionAt: $transactionAt')
@@ -718,6 +921,7 @@ class DatabaseAtV3 extends GeneratedDatabase {
   DatabaseAtV3(QueryExecutor e) : super(e);
   late final Accounts accounts = Accounts(this);
   late final TransactionTypes transactionTypes = TransactionTypes(this);
+  late final Parties parties = Parties(this);
   late final Transactions transactions = Transactions(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
@@ -726,6 +930,7 @@ class DatabaseAtV3 extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     accounts,
     transactionTypes,
+    parties,
     transactions,
   ];
   @override

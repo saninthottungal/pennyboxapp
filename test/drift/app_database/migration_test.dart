@@ -48,8 +48,8 @@ void main() {
     // Add data to insert into the old database, and the expected rows after the
     // migration.
     // TODO: Fill these lists
-    final oldAccountTypesData = <v1.AccountTypesData>[];
-    final expectedNewAccountTypesData = <v2.AccountTypesData>[];
+    final oldAccountsData = <v1.AccountsData>[];
+    final expectedNewAccountsData = <v2.AccountsData>[];
 
     final oldTransactionTypesData = <v1.TransactionTypesData>[];
     final expectedNewTransactionTypesData = <v2.TransactionTypesData>[];
@@ -64,14 +64,14 @@ void main() {
       createNew: v2.DatabaseAtV2.new,
       openTestedDatabase: AppDatabase.new,
       createItems: (batch, oldDb) {
-        batch.insertAll(oldDb.accountTypes, oldAccountTypesData);
+        batch.insertAll(oldDb.accounts, oldAccountsData);
         batch.insertAll(oldDb.transactionTypes, oldTransactionTypesData);
         batch.insertAll(oldDb.transactions, oldTransactionsData);
       },
       validateItems: (newDb) async {
         expect(
-          expectedNewAccountTypesData,
-          await newDb.select(newDb.accountTypes).get(),
+          expectedNewAccountsData,
+          await newDb.select(newDb.accounts).get(),
         );
         expect(
           expectedNewTransactionTypesData,
