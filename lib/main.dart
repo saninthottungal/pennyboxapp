@@ -5,10 +5,10 @@ import 'package:pennyboxapp/pages/shell/shell.page.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(
-    const ProviderScope(
-      child: MyApp(),
-    ),
+    const ProviderScope(child: MyApp()),
   );
 }
 
