@@ -51,6 +51,7 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
             transactionTypes,
             transactionTypes.id.equalsExp(transactions.transactionTypeId),
           ),
+          leftOuterJoin(parties, parties.id.equalsExp(transactions.partyId)),
         ])..orderBy([
           OrderingTerm.desc(transactions.transactionAt),
         ]);
