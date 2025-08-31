@@ -64,8 +64,8 @@ class _ShadDateTimePickerState extends State<ShadDateTimePicker> {
   Future<DateTime?> _showDateTimeDialogue(BuildContext context) async {
     final date = await showDatePicker(
       context: context,
-      firstDate: DateTime.now().subtract(const Duration(days: 365 * 25)),
-      lastDate: DateTime.now(),
+      firstDate: DateTime.now().subtract(const Duration(days: 365)),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
       initialDate: DateTime.now(),
     );
     if (!context.mounted || date == null) return null;
