@@ -98,8 +98,17 @@ class TransactionsPage extends StatelessWidget {
                       title: Text(
                         transaction.party?.name ?? transaction.id.toString(),
                       ),
-                      subtitle: Text(
-                        transaction.transactionAt.toSimple(),
+                      subtitle: Text.rich(
+                        TextSpan(
+                          text: transaction.transactionAt.toSimple(),
+                          children: transaction.description != null
+                              ? [
+                                  const TextSpan(text: '\n'),
+                                  TextSpan(text: transaction.description),
+                                ]
+                              : [],
+                        ),
+                        maxLines: 2,
                         style: context.textTheme.bodySmall?.copyWith(
                           fontWeight: FontWeight.w600,
 
