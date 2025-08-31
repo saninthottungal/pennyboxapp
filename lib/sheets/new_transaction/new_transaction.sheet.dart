@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pennyboxapp/core/constants/currency_consts.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
 import 'package:pennyboxapp/core/mixins/modal_sheet.mixin.dart';
 import 'package:pennyboxapp/core/utils/context.utils.dart';
+import 'package:pennyboxapp/core/utils/number.utils.dart';
 import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
 import 'package:pennyboxapp/services/database/app_database.dart';
 import 'package:pennyboxapp/sheets/new_transaction/new_transaction.logic.dart';
@@ -156,12 +156,13 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
 
                 Consumer(
                   builder: (context, ref, child) {
-                    final amount = ref.watch(pod);
+                    final amountString = ref.watch(pod);
+                    final amount = double.tryParse(amountString) ?? 0;
 
                     return Text(
-                      '${AppCurrency.current}${amount.isEmpty ? 0 : amount}',
+                      amount.toMoney(),
                       style: context.textTheme.displayLarge?.copyWith(
-                        color: amount.isEmpty
+                        color: amountString.isEmpty
                             ? context.colorScheme.primary.withValues(alpha: 0.3)
                             : context.colorScheme.primary,
                       ),
