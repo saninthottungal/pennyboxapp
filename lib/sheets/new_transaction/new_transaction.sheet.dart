@@ -110,7 +110,7 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
                 Consumer(
                   builder: (context, ref, child) {
                     final type = ref.watch(selectedTransactionTypepod);
-                    final party = ref.watch(otherPartypod);
+                    final party = ref.watch(selectedPartypod);
                     if (type == null) return const SizedBox.shrink();
 
                     return Container(

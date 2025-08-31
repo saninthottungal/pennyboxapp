@@ -1,3 +1,4 @@
+import 'package:pennyboxapp/services/database/app_database.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'new_transaction.logic.g.dart';
@@ -20,9 +21,13 @@ class NewTransactionAmount extends _$NewTransactionAmount {
 }
 
 @riverpod
-class OtherParty extends _$OtherParty {
+class SelectedParty extends _$SelectedParty {
   @override
-  String? build() {
+  Party? build() {
     return null;
+  }
+
+  void update(Party party) {
+    state = party;
   }
 }

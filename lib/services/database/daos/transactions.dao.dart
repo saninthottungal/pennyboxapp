@@ -121,7 +121,7 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
     return accounts.deleteWhere((e) => e.id.equals(id));
   }
 
-  Future<List<Party>> getParties() {
-    return select(parties).get();
+  Stream<List<Party>> getParties() {
+    return select(parties).watch();
   }
 }
