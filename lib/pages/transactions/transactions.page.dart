@@ -95,7 +95,9 @@ class TransactionsPage extends StatelessWidget {
                           size: 20,
                         ),
                       ),
-                      title: Text(transaction.id.toString()),
+                      title: Text(
+                        transaction.party?.name ?? transaction.id.toString(),
+                      ),
                       subtitle: Text(
                         transaction.transactionAt.toSimple(),
                         style: context.textTheme.bodySmall?.copyWith(

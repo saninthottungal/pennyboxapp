@@ -66,6 +66,7 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
           description: t.description,
           account: row.readTable(accounts),
           type: row.readTable(transactionTypes).asType,
+          party: row.readTableOrNull(parties),
         );
       }).toList();
     });

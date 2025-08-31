@@ -13,5 +13,6 @@ abstract class Transaction with _$Transaction {
     required Account account,
     required TxnType type,
     required DateTime transactionAt,
+    required Party? party,
   }) = _Transaction;
 }
