@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,21 +16,16 @@ class SettingsRepository {
 
   final SharedPreferencesAsync _sharedPref;
 
-  Future<ThemeMode> getThemeMode() async {
+  Future<bool> getIsDarkTheme() async {
     final isDarkMode = (await _sharedPref.getBool(isDarkModeKey)) ?? false;
-
-    return isDarkMode ? ThemeMode.dark : ThemeMode.light;
+    return isDarkMode;
   }
 
-  Future<void> setThemeMode(ThemeMode mode) {
-    final isDarkMode = mode == ThemeMode.dark;
-
+  Future<void> setThemeMode(bool isDarkMode) {
     return _sharedPref.setBool(isDarkModeKey, isDarkMode);
   }
 
-  Future<void> toggleTheme() async {
-    final current = await getThemeMode();
-    final mode = current == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
-    await setThemeMode(mode);
+  Future<void> toggleTheme(bool isDarkMode) async {
+    await setThemeMode(isDarkMode);
   }
 }
