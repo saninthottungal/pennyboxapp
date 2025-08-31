@@ -3,13 +3,13 @@ import 'package:flutter_gutter/flutter_gutter.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/mixins/modal_sheet.mixin.dart';
-import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/sheets/new_account/new_account.logic.dart';
+import 'package:pennyboxapp/widgets/sheet_header.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 final _formKey = GlobalKey<FormState>();
 
-class NewAccountSheet extends HookConsumerWidget with ModalSheetMixin {
+class NewAccountSheet extends HookConsumerWidget with SheetMixin {
   const NewAccountSheet({super.key});
 
   @override
@@ -25,21 +25,7 @@ class NewAccountSheet extends HookConsumerWidget with ModalSheetMixin {
           crossAxisAlignment: CrossAxisAlignment.end,
           spacing: context.gutter,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Add Account",
-                  style: context.textTheme.titleLarge,
-                ),
-
-                ShadIconButton.outline(
-                  onPressed: Navigator.of(context).pop,
-                  icon: const Icon(Icons.close),
-                ),
-              ],
-            ),
-
+            const SheetHeader(title: 'Add Account'),
             ShadInputFormField(
               controller: controller,
               placeholder: const Text("Account Name"),

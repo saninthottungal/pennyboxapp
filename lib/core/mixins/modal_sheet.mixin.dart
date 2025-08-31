@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
 
-mixin ModalSheetMixin on Widget {
+mixin SheetMixin on Widget {
   Future<T?> show<T extends Object>(BuildContext context) {
     return showModalBottomSheet<T>(
       context: context,

@@ -13,7 +13,7 @@ import 'package:pennyboxapp/sheets/new_transaction/new_transaction.logic.dart';
 import 'package:pennyboxapp/widgets/date_time_picker.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-class NewTransactionSheet extends HookConsumerWidget with ModalSheetMixin {
+class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
   const NewTransactionSheet({super.key});
 
   @override

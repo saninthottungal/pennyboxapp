@@ -6,6 +6,8 @@ import 'package:pennyboxapp/core/utils/app_date.utils.dart';
 import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/core/utils/number.utils.dart';
 import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
+import 'package:pennyboxapp/sheets/delete_transaction/delete_transaction.logic.dart';
+import 'package:pennyboxapp/sheets/delete_transaction/delete_transaction.sheet.dart';
 import 'package:pennyboxapp/sheets/new_transaction/new_transaction.sheet.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -16,7 +18,7 @@ class TransactionsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: UiConsts.bodyHorizPadding.copyWith(
-        top: context.mdPadding.top,
+        top: context.mdPadding.top + context.gutter,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,6 +78,11 @@ class TransactionsPage extends StatelessWidget {
                     final transaction = transactions[index];
 
                     return ListTile(
+                      onLongPress: () => DeleteTransactionSheet(
+                        onDelete: () => ref
+                            .read(deleteTransactionpod.notifier)
+                            .delete(transaction.id),
+                      ).show(context),
                       leading: Container(
                         decoration: ShapeDecoration(
                           shape: UiConsts.shapeBoder,

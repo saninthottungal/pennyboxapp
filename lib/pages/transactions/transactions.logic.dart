@@ -55,13 +55,3 @@ Stream<List<Transaction>> getTransactions(Ref ref) {
   final db = ref.watch(appDbpod);
   return db.transactionsDao.transactionsStream();
 }
-
-@riverpod
-class TransactionsLogic extends _$TransactionsLogic {
-  @override
-  void build() {}
-
-  Future<int> deleteTransaction(int id) {
-    return ref.read(appDbpod).transactionsDao.deleteTransaction(id);
-  }
-}

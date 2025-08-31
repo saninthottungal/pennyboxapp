@@ -18,8 +18,7 @@ class HomePage extends StatelessWidget {
       padding: UiConsts.bodyHorizPadding,
       child: CustomScrollView(
         slivers: [
-          SizedBox(height: context.mdPadding.top).asSliver(),
-          const Gutter().asSliver(),
+          SizedBox(height: context.mdPadding.top + context.gutter).asSliver(),
           Consumer(
             builder: (context, ref, child) {
               final balances = ref.watch(getAccountBalancespod).value;
