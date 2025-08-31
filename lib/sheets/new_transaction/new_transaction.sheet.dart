@@ -115,7 +115,9 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
                     if (type == null) return const SizedBox.shrink();
 
                     return GestureDetector(
-                      onTap: () => const SelectPartySheet().show(context),
+                      onTap: () => SelectPartySheet(
+                        onSelected: ref.read(selectedPartypod.notifier).update,
+                      ).show(context),
                       behavior: HitTestBehavior.translucent,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -213,15 +215,15 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
                 onPressed: () async {
                   if (isDoneBtn) {
                     final selectedAcc = ref.read(selectedAccountpod);
-                    final selectedTnType = ref.read(
-                      selectedTransactionTypepod,
-                    );
+                    final selectedTnType = ref.read(selectedTransactionTypepod);
+                    final party = ref.read(selectedPartypod);
                     final value = ref.read(newTransactionAmountpod);
                     final amount = double.tryParse(value);
 
                     if (selectedAcc == null ||
                         selectedTnType == null ||
                         amount == null ||
+                        party == null ||
                         amount == 0) {
                       return;
                     }

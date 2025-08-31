@@ -4,7 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'select_party.logic.g.dart';
 
 @riverpod
-class PartiesNotifier extends _$PartiesNotifier {
+class Parties extends _$Parties {
   @override
   Stream<List<Party>> build() {
     final db = ref.watch(appDbpod);
@@ -13,5 +13,9 @@ class PartiesNotifier extends _$PartiesNotifier {
 
   Future<int> addParty(String name) {
     return ref.read(appDbpod).transactionsDao.addParty(name);
+  }
+
+  Future<int> deleteParty(int id) {
+    return ref.read(appDbpod).transactionsDao.deleteParty(id);
   }
 }

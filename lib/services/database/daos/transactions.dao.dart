@@ -128,4 +128,8 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
   Future<int> addParty(String name) {
     return parties.insertOne(PartyCompanion.insert(name: name));
   }
+
+  Future<int> deleteParty(int id) {
+    return parties.deleteWhere((e) => e.id.equals(id));
+  }
 }
