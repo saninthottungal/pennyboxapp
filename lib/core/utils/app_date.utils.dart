@@ -17,8 +17,8 @@ class AppDate {
 
 extension DateTimeX on DateTime {
   String toSimple() {
-    final now = DateTime.now();
-    final time = AppDate.time12h.format(this);
+    final now = DateTime.now().toLocal();
+    final time = AppDate.time12h.format(toLocal());
     final shortYearStr = now.year == year ? '' : AppDate.shortYear.format(this);
 
     final date = switch (this) {
