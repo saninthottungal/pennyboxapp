@@ -20,7 +20,7 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pod = newTransactionAmountpod;
-    final transactionAt = useRef<DateTime?>(null);
+    final transactionAt = useRef<DateTime>(DateTime.now());
     final noteController = useTextEditingController();
 
     return Padding(
@@ -205,7 +205,7 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
                 flex: 2,
                 child: ShadDateTimePicker(
                   margin: EdgeInsets.only(right: context.gutterSmall),
-                  onSelected: (value) => transactionAt.value = value,
+                  onChanged: (value) => transactionAt.value = value,
                 ),
               ),
 

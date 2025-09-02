@@ -7,11 +7,11 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 class ShadDateTimePicker extends StatefulWidget {
   const ShadDateTimePicker({
     super.key,
-    required this.onSelected,
+    required this.onChanged,
     this.margin,
   });
 
-  final ValueChanged<DateTime> onSelected;
+  final ValueChanged<DateTime> onChanged;
   final EdgeInsets? margin;
 
   @override
@@ -26,7 +26,12 @@ class _ShadDateTimePickerState extends State<ShadDateTimePicker> {
   void initState() {
     _timer = Timer.periodic(
       const Duration(seconds: 1),
-      (_) => setState(() => _selected = DateTime.now()),
+      (_) => setState(
+        () {
+          _selected = DateTime.now();
+          widget.onChanged(_selected);
+        },
+      ),
     );
     super.initState();
   }
@@ -52,7 +57,7 @@ class _ShadDateTimePickerState extends State<ShadDateTimePicker> {
               _selected = dateTime;
             });
 
-            widget.onSelected(dateTime);
+            widget.onChanged(dateTime);
           }
         },
         leading: const Icon(Icons.calendar_month_outlined),
