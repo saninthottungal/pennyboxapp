@@ -1,6 +1,6 @@
 # flutter pub run flutter_launcher_icons
 flutter_launcher_icons:
-  image_path: "assets/logo/piggy_bank_logo.png"
+  image_path: "assets/logo/logo.png"
 
   android: true
   # image_path_android: "assets/icon/icon.png"
