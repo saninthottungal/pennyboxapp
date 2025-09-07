@@ -34,14 +34,21 @@ part 'transactions.dao.g.dart';
      ON T.transaction_type_id = TY.id
      GROUP BY AC.id
     ''',
+
+    'queryHasPlannedTransactions': '''
+    SELECT COUNT(*)
+    FROM transactions
+    where
+    transaction_at > datetime('now');
+    ''',
   },
 )
 class TransactionsDao extends DatabaseAccessor<AppDatabase>
     with _$TransactionsDaoMixin {
   TransactionsDao(super.attachedDatabase);
 
-  Stream<List<Transaction>> transactionsStream() {
-    final query =
+  Stream<List<Transaction>> transactionsStream({bool planned = false}) {
+    var query =
         select(transactions).join([
           innerJoin(
             accounts,
@@ -55,6 +62,16 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
         ])..orderBy([
           OrderingTerm.desc(transactions.transactionAt),
         ]);
+
+    if (planned) {
+      query = query
+        ..where(transactions.transactionAt.isBiggerThan(currentDateAndTime));
+    } else {
+      query = query
+        ..where(
+          transactions.transactionAt.isSmallerOrEqual(currentDateAndTime),
+        );
+    }
 
     return query.watch().map((rows) {
       return rows.map((row) {
@@ -71,6 +88,10 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
         );
       }).toList();
     });
+  }
+
+  Stream<bool> hasPlannedTransactionsStream() {
+    return queryHasPlannedTransactions().watchSingle().map((e) => e > 0);
   }
 
   Future<List<Account>> getAccounts() {
