@@ -18,6 +18,9 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
   const NewTransactionSheet({super.key});
 
   @override
+  bool get resizeToAvoidBottomInset => false;
+
+  @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pod = newTransactionAmountpod;
     final transactionAt = useRef<DateTime>(DateTime.now());
