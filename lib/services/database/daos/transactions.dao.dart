@@ -148,8 +148,8 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
     return accounts.deleteWhere((e) => e.id.equals(id));
   }
 
-  Stream<List<Party>> getParties() {
-    return select(parties).watch();
+  Stream<List<Party>> getParties({String search = ''}) {
+    return (select(parties)..where((e) => e.name.like('%$search%'))).watch();
   }
 
   Future<int> addParty(String name) {

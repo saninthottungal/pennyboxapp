@@ -41,6 +41,11 @@ class SelectPartySheet extends HookConsumerWidget with SheetMixin {
                 children: [
                   Expanded(
                     child: ShadInputFormField(
+                      trailing: GestureDetector(
+                        onTap: inputController.clear,
+                        behavior: HitTestBehavior.translucent,
+                        child: const Icon(Icons.close),
+                      ),
                       controller: inputController,
                       placeholder: const Text("Search"),
                       textCapitalization: TextCapitalization.words,
@@ -52,6 +57,7 @@ class SelectPartySheet extends HookConsumerWidget with SheetMixin {
 
                         return null;
                       },
+                      onChanged: ref.read(partiespod.notifier).searchParties,
                     ),
                   ),
                   ShadButton.secondary(
