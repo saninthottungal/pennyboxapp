@@ -99,6 +99,7 @@ class TransactionsPage extends StatelessWidget {
                         transaction.party?.name ?? transaction.id.toString(),
                       ),
                       subtitle: Text.rich(
+                        overflow: TextOverflow.ellipsis,
                         TextSpan(
                           text: transaction.transactionAt.toSimple(),
                           children: transaction.description != null
@@ -108,7 +109,7 @@ class TransactionsPage extends StatelessWidget {
                                 ]
                               : [],
                         ),
-                        maxLines: 2,
+                        maxLines: 3,
                         style: context.textTheme.bodySmall?.copyWith(
                           fontWeight: FontWeight.w600,
 
@@ -118,6 +119,7 @@ class TransactionsPage extends StatelessWidget {
                           ),
                         ),
                       ),
+
                       trailing: Text(
                         transaction.amount.toMoney(),
                         style: context.textTheme.bodyLarge?.copyWith(
