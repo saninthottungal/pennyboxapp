@@ -9,7 +9,7 @@ class NewTransactionAmount extends _$NewTransactionAmount {
   String build() => '';
 
   void append(String char) {
-    if (char == '.' && state.endsWith('.')) return;
+    if (char == '.' && state.contains('.')) return;
 
     state = '$state$char';
   }
