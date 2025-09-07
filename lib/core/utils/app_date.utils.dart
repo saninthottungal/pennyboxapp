@@ -22,6 +22,7 @@ extension DateTimeX on DateTime {
     final shortYearStr = now.year == year ? '' : AppDate.shortYear.format(this);
 
     final date = switch (this) {
+      _ when isTomorrow => 'Tomorrow',
       _ when isToday => 'Today',
       _ when wasYesterday => 'Yesterday',
       _ => AppDate.monthDay.format(this),
