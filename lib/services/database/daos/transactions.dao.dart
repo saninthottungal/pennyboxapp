@@ -90,8 +90,8 @@ class TransactionsDao extends DatabaseAccessor<AppDatabase>
     });
   }
 
-  Stream<bool> hasPlannedTransactionsStream() {
-    return queryHasPlannedTransactions().watchSingle().map((e) => e > 0);
+  Stream<int> hasPlannedTransactionsStream() {
+    return queryHasPlannedTransactions().watchSingle();
   }
 
   Future<List<Account>> getAccounts() {

@@ -55,3 +55,8 @@ Stream<List<Transaction>> getTransactions(Ref ref) {
   final db = ref.watch(appDbpod);
   return db.transactionsDao.transactionsStream();
 }
+
+final hasPlannedTransactionsPod = StreamProvider.autoDispose<int>((ref) {
+  final dao = ref.watch(appDbpod).transactionsDao;
+  return dao.hasPlannedTransactionsStream();
+});

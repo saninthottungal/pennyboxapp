@@ -58,6 +58,50 @@ class TransactionsPage extends StatelessWidget {
 
           const Divider(),
 
+          //* See planned transactions
+          Consumer(
+            builder: (context, ref, child) {
+              final plannedCount =
+                  ref.watch(hasPlannedTransactionsPod).value ?? 0;
+
+              if (plannedCount <= 0) return const SizedBox.shrink();
+
+              return GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 12,
+                  ),
+                  decoration: ShapeDecoration(
+                    shape: UiConsts.shapeBoder.copyWith(
+                      side: BorderSide(
+                        color: context.colorScheme.secondary,
+                        strokeAlign: 0,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "See $plannedCount planned transactions",
+                        style: context.textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const Icon(
+                        Icons.arrow_forward_outlined,
+                        size: 24,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+
           /// List
           Expanded(
             child: Consumer(
