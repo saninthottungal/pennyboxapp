@@ -188,6 +188,7 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
                       controller: noteController,
                       textCapitalization: TextCapitalization.sentences,
                       placeholderAlignment: Alignment.center,
+                      textAlign: TextAlign.center,
                       placeholder: const Text("Add note"),
                       minLines: 1,
                       maxLines: 2,
