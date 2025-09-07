@@ -163,14 +163,18 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
 
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: context.gutter),
-                      child: Text(
-                        amount.toMoney(),
-                        style: context.textTheme.displayLarge?.copyWith(
-                          color: amountString.isEmpty
-                              ? context.colorScheme.primary.withValues(
-                                  alpha: 0.3,
-                                )
-                              : context.colorScheme.primary,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          amount.toMoney(),
+                          maxLines: 1,
+                          style: context.textTheme.displayLarge?.copyWith(
+                            color: amountString.isEmpty
+                                ? context.colorScheme.primary.withValues(
+                                    alpha: 0.3,
+                                  )
+                                : context.colorScheme.primary,
+                          ),
                         ),
                       ),
                     );
