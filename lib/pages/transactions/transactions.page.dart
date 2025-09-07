@@ -6,6 +6,7 @@ import 'package:pennyboxapp/core/utils/app_date.utils.dart';
 import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/core/utils/number.utils.dart';
 import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
+import 'package:pennyboxapp/services/database/models/transaction.model.dart';
 import 'package:pennyboxapp/sheets/delete_transaction/delete_transaction.logic.dart';
 import 'package:pennyboxapp/sheets/delete_transaction/delete_transaction.sheet.dart';
 import 'package:pennyboxapp/sheets/new_transaction/new_transaction.sheet.dart';
@@ -94,161 +95,108 @@ class TransactionsPage extends StatelessWidget {
           },
           body: TabBarView(
             children: [
-              /// List
+              //* transaction history
               Consumer(
                 builder: (context, ref, child) {
                   final transactions = ref
                       .watch(getTransactionspod(false))
                       .valueOrNull;
 
-                  if (transactions == null) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-
-                  return ListView.separated(
-                    padding: EdgeInsets.zero,
-                    itemCount: transactions.length,
-                    separatorBuilder: (_, _) => const Divider(),
-                    itemBuilder: (context, index) {
-                      final transaction = transactions[index];
-
-                      return ListTile(
-                        //TODO: Delete should be SOFT
-                        onLongPress: () => DeleteTransactionSheet(
-                          onDelete: () => ref
-                              .read(deleteTransactionpod.notifier)
-                              .delete(transaction.id),
-                        ).show(context),
-                        leading: Container(
-                          decoration: ShapeDecoration(
-                            shape: UiConsts.shapeBoder,
-                            color: transaction.type.color,
-                          ),
-                          padding: const EdgeInsets.all(4),
-                          child: Icon(
-                            transaction.type.icon,
-                            size: 20,
-                          ),
-                        ),
-                        title: Text(
-                          transaction.party?.name ?? transaction.id.toString(),
-                        ),
-                        subtitle: Text.rich(
-                          overflow: TextOverflow.ellipsis,
-                          TextSpan(
-                            text: transaction.transactionAt.toSimple(),
-                            children: transaction.description != null
-                                ? [
-                                    const TextSpan(text: '\n'),
-                                    TextSpan(text: transaction.description),
-                                  ]
-                                : [],
-                          ),
-                          maxLines: 3,
-                          style: context.textTheme.bodySmall?.copyWith(
-                            fontWeight: FontWeight.w600,
-
-                            //! needs change
-                            color: context.colorScheme.primary.withValues(
-                              alpha: 0.5,
-                            ),
-                          ),
-                        ),
-
-                        trailing: Text(
-                          transaction.amount.toMoney(),
-                          style: context.textTheme.bodyLarge?.copyWith(
-                            color: transaction.type.color,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      );
-                    },
-                  );
+                  return _TransactionListView(transactions);
                 },
               ),
 
-              /// List
+              //* Upcoming/Planned Transactions
               Consumer(
                 builder: (context, ref, child) {
                   final transactions = ref
                       .watch(getTransactionspod(true))
                       .valueOrNull;
 
-                  if (transactions == null) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-
-                  return ListView.separated(
-                    padding: EdgeInsets.zero,
-                    itemCount: transactions.length,
-                    separatorBuilder: (_, _) => const Divider(),
-                    itemBuilder: (context, index) {
-                      final transaction = transactions[index];
-
-                      return ListTile(
-                        //TODO: Delete should be SOFT
-                        onLongPress: () => DeleteTransactionSheet(
-                          onDelete: () => ref
-                              .read(deleteTransactionpod.notifier)
-                              .delete(transaction.id),
-                        ).show(context),
-                        leading: Container(
-                          decoration: ShapeDecoration(
-                            shape: UiConsts.shapeBoder,
-                            color: transaction.type.color,
-                          ),
-                          padding: const EdgeInsets.all(4),
-                          child: Icon(
-                            transaction.type.icon,
-                            size: 20,
-                          ),
-                        ),
-                        title: Text(
-                          transaction.party?.name ?? transaction.id.toString(),
-                        ),
-                        subtitle: Text.rich(
-                          overflow: TextOverflow.ellipsis,
-                          TextSpan(
-                            text: transaction.transactionAt.toSimple(),
-                            children: transaction.description != null
-                                ? [
-                                    const TextSpan(text: '\n'),
-                                    TextSpan(text: transaction.description),
-                                  ]
-                                : [],
-                          ),
-                          maxLines: 3,
-                          style: context.textTheme.bodySmall?.copyWith(
-                            fontWeight: FontWeight.w600,
-
-                            //! needs change
-                            color: context.colorScheme.primary.withValues(
-                              alpha: 0.5,
-                            ),
-                          ),
-                        ),
-
-                        trailing: Text(
-                          transaction.amount.toMoney(),
-                          style: context.textTheme.bodyLarge?.copyWith(
-                            color: transaction.type.color,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      );
-                    },
-                  );
+                  return _TransactionListView(transactions);
                 },
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _TransactionListView extends ConsumerWidget {
+  const _TransactionListView(this._transactions);
+
+  final List<Transaction>? _transactions;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final transactions = _transactions;
+
+    if (transactions == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    return ListView.separated(
+      padding: EdgeInsets.zero,
+      itemCount: transactions.length,
+      separatorBuilder: (_, _) => const Divider(),
+      itemBuilder: (context, index) {
+        final transaction = transactions[index];
+
+        return ListTile(
+          //TODO: Delete should be SOFT
+          onLongPress: () => DeleteTransactionSheet(
+            onDelete: () =>
+                ref.read(deleteTransactionpod.notifier).delete(transaction.id),
+          ).show(context),
+          leading: Container(
+            decoration: ShapeDecoration(
+              shape: UiConsts.shapeBoder,
+              color: transaction.type.color,
+            ),
+            padding: const EdgeInsets.all(4),
+            child: Icon(
+              transaction.type.icon,
+              size: 20,
+            ),
+          ),
+          title: Text(
+            transaction.party?.name ?? transaction.id.toString(),
+          ),
+          subtitle: Text.rich(
+            overflow: TextOverflow.ellipsis,
+            TextSpan(
+              text: transaction.transactionAt.toSimple(),
+              children: transaction.description != null
+                  ? [
+                      const TextSpan(text: '\n'),
+                      TextSpan(text: transaction.description),
+                    ]
+                  : [],
+            ),
+            maxLines: 3,
+            style: context.textTheme.bodySmall?.copyWith(
+              fontWeight: FontWeight.w600,
+
+              //! needs change
+              color: context.colorScheme.primary.withValues(
+                alpha: 0.5,
+              ),
+            ),
+          ),
+
+          trailing: Text(
+            transaction.amount.toMoney(),
+            style: context.textTheme.bodyLarge?.copyWith(
+              color: transaction.type.color,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        );
+      },
     );
   }
 }
