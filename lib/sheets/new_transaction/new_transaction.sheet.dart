@@ -205,6 +205,7 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
               Expanded(
                 flex: 2,
                 child: ShadDateTimePicker(
+                  initialDateTime: transactionAt.value,
                   margin: EdgeInsets.only(right: context.gutterSmall),
                   onChanged: (value) => transactionAt.value = value,
                 ),
