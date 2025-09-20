@@ -10,13 +10,13 @@ class AppSqfliteDb {
   }
 
   AppSqfliteDb._() {
-    transactionDao = TransactionDao(this);
+    transactionDao = TransactionDao(_db);
   }
 
   static final _instance = AppSqfliteDb._();
 
-  late final Database _rawDb;
-  Database get rawDb => _rawDb;
+  late final Database _db;
+  Database get db => _db;
 
   late final TransactionDao transactionDao;
 
@@ -29,7 +29,7 @@ class AppSqfliteDb {
       path = join(dbFolder.path, 'pennybox.db');
     }
 
-    return _rawDb = await openDatabase(
+    return _db = await openDatabase(
       path,
       version: 1,
       onCreate: (db, version) async {

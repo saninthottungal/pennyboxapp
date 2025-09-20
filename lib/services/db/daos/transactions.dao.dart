@@ -1,7 +1,7 @@
-import 'package:pennyboxapp/services/db/db.dart';
+import 'package:sqflite/sqflite.dart';
 
 class TransactionDao {
   TransactionDao(this._db);
 
-  final AppSqfliteDb _db;
+  final Database _db;
 }
