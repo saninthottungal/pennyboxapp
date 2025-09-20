@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pennyboxapp/services/db/transactions.dao.dart';
+import 'package:pennyboxapp/services/db/daos/transactions.dao.dart';
 import 'package:sqflite/sqflite.dart';
 
 class AppSqfliteDb {
