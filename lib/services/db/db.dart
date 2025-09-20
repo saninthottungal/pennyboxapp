@@ -12,8 +12,8 @@ class AppSqfliteDb {
 
   static final _instance = AppSqfliteDb._();
 
-  late final Database _db;
-  Database get db => _db;
+  late final Database _rawDb;
+  Database get rawDb => _rawDb;
 
   Future<Database> open() async {
     final dbFolder = await getApplicationDocumentsDirectory();
@@ -24,6 +24,6 @@ class AppSqfliteDb {
       path = join(dbFolder.path, 'pennybox.db');
     }
 
-    return _db = await openDatabase(path);
+    return _rawDb = await openDatabase(path);
   }
 }
