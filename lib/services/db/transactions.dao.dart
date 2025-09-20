@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:pennyboxapp/services/db/db.dart';
+import 'package:sqflite/sqflite.dart';
 
 part 'transactions.dao.g.dart';
 part 'transactions.dao.freezed.dart';
@@ -20,8 +21,8 @@ class TransactionDao {
 
   final AppSqfliteDb _db;
 
-  Future<void> createTables() async {
-    _db.rawDb.execute('''
+  Future<void> createTables(Database db) {
+    return db.execute('''
 CREATE TABLE IF NOT EXISTS  accounts
 (
 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -52,5 +53,16 @@ transaction_type_id INTEGER NOT NULL REFERENCES transaction_types(id) ON DELETE 
 party_id INTEGER  REFERENCES parties(id)  ON DELETE SET NULL ON UPDATE SET NULL
 );
 ''');
+  }
+
+  Future<void> insertDefaultTnxTypesAndAccounts(Database db) {
+    return db.execute(
+      '''
+INSERT INTO accounts (name) values (?);
+INSERT INTO transaction_types (kind) VALUES (?),(?),(?);
+
+    ''',
+      ["Cash", "Income", "Expense", "Transfer"],
+    );
   }
 }
