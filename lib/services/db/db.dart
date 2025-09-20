@@ -1,18 +1,22 @@
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-class AppDatabase {
-  factory AppDatabase() {
+class AppSqfliteDb {
+  factory AppSqfliteDb() {
     return _instance;
   }
 
-  AppDatabase._();
+  AppSqfliteDb._();
 
-  static final _instance = AppDatabase._();
+  static final _instance = AppSqfliteDb._();
 
   late final Database _db;
   Database get db => _db;
 
   Future<Database> open() async {
-    return _db = await openDatabase('manager.db');
+    final dbFolder = await getApplicationDocumentsDirectory();
+    final path = join(dbFolder.path, 'pennybox.db');
+    return _db = await openDatabase(path);
   }
 }

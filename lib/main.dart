@@ -3,11 +3,14 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/theme/app_theme.dart';
 import 'package:pennyboxapp/pages/shell/shell.page.dart';
+import 'package:pennyboxapp/services/db/db.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-void main() {
+void main() async {
   final binding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: binding);
+
+  await AppSqfliteDb().open();
 
   runApp(
     const ProviderScope(child: MyApp()),
