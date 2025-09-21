@@ -3,7 +3,7 @@ import 'package:flutter_gutter/flutter_gutter.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/mixins/modal_sheet.mixin.dart';
-import 'package:pennyboxapp/services/db/db.dart';
+import 'package:pennyboxapp/sheets/new_account/new_account.logic.dart';
 import 'package:pennyboxapp/widgets/sheet_header.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -47,9 +47,11 @@ class NewAccountSheet extends HookConsumerWidget with SheetMixin {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
 
-                  await AppSqfliteDb().transactionDao.addAccount(
-                    controller.text,
-                  );
+                  await ref
+                      .read(newAccountpod.notifier)
+                      .addAccount(
+                        controller.text,
+                      );
                   FocusManager.instance.primaryFocus?.unfocus();
                   if (context.mounted) Navigator.of(context).pop();
                 }

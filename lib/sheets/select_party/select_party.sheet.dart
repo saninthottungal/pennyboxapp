@@ -4,7 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/mixins/modal_sheet.mixin.dart';
 import 'package:pennyboxapp/core/utils/context.utils.dart';
-import 'package:pennyboxapp/services/database/app_database.dart';
+import 'package:pennyboxapp/services/db/models/party.model.dart';
 import 'package:pennyboxapp/sheets/select_party/select_party.logic.dart';
 import 'package:pennyboxapp/widgets/sheet_header.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';

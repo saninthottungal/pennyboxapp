@@ -1,4 +1,4 @@
-import 'package:pennyboxapp/services/database/app_database.dart';
+import 'package:pennyboxapp/services/db/models/party.model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'new_transaction.logic.g.dart';

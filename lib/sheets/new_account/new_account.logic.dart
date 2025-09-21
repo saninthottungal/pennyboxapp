@@ -1,4 +1,4 @@
-import 'package:pennyboxapp/services/database/app_database.dart';
+import 'package:pennyboxapp/services/db/db.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'new_account.logic.g.dart';
@@ -8,7 +8,7 @@ class NewAccount extends _$NewAccount {
   @override
   void build() {}
 
-  Future<int> addAccount(String name) {
-    return ref.read(appDbpod).transactionsDao.addAccount(name);
+  Future<void> addAccount(String name) {
+    return AppSqfliteDb().transactionDao.addAccount(name);
   }
 }

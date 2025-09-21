@@ -1,4 +1,5 @@
-import 'package:pennyboxapp/services/database/app_database.dart';
+import 'package:pennyboxapp/services/db/db.dart';
+import 'package:pennyboxapp/services/db/models/party.model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'select_party.logic.g.dart';
@@ -8,17 +9,16 @@ class Parties extends _$Parties {
   String _search = '';
 
   @override
-  Stream<List<Party>> build() {
-    final db = ref.watch(appDbpod);
-    return db.transactionsDao.getParties(search: _search);
+  Future<List<Party>> build() {
+    return AppSqfliteDb().transactionDao.getParties(search: _search);
   }
 
-  Future<int> addParty(String name) {
-    return ref.read(appDbpod).transactionsDao.addParty(name);
+  Future<void> addParty(String name) {
+    return AppSqfliteDb().transactionDao.addParty(name);
   }
 
-  Future<int> deleteParty(int id) {
-    return ref.read(appDbpod).transactionsDao.deleteParty(id);
+  Future<void> deleteParty(int id) {
+    return AppSqfliteDb().transactionDao.deleteParty(id);
   }
 
   Future<void> searchParties(String search) async {
