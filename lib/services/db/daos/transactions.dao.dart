@@ -99,14 +99,14 @@ VALUES
 
   Future<List<AccountwBalance>> getAccountBalances() async {
     final res = await _db.rawQuery('''
-SELECT AC.id, AC.name, 
-SUM(CASE WHEN TXNTYPE.kind = 'Income'  THEN TXN.amount ELSE 0 END ) -
-SUM(CASE WHEN TXNTYPE.kind != 'Income' THEN TXN.amount ELSE 0 END) AS balance
+SELECT AC.id, AC.name as account_name, 
+COALESCE(SUM(CASE WHEN TXNTYPE.kind = 'Income'  THEN TXN.amount ELSE 0 END),0) -
+COALESCE(SUM(CASE WHEN TXNTYPE.kind != 'Income' THEN TXN.amount ELSE 0 END),0) AS balance
 FROM accounts AS AC
 LEFT OUTER JOIN
 transactions AS TXN
 ON AC.id = TXN.account_id
-INNER JOIN 
+LEFT OUTER JOIN
 transaction_types AS TXNTYPE
 ON TXNTYPE.id = TXN.transaction_type_id
 GROUP BY AC.id;

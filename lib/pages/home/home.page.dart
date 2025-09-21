@@ -6,7 +6,7 @@ import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/core/utils/number.utils.dart';
 import 'package:pennyboxapp/core/utils/widget.utils.dart';
 import 'package:pennyboxapp/pages/home/home.logic.dart';
-import 'package:pennyboxapp/services/database/models/account_with_balance.model.dart';
+import 'package:pennyboxapp/services/db/models/account_with_balance.model.dart';
 import 'package:pennyboxapp/sheets/delete_account/delete_account.logic.dart';
 import 'package:pennyboxapp/sheets/delete_account/delete_account.sheet.dart';
 import 'package:pennyboxapp/sheets/new_account/new_account.sheet.dart';

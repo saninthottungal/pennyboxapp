@@ -19,7 +19,7 @@ class AppSqfliteDb {
 
   Future<Database> open() async {
     final dbFolder = await getApplicationDocumentsDirectory();
-    final String path = join(dbFolder.path, 'pennyboxdb.sqlite');
+    final String path = join(dbFolder.path, 'pennybox.db');
 
     _db = await openDatabase(
       path,
