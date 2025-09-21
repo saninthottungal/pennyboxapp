@@ -61,4 +61,11 @@ VALUES
       ],
     );
   }
+
+  Future<void> addAcount(String name) {
+    return _db.rawInsert(
+      'INSERT INTO accounts (name) Values (?);',
+      [name],
+    );
+  }
 }
