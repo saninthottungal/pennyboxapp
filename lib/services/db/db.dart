@@ -19,7 +19,7 @@ class AppDatabase {
 
   Future<Database> open() async {
     final dbFolder = await getApplicationDocumentsDirectory();
-    final String path = join(dbFolder.path, 'pennybox.db');
+    final String path = join(dbFolder.path, 'pennyboxdb.sqlite');
 
     _db = await openDatabase(
       path,
