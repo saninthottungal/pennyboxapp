@@ -8,7 +8,6 @@ import 'package:pennyboxapp/core/mixins/modal_sheet.mixin.dart';
 import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/core/utils/number.utils.dart';
 import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
-import 'package:pennyboxapp/services/db/db.dart';
 import 'package:pennyboxapp/services/db/models/account.model.dart';
 import 'package:pennyboxapp/sheets/new_transaction/new_transaction.logic.dart';
 import 'package:pennyboxapp/sheets/select_party/select_party.sheet.dart';
@@ -265,14 +264,16 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
                       return;
                     }
 
-                    await AppDatabase().transactionDao.addTransaction(
-                      amount: amount,
-                      accountId: selectedAcc.id,
-                      transactionTypeId: selectedTnType.id,
-                      transactionAt: transactionAt.value,
-                      partyId: party.id,
-                      description: note.isNotEmpty ? note : null,
-                    );
+                    await ref
+                        .read(newTransactionPodpod.notifier)
+                        .addTransaction(
+                          amount: amount,
+                          accountId: selectedAcc.id,
+                          transactionTypeId: selectedTnType.id,
+                          transactionAt: transactionAt.value,
+                          partyId: party.id,
+                          description: note.isNotEmpty ? note : null,
+                        );
                     if (context.mounted) Navigator.pop(context);
                   } else {
                     ref.read(pod.notifier).append(char);

@@ -1,3 +1,6 @@
+import 'package:pennyboxapp/pages/home/home.logic.dart';
+import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
+import 'package:pennyboxapp/services/db/db.dart';
 import 'package:pennyboxapp/services/db/models/party.model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -31,5 +34,33 @@ class SelectedParty extends _$SelectedParty {
 
   void update(Party party) {
     state = party;
+  }
+}
+
+@riverpod
+class NewTransactionPod extends _$NewTransactionPod {
+  @override
+  void build() {}
+
+  Future<void> addTransaction({
+    required double amount,
+    required int accountId,
+    required int transactionTypeId,
+    required DateTime? transactionAt,
+    required int partyId,
+    required String? description,
+  }) async {
+    await AppDatabase().transactionDao.addTransaction(
+      amount: amount,
+      accountId: accountId,
+      transactionTypeId: transactionTypeId,
+      transactionAt: transactionAt,
+      partyId: partyId,
+      description: description,
+    );
+    // updating state
+    ref.invalidate(getTransactionspod(true));
+    ref.invalidate(getTransactionspod(false));
+    ref.invalidate(getAccountBalancespod);
   }
 }
