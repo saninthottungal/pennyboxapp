@@ -68,4 +68,11 @@ VALUES
       [name],
     );
   }
+
+  Future<void> deleteAccount(String id) {
+    return _db.rawDelete(
+      'DELETE FROM ACCOUNTS WHERE id = ?;',
+      [id],
+    );
+  }
 }
