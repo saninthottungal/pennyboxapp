@@ -40,4 +40,8 @@ enum TxnType {
   };
 
   const TxnType(this.id);
+
+  factory TxnType.fromMap(Map<String, Object?> map, [String? key]) {
+    return TxnType.values.singleWhere((e) => e.id == map[key ?? 'id']);
+  }
 }

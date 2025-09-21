@@ -2,6 +2,7 @@ import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
 import 'package:pennyboxapp/services/db/models/account.model.dart';
 import 'package:pennyboxapp/services/db/models/account_with_balance.model.dart';
 import 'package:pennyboxapp/services/db/models/party.model.dart';
+import 'package:pennyboxapp/services/db/models/transaction.model.dart' as model;
 import 'package:sqflite/sqflite.dart';
 
 class TransactionDao {
@@ -17,11 +18,7 @@ class TransactionDao {
   Future<List<TxnType>> getTransactionTypes() async {
     final res = await _db.rawQuery('SELECT * FROM transaction_types');
 
-    return res
-        .map(
-          (e) => TxnType.values.singleWhere((type) => type.id == e['id']),
-        )
-        .toList();
+    return res.map(TxnType.fromMap).toList();
   }
 
   Future<void> addTransactions({
@@ -123,5 +120,64 @@ GROUP BY AC.id;
       'DELETE FROM transactions WHERE id = ?',
       [id],
     );
+  }
+
+  Future<List<model.Transaction>> getTransactions({
+    bool isPlanned = false,
+  }) async {
+    final op = isPlanned ? '>' : '<=';
+
+    final res = await _db.rawQuery('''
+SELECT 
+
+T.id, 
+T.amount, 
+T.description, 
+AC.id as account_id,
+AC.name as account_name,
+TY.id as transaction_type_id,
+TY.kind as transaction_type,
+T.transaction_at,
+P.id as party_id,
+P.name as party_name
+
+FROM 
+transactions AS T
+INNER JOIN
+accounts AS AC
+ON T.account_id = AC.id
+INNER JOIN
+transaction_types AS TY
+ON T.transaction_type_id = TY.id
+LEFT OUTER JOIN
+parties AS P
+ON T.party_id = P.id 
+WHERE
+T.transaction_at $op CURRENT_TIMESTAMP;
+''');
+
+    return res.map((row) {
+      final account = Account(
+        id: row['account_id']! as int,
+        name: row['account_name']! as String,
+      );
+
+      final type = TxnType.fromMap(row, 'transaction_type');
+
+      final party = Party(
+        id: row['party_id']! as int,
+        name: row['party_name']! as String,
+      );
+      return model.Transaction(
+        id: row['id']! as int,
+        amount: row['amount']! as double,
+        account: account,
+        type: type,
+        transactionAt: DateTime.parse(
+          row['transaction_at']! as String,
+        ).toLocal(),
+        party: party,
+      );
+    }).toList();
   }
 }
