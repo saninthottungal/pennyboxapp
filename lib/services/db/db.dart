@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pennyboxapp/services/db/daos/transactions.dao.dart';
@@ -9,9 +8,7 @@ class AppSqfliteDb {
     return _instance;
   }
 
-  AppSqfliteDb._() {
-    transactionDao = TransactionDao(_db);
-  }
+  AppSqfliteDb._();
 
   static final _instance = AppSqfliteDb._();
 
@@ -22,14 +19,9 @@ class AppSqfliteDb {
 
   Future<Database> open() async {
     final dbFolder = await getApplicationDocumentsDirectory();
-    final String path;
-    if (kDebugMode) {
-      path = '/Users/paiteq/Developer/pennybox_debug.db';
-    } else {
-      path = join(dbFolder.path, 'pennybox.db');
-    }
+    final String path = join(dbFolder.path, 'pennyboxdb.sqlite');
 
-    return _db = await openDatabase(
+    _db = await openDatabase(
       path,
       version: 1,
       onCreate: (db, version) async {
@@ -84,5 +76,8 @@ class AppSqfliteDb {
         ''');
       },
     );
+
+    transactionDao = TransactionDao(_db);
+    return _db;
   }
 }

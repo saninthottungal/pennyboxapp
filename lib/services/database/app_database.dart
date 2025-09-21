@@ -101,7 +101,7 @@ class AppDatabase extends _$AppDatabase {
   static LazyDatabase _openConnection() {
     return LazyDatabase(() async {
       final dbFolder = await p.getApplicationDocumentsDirectory();
-      final file = File(join(dbFolder.path, 'pennyboxdb.sqlite'));
+      final file = File(join(dbFolder.path, 'pennyboxdbtemp.sqlite'));
       // Also work around limitations on old Android versions
 
       if (Platform.isAndroid) {
