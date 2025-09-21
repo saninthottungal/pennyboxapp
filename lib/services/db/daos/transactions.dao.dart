@@ -117,4 +117,11 @@ GROUP BY AC.id;
 
     return res.map(AccountwBalance.fromJson).toList();
   }
+
+  Future<void> deleteTransaction(int id) {
+    return _db.rawDelete(
+      'DELETE FROM transactions WHERE id = ?',
+      [id],
+    );
+  }
 }
