@@ -164,10 +164,12 @@ T.transaction_at $op CURRENT_TIMESTAMP;
 
       final type = TxnType.fromMap(row, 'transaction_type');
 
-      final party = Party(
-        id: row['party_id']! as int,
-        name: row['party_name']! as String,
-      );
+      final party = row['party_id'] != null
+          ? Party(
+              id: row['party_id']! as int,
+              name: row['party_name']! as String,
+            )
+          : null;
       return model.Transaction(
         id: row['id']! as int,
         amount: row['amount']! as double,
