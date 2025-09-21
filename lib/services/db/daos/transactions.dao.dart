@@ -18,7 +18,7 @@ class TransactionDao {
   Future<List<TxnType>> getTransactionTypes() async {
     final res = await _db.rawQuery('SELECT * FROM transaction_types');
 
-    return res.map(TxnType.fromMap).toList();
+    return res.map((row) => TxnType.fromId(row['id']! as int)).toList();
   }
 
   Future<void> addTransactions({
@@ -162,7 +162,7 @@ T.transaction_at $op CURRENT_TIMESTAMP;
         name: row['account_name']! as String,
       );
 
-      final type = TxnType.fromMap(row, 'transaction_type');
+      final type = TxnType.fromId(row['transaction_type']! as int);
 
       final party = row['party_id'] != null
           ? Party(
