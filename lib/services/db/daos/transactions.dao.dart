@@ -63,31 +63,31 @@ VALUES
     );
   }
 
-  Future<void> addAcount(String name) {
+  Future<void> addAccount(String name) {
     return _db.rawInsert(
       'INSERT INTO accounts (name) Values (?);',
       [name],
     );
   }
 
-  Future<void> deleteAccount(String id) {
+  Future<void> deleteAccount(int id) {
     return _db.rawDelete(
-      'DELETE FROM ACCOUNTS WHERE id = ?;',
+      'DELETE FROM accounts WHERE id = ?;',
       [id],
     );
   }
 
   Future<List<Party>> getParties({String search = ''}) async {
     final res = await _db.rawQuery(
-      "SELECT * FROM PARTIES WHERE name LIKE '%?%';",
-      [search],
+      "SELECT * FROM parties WHERE name LIKE ?;",
+      ['%$search%'],
     );
     return res.map(Party.fromJson).toList();
   }
 
   Future<void> addParty(String name) {
     return _db.rawInsert(
-      'INSERT INTO PARTIES (name) VALUES (?);',
+      'INSERT INTO parties (name) VALUES (?);',
       [name],
     );
   }
