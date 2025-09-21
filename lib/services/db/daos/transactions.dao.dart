@@ -86,9 +86,16 @@ VALUES
   }
 
   Future<void> addParty(String name) {
-    return _db.execute(
+    return _db.rawInsert(
       'INSERT INTO PARTIES (name) VALUES (?);',
       [name],
+    );
+  }
+
+  Future<void> deleteParty(int id) {
+    return _db.rawDelete(
+      'DELETE FROM parties WHERE id = ?',
+      [id],
     );
   }
 }
