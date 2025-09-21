@@ -12,3 +12,7 @@ targets:
         options:
           provider_name_suffix: "pod"
           provider_family_name_suffix: "pod"
+
+      json_serializable:
+        options:
+          field_rename: snake
