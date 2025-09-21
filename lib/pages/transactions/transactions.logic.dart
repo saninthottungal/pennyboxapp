@@ -1,23 +1,20 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
-import 'package:pennyboxapp/services/database/app_database.dart';
-import 'package:pennyboxapp/services/database/models/transaction.model.dart';
+import 'package:pennyboxapp/services/db/db.dart';
+import 'package:pennyboxapp/services/db/models/account.model.dart';
+import 'package:pennyboxapp/services/db/models/transaction.model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'transactions.logic.g.dart';
 
 @riverpod
 Future<List<TxnType>> transactionTypes(Ref ref) {
-  final db = ref.watch(appDbpod);
-
-  return db.transactionsDao.geTransactionTypes();
+  return AppSqfliteDb().transactionDao.getTransactionTypes();
 }
 
 @riverpod
 Future<List<Account>> getAccounts(Ref ref) {
-  final db = ref.watch(appDbpod);
-
-  return db.transactionsDao.getAccounts();
+  return AppSqfliteDb().transactionDao.getAccounts();
 }
 
 @riverpod
@@ -51,12 +48,6 @@ class SelectedTransactionType extends _$SelectedTransactionType {
 }
 
 @riverpod
-Stream<List<Transaction>> getTransactions(Ref ref, bool planned) {
-  final db = ref.watch(appDbpod);
-  return db.transactionsDao.transactionsStream(planned: planned);
+Future<List<Transaction>> getTransactions(Ref ref, bool planned) {
+  return AppSqfliteDb().transactionDao.getTransactions(isPlanned: planned);
 }
-
-final hasPlannedTransactionsPod = StreamProvider.autoDispose<int>((ref) {
-  final dao = ref.watch(appDbpod).transactionsDao;
-  return dao.hasPlannedTransactionsStream();
-});

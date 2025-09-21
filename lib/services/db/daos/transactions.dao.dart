@@ -21,7 +21,7 @@ class TransactionDao {
     return res.map((row) => TxnType.fromId(row['id']! as int)).toList();
   }
 
-  Future<void> addTransactions({
+  Future<void> addTransaction({
     required double amount,
     required int accountId,
     required int transactionTypeId,

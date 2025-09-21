@@ -6,7 +6,7 @@ import 'package:pennyboxapp/core/utils/app_date.utils.dart';
 import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/core/utils/number.utils.dart';
 import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
-import 'package:pennyboxapp/services/database/models/transaction.model.dart';
+import 'package:pennyboxapp/services/db/models/transaction.model.dart';
 import 'package:pennyboxapp/sheets/delete_transaction/delete_transaction.logic.dart';
 import 'package:pennyboxapp/sheets/delete_transaction/delete_transaction.sheet.dart';
 import 'package:pennyboxapp/sheets/new_transaction/new_transaction.sheet.dart';
