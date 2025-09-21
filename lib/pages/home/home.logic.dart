@@ -7,6 +7,6 @@ part 'home.logic.g.dart';
 
 @riverpod
 Future<List<AccountwBalance>> getAccountBalances(Ref ref) async {
-  final res = await AppSqfliteDb().transactionDao.getAccountBalances();
+  final res = await AppDatabase().transactionDao.getAccountBalances();
   return res;
 }

@@ -265,7 +265,7 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
                       return;
                     }
 
-                    await AppSqfliteDb().transactionDao.addTransaction(
+                    await AppDatabase().transactionDao.addTransaction(
                       amount: amount,
                       accountId: selectedAcc.id,
                       transactionTypeId: selectedTnType.id,

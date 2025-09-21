@@ -9,12 +9,12 @@ part 'transactions.logic.g.dart';
 
 @riverpod
 Future<List<TxnType>> transactionTypes(Ref ref) {
-  return AppSqfliteDb().transactionDao.getTransactionTypes();
+  return AppDatabase().transactionDao.getTransactionTypes();
 }
 
 @riverpod
 Future<List<Account>> getAccounts(Ref ref) {
-  return AppSqfliteDb().transactionDao.getAccounts();
+  return AppDatabase().transactionDao.getAccounts();
 }
 
 @riverpod
@@ -49,5 +49,5 @@ class SelectedTransactionType extends _$SelectedTransactionType {
 
 @riverpod
 Future<List<Transaction>> getTransactions(Ref ref, bool planned) {
-  return AppSqfliteDb().transactionDao.getTransactions(isPlanned: planned);
+  return AppDatabase().transactionDao.getTransactions(isPlanned: planned);
 }

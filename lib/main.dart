@@ -10,7 +10,7 @@ void main() async {
   final binding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: binding);
 
-  await AppSqfliteDb().open();
+  await AppDatabase().open();
 
   runApp(
     const ProviderScope(child: MyApp()),

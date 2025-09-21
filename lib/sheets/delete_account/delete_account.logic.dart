@@ -9,6 +9,6 @@ class DeleteAccount extends _$DeleteAccount {
   void build() {}
 
   Future<void> delete(int id) {
-    return AppSqfliteDb().transactionDao.deleteAccount(id);
+    return AppDatabase().transactionDao.deleteAccount(id);
   }
 }

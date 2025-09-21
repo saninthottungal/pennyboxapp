@@ -9,6 +9,6 @@ class NewAccount extends _$NewAccount {
   void build() {}
 
   Future<void> addAccount(String name) {
-    return AppSqfliteDb().transactionDao.addAccount(name);
+    return AppDatabase().transactionDao.addAccount(name);
   }
 }

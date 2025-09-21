@@ -3,14 +3,14 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pennyboxapp/services/db/daos/transactions.dao.dart';
 import 'package:sqflite/sqflite.dart';
 
-class AppSqfliteDb {
-  factory AppSqfliteDb() {
+class AppDatabase {
+  factory AppDatabase() {
     return _instance;
   }
 
-  AppSqfliteDb._();
+  AppDatabase._();
 
-  static final _instance = AppSqfliteDb._();
+  static final _instance = AppDatabase._();
 
   late final Database _db;
   Database get db => _db;

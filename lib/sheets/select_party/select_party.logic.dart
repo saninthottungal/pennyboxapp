@@ -10,15 +10,15 @@ class Parties extends _$Parties {
 
   @override
   Future<List<Party>> build() {
-    return AppSqfliteDb().transactionDao.getParties(search: _search);
+    return AppDatabase().transactionDao.getParties(search: _search);
   }
 
   Future<void> addParty(String name) {
-    return AppSqfliteDb().transactionDao.addParty(name);
+    return AppDatabase().transactionDao.addParty(name);
   }
 
   Future<void> deleteParty(int id) {
-    return AppSqfliteDb().transactionDao.deleteParty(id);
+    return AppDatabase().transactionDao.deleteParty(id);
   }
 
   Future<void> searchParties(String search) async {
