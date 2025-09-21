@@ -149,7 +149,9 @@ transaction_types AS TY
 ON T.transaction_type_id = TY.id
 LEFT OUTER JOIN
 parties AS P
-ON T.party_id = P.id;
+ON T.party_id = P.id
+
+ORDER BY T.transaction_at DESC;
 ''');
 
     final transactions = res.map((row) {
