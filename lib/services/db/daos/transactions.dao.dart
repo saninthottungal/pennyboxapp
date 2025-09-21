@@ -1,5 +1,6 @@
 import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
 import 'package:pennyboxapp/services/db/models/account.model.dart';
+import 'package:pennyboxapp/services/db/models/party.model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class TransactionDao {
@@ -74,5 +75,13 @@ VALUES
       'DELETE FROM ACCOUNTS WHERE id = ?;',
       [id],
     );
+  }
+
+  Future<List<Party>> getParties({String search = ''}) async {
+    final res = await _db.rawQuery(
+      "SELECT * FROM PARTIES WHERE name LIKE '%?%';",
+      [search],
+    );
+    return res.map(Party.fromJson).toList();
   }
 }
