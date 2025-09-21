@@ -1,5 +1,6 @@
 import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
 import 'package:pennyboxapp/services/db/models/account.model.dart';
+import 'package:pennyboxapp/services/db/models/account_with_balance.model.dart';
 import 'package:pennyboxapp/services/db/models/party.model.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -97,5 +98,23 @@ VALUES
       'DELETE FROM parties WHERE id = ?',
       [id],
     );
+  }
+
+  Future<List<AccountwBalance>> getAccountBalances() async {
+    final res = await _db.rawQuery('''
+SELECT AC.id, AC.name, 
+SUM(CASE WHEN TXNTYPE.kind = 'Income'  THEN TXN.amount ELSE 0 END ) -
+SUM(CASE WHEN TXNTYPE.kind != 'Income' THEN TXN.amount ELSE 0 END) AS balance
+FROM accounts AS AC
+LEFT OUTER JOIN
+transactions AS TXN
+ON AC.id = TXN.account_id
+INNER JOIN 
+transaction_types AS TXNTYPE
+ON TXNTYPE.id = TXN.transaction_type_id
+GROUP BY AC.id;
+''');
+
+    return res.map(AccountwBalance.fromJson).toList();
   }
 }
