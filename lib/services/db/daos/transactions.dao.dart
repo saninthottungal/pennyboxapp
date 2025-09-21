@@ -84,4 +84,11 @@ VALUES
     );
     return res.map(Party.fromJson).toList();
   }
+
+  Future<void> addParty(String name) {
+    return _db.execute(
+      'INSERT INTO PARTIES (name) VALUES (?);',
+      [name],
+    );
+  }
 }
