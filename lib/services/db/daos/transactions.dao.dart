@@ -162,7 +162,7 @@ T.transaction_at $op CURRENT_TIMESTAMP;
         name: row['account_name']! as String,
       );
 
-      final type = TxnType.fromId(row['transaction_type']! as int);
+      final type = TxnType.fromId(row['transaction_type_id']! as int);
 
       final party = row['party_id'] != null
           ? Party(
