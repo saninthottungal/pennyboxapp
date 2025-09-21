@@ -1,4 +1,4 @@
-import 'package:pennyboxapp/services/database/app_database.dart';
+import 'package:pennyboxapp/services/db/db.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'delete_account.logic.g.dart';
@@ -9,6 +9,6 @@ class DeleteAccount extends _$DeleteAccount {
   void build() {}
 
   Future<void> delete(int id) {
-    return ref.read(appDbpod).transactionsDao.deleteAccount(id);
+    return AppSqfliteDb().transactionDao.deleteAccount(id);
   }
 }
