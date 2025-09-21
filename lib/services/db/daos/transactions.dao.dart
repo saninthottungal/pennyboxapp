@@ -53,7 +53,7 @@ VALUES
       [
         description,
         amount,
-        transactionAt?.toIso8601String(),
+        transactionAt?.toUtc().toIso8601String(),
         accountId,
         transactionTypeId,
         partyId,
@@ -125,8 +125,6 @@ GROUP BY AC.id;
   Future<List<model.Transaction>> getTransactions({
     bool isPlanned = false,
   }) async {
-    final op = isPlanned ? '>' : '<=';
-
     final res = await _db.rawQuery('''
 SELECT 
 
@@ -151,12 +149,10 @@ transaction_types AS TY
 ON T.transaction_type_id = TY.id
 LEFT OUTER JOIN
 parties AS P
-ON T.party_id = P.id 
-WHERE
-T.transaction_at $op CURRENT_TIMESTAMP;
+ON T.party_id = P.id;
 ''');
 
-    return res.map((row) {
+    final transactions = res.map((row) {
       final account = Account(
         id: row['account_id']! as int,
         name: row['account_name']! as String,
@@ -180,6 +176,16 @@ T.transaction_at $op CURRENT_TIMESTAMP;
         ).toLocal(),
         party: party,
       );
-    }).toList();
+    });
+
+    //TODO: filtering should be on the sql level
+    if (isPlanned) {
+      return transactions
+          .where((e) => e.transactionAt.isAfter(DateTime.now()))
+          .toList();
+    }
+    return transactions
+        .where((e) => e.transactionAt.isBefore(DateTime.now()))
+        .toList();
   }
 }
