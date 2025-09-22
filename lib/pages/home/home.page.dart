@@ -150,12 +150,12 @@ class _Accounts extends StatefulWidget {
 }
 
 class _AccountsState extends State<_Accounts> {
-  late final HomeAccounts controller;
+  late final AccountsLogic controller;
 
   @override
   void initState() {
     super.initState();
-    controller = HomeAccounts();
+    controller = AccountsLogic();
   }
 
   @override
@@ -191,9 +191,7 @@ class _AccountsState extends State<_Accounts> {
                   Expanded(
                     child: _AccountCard(
                       account,
-                      onDelete: (id) {
-                        //   ref.read(deleteAccountpod.notifier).delete(id);
-                      },
+                      onDelete: controller.deleteAccount,
                     ),
                   )
               else
@@ -206,9 +204,7 @@ class _AccountsState extends State<_Accounts> {
 
                       return _AccountCard(
                         account,
-                        onDelete: (id) {
-                          //    ref.read(deleteAccountpod.notifier).delete(id);
-                        },
+                        onDelete: controller.deleteAccount,
                       );
                     },
                     separatorBuilder: (_, _) => const Gutter(),

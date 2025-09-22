@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:pennyboxapp/services/db/db.dart';
 import 'package:pennyboxapp/services/db/models/account_with_balance.model.dart';
 
-class HomeAccounts extends ChangeNotifier {
-  HomeAccounts() {
+class AccountsLogic extends ChangeNotifier {
+  AccountsLogic() {
     getAccountBalances();
   }
 
@@ -17,5 +17,10 @@ class HomeAccounts extends ChangeNotifier {
     isLoading = false;
 
     notifyListeners();
+  }
+
+  Future<void> deleteAccount(int id) async {
+    await AppDatabase().transactionDao.deleteAccount(id);
+    getAccountBalances();
   }
 }
