@@ -29,3 +29,20 @@ class AccountsLogic extends ChangeNotifier {
     getAccountBalances();
   }
 }
+
+class AccountsProvider extends InheritedWidget {
+  AccountsProvider({
+    required super.child,
+  }) : controller = AccountsLogic();
+
+  final AccountsLogic controller;
+
+  static AccountsLogic of(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<AccountsProvider>()!
+        .controller;
+  }
+
+  @override
+  bool updateShouldNotify(InheritedWidget oldWidget) => false;
+}

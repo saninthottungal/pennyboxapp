@@ -150,22 +150,10 @@ class _Accounts extends StatefulWidget {
 }
 
 class _AccountsState extends State<_Accounts> {
-  late final AccountsLogic controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = AccountsLogic();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final controller = AccountsProvider.of(context);
+
     return ListenableBuilder(
       listenable: controller,
       builder: (context, child) {
