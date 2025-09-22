@@ -150,12 +150,12 @@ class _Accounts extends StatefulWidget {
 }
 
 class _AccountsState extends State<_Accounts> {
-  late final AccountBalances controller;
+  late final HomeAccounts controller;
 
   @override
   void initState() {
     super.initState();
-    controller = AccountBalances();
+    controller = HomeAccounts();
   }
 
   @override

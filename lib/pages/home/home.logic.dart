@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:pennyboxapp/services/db/db.dart';
 import 'package:pennyboxapp/services/db/models/account_with_balance.model.dart';
 
-class AccountBalances extends ChangeNotifier {
-  AccountBalances() {
+class HomeAccounts extends ChangeNotifier {
+  HomeAccounts() {
     getAccountBalances();
   }
 
