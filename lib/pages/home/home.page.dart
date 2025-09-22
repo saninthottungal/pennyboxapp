@@ -213,7 +213,9 @@ class _AccountsState extends State<_Accounts> {
 
               ShadButton.outline(
                 onPressed: () {
-                  const NewAccountSheet().show(context);
+                  NewAccountSheet(
+                    onAction: controller.addAccount,
+                  ).show(context);
                 },
                 child: const Icon(Icons.add),
               ),

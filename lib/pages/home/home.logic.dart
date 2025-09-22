@@ -19,6 +19,11 @@ class AccountsLogic extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> addAccount(String name) async {
+    await AppDatabase().transactionDao.addAccount(name);
+    getAccountBalances();
+  }
+
   Future<void> deleteAccount(int id) async {
     await AppDatabase().transactionDao.deleteAccount(id);
     getAccountBalances();
