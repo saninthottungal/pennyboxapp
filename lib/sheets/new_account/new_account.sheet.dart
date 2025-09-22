@@ -7,7 +7,7 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 
 final _formKey = GlobalKey<FormState>();
 
-class NewAccountSheet extends StatelessWidget with SheetMixin {
+class NewAccountSheet extends HookWidget with SheetMixin {
   const NewAccountSheet({
     super.key,
     required this.onAction,
