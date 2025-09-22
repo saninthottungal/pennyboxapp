@@ -1,4 +1,3 @@
-import 'package:pennyboxapp/pages/home/home.logic.dart';
 import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
 import 'package:pennyboxapp/services/db/db.dart';
 import 'package:pennyboxapp/services/db/models/party.model.dart';
@@ -61,6 +60,5 @@ class NewTransactionPod extends _$NewTransactionPod {
     // updating state
     ref.invalidate(getTransactionspod(true));
     ref.invalidate(getTransactionspod(false));
-    ref.invalidate(getAccountBalancespod);
   }
 }

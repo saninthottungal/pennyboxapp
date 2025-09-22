@@ -1,4 +1,3 @@
-import 'package:pennyboxapp/pages/home/home.logic.dart';
 import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
 import 'package:pennyboxapp/services/db/db.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -16,6 +15,5 @@ class DeleteTransaction extends _$DeleteTransaction {
     // updating state
     ref.invalidate(getTransactionspod(true));
     ref.invalidate(getTransactionspod(false));
-    ref.invalidate(getAccountBalancespod);
   }
 }

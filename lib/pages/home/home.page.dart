@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/core/utils/number.utils.dart';
 import 'package:pennyboxapp/core/utils/widget.utils.dart';
 import 'package:pennyboxapp/pages/home/home.logic.dart';
 import 'package:pennyboxapp/services/db/models/account_with_balance.model.dart';
-import 'package:pennyboxapp/sheets/delete_account/delete_account.logic.dart';
 import 'package:pennyboxapp/sheets/delete_account/delete_account.sheet.dart';
 import 'package:pennyboxapp/sheets/new_account/new_account.sheet.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -144,15 +142,34 @@ class _QuickAction extends StatelessWidget {
   }
 }
 
-class _Accounts extends ConsumerWidget {
+class _Accounts extends StatefulWidget {
   const _Accounts();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Consumer(
-      builder: (context, ref, child) {
-        final accounts = ref.watch(getAccountBalancespod).value;
-        if (accounts == null) {
+  _AccountsState createState() => _AccountsState();
+}
+
+class _AccountsState extends State<_Accounts> {
+  late final AccountBalances controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AccountBalances();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: controller,
+      builder: (context, child) {
+        if (controller.isLoading) {
           return const ShadCard(
             title: Text("NIL"),
             description: Text("Loading..."),
@@ -169,13 +186,13 @@ class _Accounts extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              if (accounts.length <= 2)
-                for (final account in accounts)
+              if (controller.balances.length <= 2)
+                for (final account in controller.balances)
                   Expanded(
                     child: _AccountCard(
                       account,
                       onDelete: (id) {
-                        ref.read(deleteAccountpod.notifier).delete(id);
+                        //   ref.read(deleteAccountpod.notifier).delete(id);
                       },
                     ),
                   )
@@ -183,14 +200,14 @@ class _Accounts extends ConsumerWidget {
                 Expanded(
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    itemCount: accounts.length,
+                    itemCount: controller.balances.length,
                     itemBuilder: (context, index) {
-                      final account = accounts[index];
+                      final account = controller.balances[index];
 
                       return _AccountCard(
                         account,
                         onDelete: (id) {
-                          ref.read(deleteAccountpod.notifier).delete(id);
+                          //    ref.read(deleteAccountpod.notifier).delete(id);
                         },
                       );
                     },
