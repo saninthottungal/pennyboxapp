@@ -11,31 +11,15 @@ import 'package:pennyboxapp/sheets/delete_transaction/delete_transaction.sheet.d
 import 'package:pennyboxapp/sheets/new_transaction/new_transaction.sheet.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-class TransactionsPage extends StatefulWidget {
+class TransactionsPage extends StatelessWidget {
   const TransactionsPage({super.key});
 
   @override
-  State<TransactionsPage> createState() => _TransactionsPageState();
-}
-
-class _TransactionsPageState extends State<TransactionsPage> {
-  late final TransactionsLogic controller;
-  @override
-  void initState() {
-    super.initState();
-    controller = TransactionsProvider.of(context)
+  Widget build(BuildContext context) {
+    final controller = TransactionsProvider.of(context)
       ..getHistory()
       ..getPlanned();
-  }
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Padding(
       padding: UiConsts.bodyHorizPadding,
       child: DefaultTabController(
