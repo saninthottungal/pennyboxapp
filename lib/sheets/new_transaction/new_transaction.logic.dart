@@ -4,6 +4,7 @@ import 'package:pennyboxapp/services/db/daos/transactions.dao.dart';
 import 'package:pennyboxapp/services/db/db.dart';
 import 'package:pennyboxapp/services/db/models/account.model.dart';
 import 'package:pennyboxapp/services/db/models/party.model.dart';
+import 'package:pennyboxapp/services/event_bus/event_bus.dart';
 
 class NewTransactionLogic extends ChangeNotifier {
   NewTransactionLogic() {
@@ -50,12 +51,14 @@ class NewTransactionLogic extends ChangeNotifier {
 
   void updateSelectedTransactionType(TxnType? account) {
     selectedTxnType = account;
+    notifyListeners();
   }
 
   Account? selectedAccount;
 
   void updateSelectedAccount(Account? account) {
     selectedAccount = account;
+    notifyListeners();
   }
 
   List<Account> accounts = [];
@@ -85,6 +88,9 @@ class NewTransactionLogic extends ChangeNotifier {
       partyId: selectedParty!.id,
       description: description,
     );
+
+    eventBus.fire(FetchAccountBalances());
+
     return true;
   }
 }
