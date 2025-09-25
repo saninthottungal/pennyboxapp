@@ -11,7 +11,7 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 
 final _formKey = GlobalKey<FormState>();
 
-class SelectPartySheet extends HookConsumerWidget with SheetMixin {
+class SelectPartySheet extends StatefulHookConsumerWidget with SheetMixin {
   const SelectPartySheet({
     super.key,
     required this.onSelected,
@@ -20,7 +20,27 @@ class SelectPartySheet extends HookConsumerWidget with SheetMixin {
   final ValueChanged<Party> onSelected;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _SelectPartySheetState();
+}
+
+class _SelectPartySheetState extends ConsumerState<SelectPartySheet> {
+  late final SelectPartyLogic controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = SelectPartyLogic();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final inputController = useTextEditingController();
 
     return Padding(
@@ -57,15 +77,13 @@ class SelectPartySheet extends HookConsumerWidget with SheetMixin {
 
                         return null;
                       },
-                      onChanged: ref.read(partiespod.notifier).searchParties,
+                      onChanged: controller.searchParties,
                     ),
                   ),
                   ShadButton.secondary(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        ref
-                            .read(partiespod.notifier)
-                            .addParty(inputController.text);
+                        controller.addParty(inputController.text);
 
                         inputController.clear();
                       }
@@ -76,19 +94,16 @@ class SelectPartySheet extends HookConsumerWidget with SheetMixin {
               ),
 
               Expanded(
-                child: Consumer(
-                  builder: (context, ref, child) {
-                    final parties = ref.watch(partiespod).value;
-
-                    if (parties == null) return const SizedBox.shrink();
-
+                child: ListenableBuilder(
+                  listenable: controller,
+                  builder: (context, child) {
                     return ListView.separated(
                       itemBuilder: (context, index) {
-                        final party = parties[index];
+                        final party = controller.parties[index];
 
                         return GestureDetector(
                           onTap: () {
-                            onSelected(party);
+                            widget.onSelected(party);
                             Navigator.of(context).pop();
                           },
                           behavior: HitTestBehavior.translucent,
@@ -109,7 +124,7 @@ class SelectPartySheet extends HookConsumerWidget with SheetMixin {
                         );
                       },
                       separatorBuilder: (_, _) => const Gutter(),
-                      itemCount: parties.length,
+                      itemCount: controller.parties.length,
                     );
                   },
                 ),
