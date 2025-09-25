@@ -9,9 +9,17 @@ import 'package:pennyboxapp/services/event_bus/event_bus.dart';
 class NewTransactionLogic extends ChangeNotifier {
   NewTransactionLogic() {
     _dao = AppDatabase().transactionDao;
+    updateOptionsWithLastTnx();
   }
 
   late final TransactionDao _dao;
+
+  Future<void> updateOptionsWithLastTnx() async {
+    final tnx = (await _dao.getTransactions(limit: 2)).firstOrNull;
+    selectedAccount = tnx?.account;
+    selectedTxnType = tnx?.type;
+    notifyListeners();
+  }
 
   String amount = '';
 

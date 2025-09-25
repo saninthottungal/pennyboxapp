@@ -124,7 +124,10 @@ GROUP BY AC.id;
 
   Future<List<model.Transaction>> getTransactions({
     bool isPlanned = false,
+    int? limit,
   }) async {
+    final limitClause = limit != null ? 'LIMIT $limit' : '';
+
     final res = await _db.rawQuery('''
 SELECT 
 
@@ -151,7 +154,8 @@ LEFT OUTER JOIN
 parties AS P
 ON T.party_id = P.id
 
-ORDER BY T.transaction_at DESC;
+ORDER BY T.transaction_at DESC
+$limitClause;
 ''');
 
     final transactions = res.map((row) {
