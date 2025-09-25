@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/mixins/modal_sheet.mixin.dart';
 import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/services/db/models/party.model.dart';
@@ -11,7 +9,7 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 
 final _formKey = GlobalKey<FormState>();
 
-class SelectPartySheet extends StatefulHookConsumerWidget with SheetMixin {
+class SelectPartySheet extends StatefulWidget with SheetMixin {
   const SelectPartySheet({
     super.key,
     required this.onSelected,
@@ -20,29 +18,29 @@ class SelectPartySheet extends StatefulHookConsumerWidget with SheetMixin {
   final ValueChanged<Party> onSelected;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _SelectPartySheetState();
+  _SelectPartySheetState createState() => _SelectPartySheetState();
 }
 
-class _SelectPartySheetState extends ConsumerState<SelectPartySheet> {
+class _SelectPartySheetState extends State<SelectPartySheet> {
   late final SelectPartyLogic controller;
+  late final TextEditingController inputController;
 
   @override
   void initState() {
     super.initState();
     controller = SelectPartyLogic();
+    inputController = TextEditingController();
   }
 
   @override
   void dispose() {
     controller.dispose();
+    inputController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final inputController = useTextEditingController();
-
     return Padding(
       padding: EdgeInsets.symmetric(vertical: context.gutter),
       child: ConstrainedBox(

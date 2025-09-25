@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/theme/app_theme.dart';
 import 'package:pennyboxapp/pages/home/home.logic.dart';
 import 'package:pennyboxapp/pages/shell/shell.page.dart';
@@ -15,11 +14,9 @@ void main() async {
   await AppDatabase().open();
 
   runApp(
-    ProviderScope(
-      child: AccountsProvider(
-        child: TransactionsProvider(
-          child: const MyApp(),
-        ),
+    AccountsProvider(
+      child: TransactionsProvider(
+        child: const MyApp(),
       ),
     ),
   );

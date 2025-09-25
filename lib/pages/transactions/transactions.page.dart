@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/utils/app_date.utils.dart';
 import 'package:pennyboxapp/core/utils/context.utils.dart';
@@ -121,13 +120,13 @@ class TransactionsPage extends StatelessWidget {
   }
 }
 
-class _TransactionListView extends ConsumerWidget {
+class _TransactionListView extends StatelessWidget {
   const _TransactionListView(this.transactions);
 
   final List<Transaction> transactions;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final controller = TransactionsProvider.of(context);
 
     return ListView.separated(

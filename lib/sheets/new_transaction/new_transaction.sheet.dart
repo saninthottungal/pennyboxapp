@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
 import 'package:pennyboxapp/core/mixins/modal_sheet.mixin.dart';
@@ -13,7 +11,7 @@ import 'package:pennyboxapp/sheets/select_party/select_party.sheet.dart';
 import 'package:pennyboxapp/widgets/date_time_picker.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-class NewTransactionSheet extends StatefulHookConsumerWidget with SheetMixin {
+class NewTransactionSheet extends StatefulWidget with SheetMixin {
   const NewTransactionSheet({super.key});
 
   @override
@@ -23,27 +21,30 @@ class NewTransactionSheet extends StatefulHookConsumerWidget with SheetMixin {
   _NewTransactionSheetState createState() => _NewTransactionSheetState();
 }
 
-class _NewTransactionSheetState extends ConsumerState<NewTransactionSheet> {
+class _NewTransactionSheetState extends State<NewTransactionSheet> {
   late final NewTransactionLogic controller;
+  late final TextEditingController noteController;
+
+  DateTime transactionAt = DateTime.now();
   @override
   void initState() {
     super.initState();
     controller = NewTransactionLogic()
       ..getAccounts()
       ..getTrancationTypes();
+
+    noteController = TextEditingController();
   }
 
   @override
   void dispose() {
     controller.dispose();
+    noteController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final transactionAt = useRef<DateTime>(DateTime.now());
-    final noteController = useTextEditingController();
-
     return Padding(
       padding: EdgeInsets.symmetric(vertical: context.gutter),
       child: Column(
@@ -211,9 +212,9 @@ class _NewTransactionSheetState extends ConsumerState<NewTransactionSheet> {
               Expanded(
                 flex: 2,
                 child: ShadDateTimePicker(
-                  initialDateTime: transactionAt.value,
+                  initialDateTime: transactionAt,
                   margin: EdgeInsets.only(right: context.gutterSmall),
-                  onChanged: (value) => transactionAt.value = value,
+                  onChanged: (value) => transactionAt = value,
                 ),
               ),
 
@@ -251,7 +252,7 @@ class _NewTransactionSheetState extends ConsumerState<NewTransactionSheet> {
                     final note = noteController.text.trim();
 
                     await controller.addTransaction(
-                      transactionAt: transactionAt.value,
+                      transactionAt: transactionAt,
                       description: note.isNotEmpty ? note : null,
                     );
                     if (context.mounted) Navigator.pop(context);
