@@ -1,4 +1,3 @@
-import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
 import 'package:pennyboxapp/services/db/db.dart';
 import 'package:pennyboxapp/services/db/models/party.model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -57,8 +56,5 @@ class NewTransactionPod extends _$NewTransactionPod {
       partyId: partyId,
       description: description,
     );
-    // updating state
-    ref.invalidate(getTransactionspod(true));
-    ref.invalidate(getTransactionspod(false));
   }
 }

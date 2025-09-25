@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
 import 'package:pennyboxapp/services/db/db.dart';
@@ -21,10 +22,9 @@ Future<List<Account>> getAccounts(Ref ref) {
 class SelectedAccount extends _$SelectedAccount {
   @override
   Account? build() {
-    final transactions = ref.watch(getTransactionspod(false)).value;
     final accounts = ref.watch(getAccountspod).value;
 
-    return transactions?.firstOrNull?.account ?? accounts?.firstOrNull;
+    return accounts?.firstOrNull;
   }
 
   void update(Account? account) {
@@ -36,10 +36,9 @@ class SelectedAccount extends _$SelectedAccount {
 class SelectedTransactionType extends _$SelectedTransactionType {
   @override
   TxnType? build() {
-    final transactions = ref.watch(getTransactionspod(false)).value;
     final types = ref.watch(transactionTypespod).value;
 
-    return transactions?.firstOrNull?.type ?? types?.firstOrNull;
+    return types?.firstOrNull;
   }
 
   void update(TxnType? account) {
@@ -47,7 +46,26 @@ class SelectedTransactionType extends _$SelectedTransactionType {
   }
 }
 
-@riverpod
-Future<List<Transaction>> getTransactions(Ref ref, bool planned) {
-  return AppDatabase().transactionDao.getTransactions(isPlanned: planned);
+class TransactionsLogic extends ChangeNotifier {
+  TransactionsLogic() {
+    getHistory();
+    getPlanned();
+  }
+
+  List<Transaction> history = [];
+  List<Transaction> planned = [];
+
+  Future<void> getHistory() async {
+    final transactions = await AppDatabase().transactionDao.getTransactions();
+    history = transactions;
+    notifyListeners();
+  }
+
+  Future<void> getPlanned() async {
+    final transactions = await AppDatabase().transactionDao.getTransactions(
+      isPlanned: true,
+    );
+    planned = transactions;
+    notifyListeners();
+  }
 }

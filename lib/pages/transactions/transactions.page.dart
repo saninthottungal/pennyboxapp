@@ -12,8 +12,26 @@ import 'package:pennyboxapp/sheets/delete_transaction/delete_transaction.sheet.d
 import 'package:pennyboxapp/sheets/new_transaction/new_transaction.sheet.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-class TransactionsPage extends StatelessWidget {
+class TransactionsPage extends StatefulWidget {
   const TransactionsPage({super.key});
+
+  @override
+  State<TransactionsPage> createState() => _TransactionsPageState();
+}
+
+class _TransactionsPageState extends State<TransactionsPage> {
+  late final TransactionsLogic controller;
+  @override
+  void initState() {
+    super.initState();
+    controller = TransactionsLogic();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,24 +114,18 @@ class TransactionsPage extends StatelessWidget {
           body: TabBarView(
             children: [
               //* transaction history
-              Consumer(
-                builder: (context, ref, child) {
-                  final transactions = ref
-                      .watch(getTransactionspod(false))
-                      .valueOrNull;
-
-                  return _TransactionListView(transactions);
+              ListenableBuilder(
+                listenable: controller,
+                builder: (context, child) {
+                  return _TransactionListView(controller.history);
                 },
               ),
 
               //* Upcoming/Planned Transactions
-              Consumer(
-                builder: (context, ref, child) {
-                  final transactions = ref
-                      .watch(getTransactionspod(true))
-                      .valueOrNull;
-
-                  return _TransactionListView(transactions);
+              ListenableBuilder(
+                listenable: controller,
+                builder: (context, child) {
+                  return _TransactionListView(controller.planned);
                 },
               ),
             ],
