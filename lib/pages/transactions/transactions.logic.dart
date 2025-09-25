@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pennyboxapp/services/db/daos/transactions.dao.dart';
 import 'package:pennyboxapp/services/db/db.dart';
 import 'package:pennyboxapp/services/db/models/transaction.model.dart';
+import 'package:pennyboxapp/services/event_bus/event_bus.dart';
 
 class TransactionsLogic extends ChangeNotifier {
   TransactionsLogic() {
@@ -24,8 +25,13 @@ class TransactionsLogic extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> delete(int id) {
-    return _dao.deleteTransaction(id);
+  Future<void> delete(int id) async {
+    await _dao.deleteTransaction(id);
+    history.removeWhere((e) => e.id == id);
+    planned.removeWhere((e) => e.id == id);
+
+    notifyListeners();
+    eventBus.fire(FetchAccountBalances());
   }
 }
 
