@@ -23,7 +23,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
   @override
   void initState() {
     super.initState();
-    controller = TransactionsLogic()
+    controller = TransactionsProvider.of(context)
       ..getHistory()
       ..getPlanned();
   }
@@ -138,19 +138,13 @@ class _TransactionsPageState extends State<TransactionsPage> {
 }
 
 class _TransactionListView extends ConsumerWidget {
-  const _TransactionListView(this._transactions);
+  const _TransactionListView(this.transactions);
 
-  final List<Transaction>? _transactions;
+  final List<Transaction> transactions;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final transactions = _transactions;
-
-    if (transactions == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+    final controller = TransactionsProvider.of(context);
 
     return ListView.separated(
       padding: EdgeInsets.zero,
