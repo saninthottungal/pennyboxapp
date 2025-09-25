@@ -30,6 +30,7 @@ environment:
 dependencies:
   cupertino_icons: ^1.0.8
   dartx: ^1.2.0
+  event_bus: ^2.0.1
   flutter:
     sdk: flutter
   flutter_gutter: ^2.2.0
