@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pennyboxapp/core/theme/app_theme.dart';
 import 'package:pennyboxapp/pages/home/home.logic.dart';
 import 'package:pennyboxapp/pages/shell/shell.page.dart';
+import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
 import 'package:pennyboxapp/services/db/db.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -16,7 +17,9 @@ void main() async {
   runApp(
     ProviderScope(
       child: AccountsProvider(
-        child: const MyApp(),
+        child: TransactionsProvider(
+          child: const MyApp(),
+        ),
       ),
     ),
   );

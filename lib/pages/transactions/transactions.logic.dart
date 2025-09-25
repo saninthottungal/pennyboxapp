@@ -23,4 +23,25 @@ class TransactionsLogic extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  Future<void> delete(int id) {
+    return _dao.deleteTransaction(id);
+  }
+}
+
+class TransactionsProvider extends InheritedWidget {
+  TransactionsProvider({
+    required super.child,
+  }) : controller = TransactionsLogic();
+
+  final TransactionsLogic controller;
+
+  static TransactionsLogic of(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<TransactionsProvider>()!
+        .controller;
+  }
+
+  @override
+  bool updateShouldNotify(InheritedWidget oldWidget) => false;
 }
