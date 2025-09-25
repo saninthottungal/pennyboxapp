@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:pennyboxapp/services/db/daos/transactions.dao.dart';
 import 'package:pennyboxapp/services/db/db.dart';
@@ -7,9 +9,17 @@ import 'package:pennyboxapp/services/event_bus/event_bus.dart';
 class TransactionsLogic extends ChangeNotifier {
   TransactionsLogic() {
     _dao = AppDatabase().transactionDao;
+
+    getHistory();
+    getPlanned();
+
+    _event = eventBus.on<FetchTransactions>().listen(
+      (e) => e.planned ? getPlanned() : getHistory(),
+    );
   }
 
   late final TransactionDao _dao;
+  StreamSubscription<FetchTransactions>? _event;
 
   List<Transaction> history = [];
   List<Transaction> planned = [];
@@ -32,6 +42,12 @@ class TransactionsLogic extends ChangeNotifier {
 
     notifyListeners();
     eventBus.fire(FetchAccountBalances());
+  }
+
+  @override
+  void dispose() {
+    _event?.cancel();
+    super.dispose();
   }
 }
 

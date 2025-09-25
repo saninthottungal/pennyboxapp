@@ -89,7 +89,13 @@ class NewTransactionLogic extends ChangeNotifier {
       description: description,
     );
 
-    eventBus.fire(FetchAccountBalances());
+    eventBus
+      ..fire(FetchAccountBalances())
+      ..fire(
+        FetchTransactions(
+          planned: transactionAt.isAfter(DateTime.now()),
+        ),
+      );
 
     return true;
   }

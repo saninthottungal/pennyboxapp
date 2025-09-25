@@ -15,9 +15,7 @@ class TransactionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = TransactionsProvider.of(context)
-      ..getHistory()
-      ..getPlanned();
+    final controller = TransactionsProvider.of(context);
 
     return Padding(
       padding: UiConsts.bodyHorizPadding,
