@@ -251,11 +251,11 @@ class _NewTransactionSheetState extends State<NewTransactionSheet> {
                   if (isDoneBtn) {
                     final note = noteController.text.trim();
 
-                    await controller.addTransaction(
+                    final success = await controller.addTransaction(
                       transactionAt: transactionAt,
                       description: note.isNotEmpty ? note : null,
                     );
-                    if (context.mounted) Navigator.pop(context);
+                    if (context.mounted && success) Navigator.pop(context);
                   } else {
                     controller.append(char);
                   }

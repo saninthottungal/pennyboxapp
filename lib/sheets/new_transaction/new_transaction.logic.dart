@@ -65,7 +65,7 @@ class NewTransactionLogic extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addTransaction({
+  Future<bool> addTransaction({
     required DateTime transactionAt,
     required String? description,
   }) async {
@@ -74,7 +74,7 @@ class NewTransactionLogic extends ChangeNotifier {
         double.tryParse(amount) == null ||
         selectedParty == null ||
         double.tryParse(amount) == 0) {
-      return;
+      return false;
     }
 
     await AppDatabase().transactionDao.addTransaction(
@@ -85,5 +85,6 @@ class NewTransactionLogic extends ChangeNotifier {
       partyId: selectedParty!.id,
       description: description,
     );
+    return true;
   }
 }
