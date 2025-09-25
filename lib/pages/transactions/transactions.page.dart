@@ -24,7 +24,9 @@ class _TransactionsPageState extends State<TransactionsPage> {
   @override
   void initState() {
     super.initState();
-    controller = TransactionsLogic();
+    controller = TransactionsLogic()
+      ..getHistory()
+      ..getPlanned();
   }
 
   @override

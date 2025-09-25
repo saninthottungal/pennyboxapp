@@ -7,22 +7,40 @@ import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
 import 'package:pennyboxapp/core/mixins/modal_sheet.mixin.dart';
 import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/core/utils/number.utils.dart';
-import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
 import 'package:pennyboxapp/services/db/models/account.model.dart';
 import 'package:pennyboxapp/sheets/new_transaction/new_transaction.logic.dart';
 import 'package:pennyboxapp/sheets/select_party/select_party.sheet.dart';
 import 'package:pennyboxapp/widgets/date_time_picker.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
+class NewTransactionSheet extends StatefulHookConsumerWidget with SheetMixin {
   const NewTransactionSheet({super.key});
 
   @override
   bool get resizeToAvoidBottomInset => false;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final pod = newTransactionAmountpod;
+  _NewTransactionSheetState createState() => _NewTransactionSheetState();
+}
+
+class _NewTransactionSheetState extends ConsumerState<NewTransactionSheet> {
+  late final NewTransactionLogic controller;
+  @override
+  void initState() {
+    super.initState();
+    controller = NewTransactionLogic()
+      ..getAccounts()
+      ..getTrancationTypes();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final transactionAt = useRef<DateTime>(DateTime.now());
     final noteController = useTextEditingController();
 
@@ -36,64 +54,44 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
             spacing: context.gutter,
             children: [
               //* Account Types
-              Consumer(
-                builder: (context, ref, _) {
-                  final snapShot = ref.watch(getAccountspod);
-                  final selected = ref.watch(selectedAccountpod);
-
-                  switch (snapShot) {
-                    case AsyncValue(value: final accounts, hasValue: true):
-                      return ShadSelect<Account>(
-                        initialValue: selected,
-                        placeholder: const Text("Account"),
-                        selectedOptionBuilder: (context, value) {
-                          return Text(value.name);
-                        },
-                        options: accounts?.map((e) {
-                          return ShadOption(
-                            value: e,
-                            child: Text(e.name),
-                          );
-                        }).toList(),
-                        onChanged: ref.read(selectedAccountpod.notifier).update,
+              ListenableBuilder(
+                listenable: controller,
+                builder: (context, _) {
+                  return ShadSelect<Account>(
+                    initialValue: controller.selectedAccount,
+                    placeholder: const Text("Account"),
+                    selectedOptionBuilder: (context, value) {
+                      return Text(value.name);
+                    },
+                    options: controller.accounts.map((e) {
+                      return ShadOption(
+                        value: e,
+                        child: Text(e.name),
                       );
-                    case AsyncValue(error: != null):
-                      return const SizedBox.shrink();
-                    default:
-                      return const CircularProgressIndicator();
-                  }
+                    }).toList(),
+                    onChanged: controller.updateSelectedAccount,
+                  );
                 },
               ),
 
               //* TransactionTypes
-              Consumer(
-                builder: (context, ref, _) {
-                  final snapShot = ref.watch(transactionTypespod);
-                  final selected = ref.watch(selectedTransactionTypepod);
-
-                  switch (snapShot) {
-                    case AsyncValue(value: final transactions?):
-                      return ShadSelect<TxnType>(
-                        initialValue: selected,
-                        placeholder: const Text("Transaction"),
-                        selectedOptionBuilder: (context, value) {
-                          return Text(value.asText);
-                        },
-                        options: transactions.map((e) {
-                          return ShadOption(
-                            value: e,
-                            child: Text(e.asText),
-                          );
-                        }).toList(),
-                        onChanged: ref
-                            .read(selectedTransactionTypepod.notifier)
-                            .update,
+              ListenableBuilder(
+                listenable: controller,
+                builder: (context, child) {
+                  return ShadSelect<TxnType>(
+                    initialValue: controller.selectedTxnType,
+                    placeholder: const Text("Transaction"),
+                    selectedOptionBuilder: (context, value) {
+                      return Text(value.asText);
+                    },
+                    options: controller.transactionTypes.map((e) {
+                      return ShadOption(
+                        value: e,
+                        child: Text(e.asText),
                       );
-                    case AsyncValue(error: != null):
-                      return const SizedBox.shrink();
-                    default:
-                      return const CircularProgressIndicator();
-                  }
+                    }).toList(),
+                    onChanged: controller.updateSelectedTransactionType,
+                  );
                 },
               ),
 
@@ -112,15 +110,16 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
               spacing: context.gutterSmall,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Consumer(
-                  builder: (context, ref, child) {
-                    final type = ref.watch(selectedTransactionTypepod);
-                    final party = ref.watch(selectedPartypod);
-                    if (type == null) return const SizedBox.shrink();
+                ListenableBuilder(
+                  listenable: controller,
+                  builder: (context, child) {
+                    if (controller.selectedTxnType == null) {
+                      return const SizedBox.shrink();
+                    }
 
                     return GestureDetector(
                       onTap: () => SelectPartySheet(
-                        onSelected: ref.read(selectedPartypod.notifier).update,
+                        onSelected: controller.updateParty,
                       ).show(context),
                       behavior: HitTestBehavior.translucent,
                       child: Container(
@@ -128,7 +127,7 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
                           horizontal: 8,
                           vertical: 2,
                         ),
-                        decoration: party != null
+                        decoration: controller.selectedParty != null
                             ? null
                             : BoxDecoration(
                                 border: Border.all(
@@ -140,12 +139,12 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
                                 borderRadius: UiConsts.borderRadius,
                               ),
                         child: Text(
-                          '${type.actionLabel} ${party?.name ?? '?'}',
+                          '${controller.selectedTxnType?.actionLabel} ${controller.selectedParty?.name ?? '?'}',
                           textAlign: TextAlign.center,
                           //! needs to define a color for this
                           style: context.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: party == null
+                            color: controller.selectedParty == null
                                 //! needs to define a color for this
                                 ? context.colorScheme.primary.withValues(
                                     alpha: 0.3,
@@ -159,10 +158,10 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
                 ),
 
                 //* Amount
-                Consumer(
-                  builder: (context, ref, child) {
-                    final amountString = ref.watch(pod);
-                    final amount = double.tryParse(amountString) ?? 0;
+                ListenableBuilder(
+                  listenable: controller,
+                  builder: (context, child) {
+                    final amount = double.tryParse(controller.amount) ?? 0;
 
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: context.gutter),
@@ -172,7 +171,7 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
                           amount.toMoney(),
                           maxLines: 1,
                           style: context.textTheme.displayLarge?.copyWith(
-                            color: amountString.isEmpty
+                            color: amount == 0
                                 ? context.colorScheme.primary.withValues(
                                     alpha: 0.3,
                                   )
@@ -222,8 +221,8 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
                 child: Padding(
                   padding: EdgeInsets.only(left: context.gutterSmall),
                   child: ShadIconButton.secondary(
-                    onPressed: ref.read(pod.notifier).backSpace,
-                    onLongPress: ref.read(pod.notifier).clear,
+                    onPressed: controller.backSpace,
+                    onLongPress: controller.clear,
                     icon: const Icon(Icons.backspace_outlined),
                   ),
                 ),
@@ -249,34 +248,15 @@ class NewTransactionSheet extends HookConsumerWidget with SheetMixin {
               return ShadButton.raw(
                 onPressed: () async {
                   if (isDoneBtn) {
-                    final selectedAcc = ref.read(selectedAccountpod);
-                    final selectedTnType = ref.read(selectedTransactionTypepod);
-                    final party = ref.read(selectedPartypod);
-                    final value = ref.read(newTransactionAmountpod);
-                    final amount = double.tryParse(value);
                     final note = noteController.text.trim();
 
-                    if (selectedAcc == null ||
-                        selectedTnType == null ||
-                        amount == null ||
-                        party == null ||
-                        amount == 0) {
-                      return;
-                    }
-
-                    await ref
-                        .read(newTransactionPodpod.notifier)
-                        .addTransaction(
-                          amount: amount,
-                          accountId: selectedAcc.id,
-                          transactionTypeId: selectedTnType.id,
-                          transactionAt: transactionAt.value,
-                          partyId: party.id,
-                          description: note.isNotEmpty ? note : null,
-                        );
+                    await controller.addTransaction(
+                      transactionAt: transactionAt.value,
+                      description: note.isNotEmpty ? note : null,
+                    );
                     if (context.mounted) Navigator.pop(context);
                   } else {
-                    ref.read(pod.notifier).append(char);
+                    controller.append(char);
                   }
                 },
                 variant: isDoneBtn

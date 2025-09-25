@@ -1,59 +1,88 @@
+import 'package:flutter/material.dart';
+import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
+import 'package:pennyboxapp/services/db/daos/transactions.dao.dart';
 import 'package:pennyboxapp/services/db/db.dart';
+import 'package:pennyboxapp/services/db/models/account.model.dart';
 import 'package:pennyboxapp/services/db/models/party.model.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'new_transaction.logic.g.dart';
+class NewTransactionLogic extends ChangeNotifier {
+  NewTransactionLogic() {
+    _dao = AppDatabase().transactionDao;
+  }
 
-@riverpod
-class NewTransactionAmount extends _$NewTransactionAmount {
-  @override
-  String build() => '';
+  late final TransactionDao _dao;
+
+  String amount = '';
 
   void append(String char) {
-    if (char == '.' && state.contains('.')) return;
+    if (char == '.' && amount.contains('.')) return;
 
-    state = '$state$char';
+    amount = '$amount$char';
+    notifyListeners();
   }
 
-  void clear() => state = '';
+  void clear() {
+    amount = '';
+    notifyListeners();
+  }
 
   void backSpace() {
-    if (state.isEmpty) return;
-    state = state.substring(0, state.length - 1);
-  }
-}
-
-@riverpod
-class SelectedParty extends _$SelectedParty {
-  @override
-  Party? build() {
-    return null;
+    if (amount.isEmpty) return;
+    amount = amount.substring(0, amount.length - 1);
+    notifyListeners();
   }
 
-  void update(Party party) {
-    state = party;
-  }
-}
+  List<TxnType> transactionTypes = [];
 
-@riverpod
-class NewTransactionPod extends _$NewTransactionPod {
-  @override
-  void build() {}
+  Future<void> getTrancationTypes() async {
+    transactionTypes = await _dao.getTransactionTypes();
+    notifyListeners();
+  }
+
+  Party? selectedParty;
+
+  void updateParty(Party party) {
+    selectedParty = party;
+    notifyListeners();
+  }
+
+  TxnType? selectedTxnType;
+
+  void updateSelectedTransactionType(TxnType? account) {
+    selectedTxnType = account;
+  }
+
+  Account? selectedAccount;
+
+  void updateSelectedAccount(Account? account) {
+    selectedAccount = account;
+  }
+
+  List<Account> accounts = [];
+
+  Future<void> getAccounts() async {
+    accounts = await _dao.getAccounts();
+    notifyListeners();
+  }
 
   Future<void> addTransaction({
-    required double amount,
-    required int accountId,
-    required int transactionTypeId,
-    required DateTime? transactionAt,
-    required int partyId,
+    required DateTime transactionAt,
     required String? description,
   }) async {
+    if (selectedAccount == null ||
+        selectedTxnType == null ||
+        double.tryParse(amount) == null ||
+        selectedParty == null ||
+        double.tryParse(amount) == 0) {
+      return;
+    }
+
     await AppDatabase().transactionDao.addTransaction(
-      amount: amount,
-      accountId: accountId,
-      transactionTypeId: transactionTypeId,
+      amount: double.parse(amount),
+      accountId: selectedAccount!.id,
+      transactionTypeId: selectedTxnType!.id,
       transactionAt: transactionAt,
-      partyId: partyId,
+      partyId: selectedParty!.id,
       description: description,
     );
   }
