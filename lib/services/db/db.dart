@@ -31,7 +31,7 @@ class AppDatabase {
 
     _db = await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: (db, version) async {
         final batch = db.batch();
         DbMigrations.queries[version]?.forEach(batch.execute);

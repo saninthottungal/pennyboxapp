@@ -53,7 +53,13 @@ class DbMigrations {
         ''',
   ];
 
+  static const _v2 = [
+    '''
+ALTER TABLE transactions ADD COLUMN transferred_to INTEGER;
+''',
+  ];
   static const Map<int, List<String>> queries = {
     1: _v1,
+    2: _v2,
   };
 }
