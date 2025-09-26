@@ -25,8 +25,10 @@ class AppDatabase {
       path,
       version: 1,
       onCreate: (db, version) async {
+        final batch = db.batch();
+
         //* Accounts Table
-        await db.execute('''
+        batch.execute('''
         CREATE TABLE IF NOT EXISTS accounts
         (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -35,7 +37,7 @@ class AppDatabase {
         ''');
 
         //* Transaction Types Table
-        await db.execute('''
+        batch.execute('''
         CREATE TABLE IF NOT EXISTS transaction_types
         (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -44,7 +46,7 @@ class AppDatabase {
         ''');
 
         //* Parties Table
-        await db.execute('''
+        batch.execute('''
         CREATE TABLE IF NOT EXISTS parties
         (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -53,7 +55,7 @@ class AppDatabase {
         ''');
 
         //* Transactions Table
-        await db.execute('''
+        batch.execute('''
         CREATE TABLE IF NOT EXISTS transactions(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         description TEXT,
@@ -67,13 +69,15 @@ class AppDatabase {
         ''');
 
         //* Insert default values
-        await db.rawInsert('INSERT INTO accounts (name) values ("Cash");');
-        await db.rawInsert('''
+        batch.rawInsert('INSERT INTO accounts (name) values ("Cash");');
+        batch.rawInsert('''
         INSERT INTO transaction_types (kind) VALUES 
         ("Income"),
         ("Expense"),
         ("Transfer");
         ''');
+
+        await batch.commit(noResult: true);
       },
     );
 

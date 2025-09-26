@@ -15,7 +15,8 @@ abstract class Transaction with _$Transaction {
     required Account account,
     required TxnType type,
     required DateTime transactionAt,
-    required Party? party,
+    Party? party,
+    Account? transferredTo,
   }) = _Transaction;
 
   factory Transaction.fromJson(Map<String, Object?> json) =>
