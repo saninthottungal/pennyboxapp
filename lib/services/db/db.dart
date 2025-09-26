@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pennyboxapp/services/db/daos/transactions.dao.dart';
@@ -20,7 +21,13 @@ class AppDatabase {
 
   Future<Database> open() async {
     final dbFolder = await getApplicationDocumentsDirectory();
-    final String path = join(dbFolder.path, 'pennyboxdb.sqlite');
+    final String path;
+
+    if (kDebugMode) {
+      path = '/Users/paiteq/Developer/personal/dbs/pennybox.sqlite';
+    } else {
+      path = join(dbFolder.path, 'pennyboxdb.sqlite');
+    }
 
     _db = await openDatabase(
       path,
@@ -30,13 +37,13 @@ class AppDatabase {
         DbMigrations.queries[version]?.forEach(batch.execute);
         await batch.commit();
       },
-      // onUpgrade: (db, oldVersion, newVersion) async {
-      //   for (int i = oldVersion + 1; i <= newVersion; i++) {
-      //     for (final query in DbMigrations.queries[i]!) {
-      //       await db.execute(query);
-      //     }
-      //   }
-      // },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        for (int i = oldVersion + 1; i <= newVersion; i++) {
+          for (final query in DbMigrations.queries[i]!) {
+            await db.execute(query);
+          }
+        }
+      },
     );
 
     transactionDao = TransactionDao(_db);
