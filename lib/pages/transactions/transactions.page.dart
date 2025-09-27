@@ -151,7 +151,9 @@ class _TransactionListView extends StatelessWidget {
             ),
           ),
           title: Text(
-            transaction.party?.name ?? transaction.id.toString(),
+            transaction.party?.name ??
+                transaction.transferredTo?.name ??
+                transaction.id.toString(),
           ),
           subtitle: Text.rich(
             overflow: TextOverflow.ellipsis,

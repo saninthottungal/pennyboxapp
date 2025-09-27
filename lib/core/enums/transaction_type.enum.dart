@@ -44,4 +44,6 @@ enum TxnType {
   factory TxnType.fromId(int id) {
     return TxnType.values.singleWhere((e) => e.id == id);
   }
+
+  bool get isTransfer => this == transfer;
 }

@@ -92,19 +92,30 @@ class NewTransactionLogic extends ChangeNotifier {
     if (selectedAccount == null ||
         selectedTxnType == null ||
         double.tryParse(amount) == null ||
-        selectedParty == null ||
-        double.tryParse(amount) == 0) {
+        (selectedParty == null && transferringTo == null) ||
+        double.tryParse(amount) == null) {
       return false;
     }
 
-    await AppDatabase().transactionDao.addTransaction(
-      amount: double.parse(amount),
-      accountId: selectedAccount!.id,
-      transactionTypeId: selectedTxnType!.id,
-      transactionAt: transactionAt,
-      partyId: selectedParty!.id,
-      description: description,
-    );
+    if (selectedTxnType!.isTransfer) {
+      await _dao.addTransferTransaction(
+        amount: double.parse(amount),
+        fromAccountId: selectedAccount!.id,
+        toAccountId: transferringTo!.id,
+        transactionAt: transactionAt,
+        description: description,
+      );
+    } else {
+      await _dao.addTransaction(
+        amount: double.parse(amount),
+        accountId: selectedAccount!.id,
+        transactionTypeId: selectedTxnType!.id,
+        transactionAt: transactionAt,
+        partyId: selectedParty?.id,
+        description: description,
+        transferId: null,
+      );
+    }
 
     eventBus
       ..fire(FetchAccountBalances())

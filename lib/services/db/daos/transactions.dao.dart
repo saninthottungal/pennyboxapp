@@ -4,6 +4,7 @@ import 'package:pennyboxapp/services/db/models/account_with_balance.model.dart';
 import 'package:pennyboxapp/services/db/models/party.model.dart';
 import 'package:pennyboxapp/services/db/models/transaction.model.dart' as model;
 import 'package:sqflite/sqflite.dart';
+import 'package:uuid/uuid.dart';
 
 class TransactionDao {
   TransactionDao(this._db);
@@ -21,27 +22,65 @@ class TransactionDao {
     return res.map((row) => TxnType.fromId(row['id']! as int)).toList();
   }
 
+  Future<void> addTransferTransaction({
+    required double amount,
+    required int fromAccountId,
+    required int toAccountId,
+    required DateTime? transactionAt,
+    required String? description,
+  }) async {
+    await _db.transaction((tnx) async {
+      final transferId = const Uuid().v4();
+
+      await addTransaction(
+        amount: amount,
+        accountId: fromAccountId,
+        transactionTypeId: TxnType.expense.id,
+        transactionAt: transactionAt,
+        partyId: null,
+        transferId: transferId,
+        description: description,
+        tnx: tnx,
+      );
+
+      await addTransaction(
+        amount: amount,
+        accountId: toAccountId,
+        transactionTypeId: TxnType.income.id,
+        transactionAt: transactionAt,
+        partyId: null,
+        transferId: transferId,
+        description: description,
+        tnx: tnx,
+      );
+    });
+  }
+
   Future<void> addTransaction({
     required double amount,
     required int accountId,
     required int transactionTypeId,
     required DateTime? transactionAt,
-    required int partyId,
+    required int? partyId,
+    required String? transferId,
     required String? description,
+    Transaction? tnx,
   }) {
-    return _db.rawInsert(
+    return (tnx ?? _db).rawInsert(
       '''
 INSERT INTO transactions 
 (
 description,
 amount,
- transaction_at,
- account_id, 
- transaction_type_id,
- party_id
+transaction_at,
+account_id, 
+transaction_type_id,
+party_id,
+transfer_id
 ) 
 VALUES 
 (
+?,
 ?,
 ?,
 ?,
@@ -57,6 +96,7 @@ VALUES
         accountId,
         transactionTypeId,
         partyId,
+        transferId,
       ],
     );
   }

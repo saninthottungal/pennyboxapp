@@ -35,11 +35,7 @@ class AppDatabase {
       onConfigure: (db) async {
         await db.execute('PRAGMA foreign_keys = ON');
       },
-      onCreate: (db, version) async {
-        final batch = db.batch();
-        DbMigrations.queries[1]?.forEach(batch.execute);
-        await batch.commit();
-      },
+
       onUpgrade: (db, oldVersion, newVersion) async {
         for (int i = oldVersion + 1; i <= newVersion; i++) {
           for (final query in DbMigrations.queries[i] ?? <String>[]) {
