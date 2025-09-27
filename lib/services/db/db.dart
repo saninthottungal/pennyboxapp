@@ -37,7 +37,7 @@ class AppDatabase {
       },
       onCreate: (db, version) async {
         final batch = db.batch();
-        DbMigrations.queries[version]?.forEach(batch.execute);
+        DbMigrations.queries[1]?.forEach(batch.execute);
         await batch.commit();
       },
       onUpgrade: (db, oldVersion, newVersion) async {

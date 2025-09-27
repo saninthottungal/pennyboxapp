@@ -55,7 +55,7 @@ class DbMigrations {
 
   static const _v2 = [
     '''
-ALTER TABLE transactions ADD COLUMN transferred_to INTEGER;
+ALTER TABLE transactions ADD COLUMN transfer_id TEXT;
 ''',
   ];
   static const Map<int, List<String>> queries = {
