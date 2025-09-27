@@ -8,6 +8,7 @@ import 'package:pennyboxapp/core/utils/number.utils.dart';
 import 'package:pennyboxapp/services/db/models/account.model.dart';
 import 'package:pennyboxapp/sheets/new_transaction/new_transaction.logic.dart';
 import 'package:pennyboxapp/sheets/select_party/select_party.sheet.dart';
+import 'package:pennyboxapp/sheets/select_transfer_account/select_transfer_account.sheet.dart';
 import 'package:pennyboxapp/widgets/date_time_picker.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -105,7 +106,7 @@ class _NewTransactionSheetState extends State<NewTransactionSheet> {
             ],
           ),
 
-          //* Other Party
+          //* Other Party/ Transfer Account
           Expanded(
             child: Column(
               spacing: context.gutterSmall,
@@ -119,16 +120,26 @@ class _NewTransactionSheetState extends State<NewTransactionSheet> {
                     }
 
                     return GestureDetector(
-                      onTap: () => SelectPartySheet(
-                        onSelected: controller.updateParty,
-                      ).show(context),
+                      onTap: () {
+                        if (controller.selectedTxnType == TxnType.transfer) {
+                          SelectTransferAccountSheet(
+                            onSelected: controller.updateTransferringTo,
+                          ).show(context);
+                        } else {
+                          SelectPartySheet(
+                            onSelected: controller.updateParty,
+                          ).show(context);
+                        }
+                      },
                       behavior: HitTestBehavior.translucent,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 8,
                           vertical: 2,
                         ),
-                        decoration: controller.selectedParty != null
+                        decoration:
+                            controller.selectedParty != null ||
+                                controller.transferringTo != null
                             ? null
                             : BoxDecoration(
                                 border: Border.all(
@@ -140,7 +151,8 @@ class _NewTransactionSheetState extends State<NewTransactionSheet> {
                                 borderRadius: UiConsts.borderRadius,
                               ),
                         child: Text(
-                          '${controller.selectedTxnType?.actionLabel} ${controller.selectedParty?.name ?? '?'}',
+                          '${controller.selectedTxnType?.actionLabel}'
+                          ' ${controller.selectedTxnType == TxnType.transfer ? controller.transferringTo?.name ?? '?' : controller.selectedParty?.name ?? '?'}',
                           textAlign: TextAlign.center,
                           //! needs to define a color for this
                           style: context.textTheme.titleMedium?.copyWith(

@@ -59,6 +59,8 @@ class NewTransactionLogic extends ChangeNotifier {
 
   void updateSelectedTransactionType(TxnType? account) {
     selectedTxnType = account;
+    selectedParty = null;
+    transferringTo = null;
     notifyListeners();
   }
 
@@ -66,6 +68,13 @@ class NewTransactionLogic extends ChangeNotifier {
 
   void updateSelectedAccount(Account? account) {
     selectedAccount = account;
+    notifyListeners();
+  }
+
+  Account? transferringTo;
+
+  void updateTransferringTo(Account account) {
+    transferringTo = account;
     notifyListeners();
   }
 
