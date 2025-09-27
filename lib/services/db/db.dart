@@ -42,7 +42,7 @@ class AppDatabase {
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         for (int i = oldVersion + 1; i <= newVersion; i++) {
-          for (final query in DbMigrations.queries[i]!) {
+          for (final query in DbMigrations.queries[i] ?? <String>[]) {
             await db.execute(query);
           }
         }
