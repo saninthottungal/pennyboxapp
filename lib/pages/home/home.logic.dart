@@ -6,18 +6,19 @@ import 'package:pennyboxapp/services/db/models/account_with_balance.model.dart';
 import 'package:pennyboxapp/services/event_bus/event_bus.dart';
 
 class AccountsLogic extends ChangeNotifier {
-  AccountsLogic(this._dao) {
-    getAccountBalances();
-    _eventSub = eventBus.on<FetchAccountBalances>().listen(
-      (_) => getAccountBalances(),
-    );
-  }
+  AccountsLogic(this._dao);
 
   late final TransactionDao _dao;
   StreamSubscription<FetchAccountBalances>? _eventSub;
 
   List<AccountwBalance> balances = [];
   bool isLoading = false;
+
+  void initEventListner() {
+    _eventSub = eventBus.on<FetchAccountBalances>().listen(
+      (_) => getAccountBalances(),
+    );
+  }
 
   Future<void> getAccountBalances() async {
     isLoading = true;

@@ -152,7 +152,9 @@ class _Accounts extends StatefulWidget {
 class _AccountsState extends State<_Accounts> {
   @override
   Widget build(BuildContext context) {
-    final controller = AccountsProvider.of(context);
+    final controller = AccountsProvider.of(context)
+      ..getAccountBalances()
+      ..initEventListner();
 
     return ListenableBuilder(
       listenable: controller,
