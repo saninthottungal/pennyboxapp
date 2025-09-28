@@ -51,7 +51,8 @@ class TransactionDao {
         amount: amount,
         accountId: toAccountId,
         transactionTypeId: TxnType.income.id,
-        transactionAt: transactionAt,
+        //* adding a small duration difference between both transaction for sorting better
+        transactionAt: transactionAt?.add(const Duration(milliseconds: 500)),
         partyId: null,
         transferId: transferId,
         description: description,
