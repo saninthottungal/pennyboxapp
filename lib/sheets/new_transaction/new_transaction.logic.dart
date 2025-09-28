@@ -93,7 +93,8 @@ class NewTransactionLogic extends ChangeNotifier {
         selectedTxnType == null ||
         double.tryParse(amount) == null ||
         (selectedParty == null && transferringTo == null) ||
-        double.tryParse(amount) == null) {
+        double.tryParse(amount) == null ||
+        selectedAccount?.id == transferringTo?.id) {
       return false;
     }
 

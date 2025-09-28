@@ -29,6 +29,10 @@ class TransactionDao {
     required DateTime? transactionAt,
     required String? description,
   }) async {
+    if (fromAccountId == toAccountId) {
+      throw Exception("Tried transferring to self account");
+    }
+
     await _db.transaction((tnx) async {
       final transferId = const Uuid().v4();
 
