@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AccountwBalance {
 
- int get id; String get accountName; double get balance;
+ int get id; String get accountName; double get balance; double get actualBalance;
 /// Create a copy of AccountwBalance
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $AccountwBalanceCopyWith<AccountwBalance> get copyWith => _$AccountwBalanceCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AccountwBalance&&(identical(other.id, id) || other.id == id)&&(identical(other.accountName, accountName) || other.accountName == accountName)&&(identical(other.balance, balance) || other.balance == balance));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AccountwBalance&&(identical(other.id, id) || other.id == id)&&(identical(other.accountName, accountName) || other.accountName == accountName)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.actualBalance, actualBalance) || other.actualBalance == actualBalance));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,accountName,balance);
+int get hashCode => Object.hash(runtimeType,id,accountName,balance,actualBalance);
 
 @override
 String toString() {
-  return 'AccountwBalance(id: $id, accountName: $accountName, balance: $balance)';
+  return 'AccountwBalance(id: $id, accountName: $accountName, balance: $balance, actualBalance: $actualBalance)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $AccountwBalanceCopyWith<$Res>  {
   factory $AccountwBalanceCopyWith(AccountwBalance value, $Res Function(AccountwBalance) _then) = _$AccountwBalanceCopyWithImpl;
 @useResult
 $Res call({
- int id, String accountName, double balance
+ int id, String accountName, double balance, double actualBalance
 });
 
 
@@ -65,11 +65,12 @@ class _$AccountwBalanceCopyWithImpl<$Res>
 
 /// Create a copy of AccountwBalance
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? accountName = null,Object? balance = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? accountName = null,Object? balance = null,Object? actualBalance = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,accountName: null == accountName ? _self.accountName : accountName // ignore: cast_nullable_to_non_nullable
 as String,balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
+as double,actualBalance: null == actualBalance ? _self.actualBalance : actualBalance // ignore: cast_nullable_to_non_nullable
 as double,
   ));
 }
@@ -155,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String accountName,  double balance)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String accountName,  double balance,  double actualBalance)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AccountwBalance() when $default != null:
-return $default(_that.id,_that.accountName,_that.balance);case _:
+return $default(_that.id,_that.accountName,_that.balance,_that.actualBalance);case _:
   return orElse();
 
 }
@@ -176,10 +177,10 @@ return $default(_that.id,_that.accountName,_that.balance);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String accountName,  double balance)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String accountName,  double balance,  double actualBalance)  $default,) {final _that = this;
 switch (_that) {
 case _AccountwBalance():
-return $default(_that.id,_that.accountName,_that.balance);case _:
+return $default(_that.id,_that.accountName,_that.balance,_that.actualBalance);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +197,10 @@ return $default(_that.id,_that.accountName,_that.balance);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String accountName,  double balance)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String accountName,  double balance,  double actualBalance)?  $default,) {final _that = this;
 switch (_that) {
 case _AccountwBalance() when $default != null:
-return $default(_that.id,_that.accountName,_that.balance);case _:
+return $default(_that.id,_that.accountName,_that.balance,_that.actualBalance);case _:
   return null;
 
 }
@@ -211,12 +212,13 @@ return $default(_that.id,_that.accountName,_that.balance);case _:
 @JsonSerializable()
 
 class _AccountwBalance implements AccountwBalance {
-  const _AccountwBalance({required this.id, required this.accountName, required this.balance});
+  const _AccountwBalance({required this.id, required this.accountName, required this.balance, required this.actualBalance});
   factory _AccountwBalance.fromJson(Map<String, dynamic> json) => _$AccountwBalanceFromJson(json);
 
 @override final  int id;
 @override final  String accountName;
 @override final  double balance;
+@override final  double actualBalance;
 
 /// Create a copy of AccountwBalance
 /// with the given fields replaced by the non-null parameter values.
@@ -231,16 +233,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AccountwBalance&&(identical(other.id, id) || other.id == id)&&(identical(other.accountName, accountName) || other.accountName == accountName)&&(identical(other.balance, balance) || other.balance == balance));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AccountwBalance&&(identical(other.id, id) || other.id == id)&&(identical(other.accountName, accountName) || other.accountName == accountName)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.actualBalance, actualBalance) || other.actualBalance == actualBalance));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,accountName,balance);
+int get hashCode => Object.hash(runtimeType,id,accountName,balance,actualBalance);
 
 @override
 String toString() {
-  return 'AccountwBalance(id: $id, accountName: $accountName, balance: $balance)';
+  return 'AccountwBalance(id: $id, accountName: $accountName, balance: $balance, actualBalance: $actualBalance)';
 }
 
 
@@ -251,7 +253,7 @@ abstract mixin class _$AccountwBalanceCopyWith<$Res> implements $AccountwBalance
   factory _$AccountwBalanceCopyWith(_AccountwBalance value, $Res Function(_AccountwBalance) _then) = __$AccountwBalanceCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String accountName, double balance
+ int id, String accountName, double balance, double actualBalance
 });
 
 
@@ -268,11 +270,12 @@ class __$AccountwBalanceCopyWithImpl<$Res>
 
 /// Create a copy of AccountwBalance
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? accountName = null,Object? balance = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? accountName = null,Object? balance = null,Object? actualBalance = null,}) {
   return _then(_AccountwBalance(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,accountName: null == accountName ? _self.accountName : accountName // ignore: cast_nullable_to_non_nullable
 as String,balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
+as double,actualBalance: null == actualBalance ? _self.actualBalance : actualBalance // ignore: cast_nullable_to_non_nullable
 as double,
   ));
 }

@@ -144,9 +144,24 @@ VALUES
 
   Future<List<AccountwBalance>> getAccountBalances() async {
     final res = await _db.rawQuery('''
+
 SELECT AC.id, AC.name as account_name, 
-COALESCE(SUM(CASE WHEN TXNTYPE.kind = 'Income'  THEN TXN.amount ELSE 0 END),0) -
-COALESCE(SUM(CASE WHEN TXNTYPE.kind != 'Income' THEN TXN.amount ELSE 0 END),0) AS balance
+coalesce(SUM(CASE WHEN TXNTYPE.kind = 'Income'  
+THEN TXN.amount ELSE 0
+ END),0) -
+coalesce(SUM(CASE WHEN TXNTYPE.kind != 'Income' 
+THEN TXN.amount ELSE 0
+ END),0) 
+ AS balance,
+
+coalesce(SUM(CASE WHEN TXNTYPE.kind = 'Income' 
+AND TXN.transaction_at <=strftime('%Y-%m-%dT%H:%M:%fZ', 'now') 
+ THEN TXN.amount ELSE 0 END),0) - 
+ coalesce(SUM(CASE WHEN TXNTYPE.kind != 'Income' 
+ AND TXN.transaction_at <=strftime('%Y-%m-%dT%H:%M:%fZ', 'now') 
+ THEN TXN.amount ELSE 0 END),0)
+ AS actual_balance
+
 FROM accounts AS AC
 LEFT OUTER JOIN
 transactions AS TXN
@@ -155,6 +170,7 @@ LEFT OUTER JOIN
 transaction_types AS TXNTYPE
 ON TXNTYPE.id = TXN.transaction_type_id
 GROUP BY AC.id;
+
 ''');
 
     return res.map(AccountwBalance.fromJson).toList();

@@ -249,7 +249,7 @@ return $default(_that.id,_that.amount,_that.description,_that.account,_that.type
 @JsonSerializable()
 
 class _Transaction implements Transaction {
-  const _Transaction({required this.id, required this.amount, this.description, required this.account, required this.type, required this.transactionAt, this.party, this.transferredTo});
+  const _Transaction({required this.id, required this.amount, this.description, required this.account, required this.type, required this.transactionAt, this.party, required this.transferredTo});
   factory _Transaction.fromJson(Map<String, dynamic> json) => _$TransactionFromJson(json);
 
 @override final  int id;

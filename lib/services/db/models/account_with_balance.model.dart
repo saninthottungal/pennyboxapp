@@ -9,6 +9,7 @@ abstract class AccountwBalance with _$AccountwBalance {
     required int id,
     required String accountName,
     required double balance,
+    required double actualBalance,
   }) = _AccountwBalance;
 
   factory AccountwBalance.fromJson(Map<String, Object?> json) =>

@@ -166,7 +166,7 @@ class _AccountsState extends State<_Accounts> {
 
         return ConstrainedBox(
           constraints: const BoxConstraints(
-            maxHeight: 105,
+            maxHeight: 120,
             minHeight: 105,
           ),
           child: Row(
@@ -236,14 +236,27 @@ class _AccountCard extends StatelessWidget {
           minWidth: 140,
         ),
         child: ShadCard(
+          padding: const EdgeInsets.fromLTRB(24, 24, 0, 0),
           title: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(account.balance.toMoney()),
           ),
-          description: Text(
-            account.accountName,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+
+          description: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(account.actualBalance.toMoney()),
+              ),
+              Text(
+                account.accountName,
+                maxLines: 1,
+                textAlign: TextAlign.left,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ),
         ),
       ),
