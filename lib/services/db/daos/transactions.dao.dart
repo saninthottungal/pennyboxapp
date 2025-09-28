@@ -180,8 +180,6 @@ GROUP BY AC.id;
     required int? id,
     required String? transferId,
   }) async {
-    assert(id == null || transferId == null);
-
     if (id != null) {
       await _db.rawDelete(
         'DELETE FROM transactions WHERE id = ?',
