@@ -1,6 +1,7 @@
 extension ListX<T> on List<T> {
   T? previousOrNull(int index) {
-    if (index == 0) return null;
+    if (isEmpty || index <= 0 || index >= length - 1) return null;
+
     return this[index - 1];
   }
 

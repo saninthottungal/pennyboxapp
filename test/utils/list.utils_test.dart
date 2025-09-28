@@ -13,7 +13,7 @@ void main() {
       "should return next value when index is valid",
       () {
         final nextNumber = numbers.nextOrNull(0);
-        expect(nextNumber, 2);
+        expect(nextNumber, numbers[1]);
       },
     );
 
@@ -50,4 +50,50 @@ void main() {
       },
     );
   });
+
+  group(
+    "previousOrNull",
+    () {
+      test(
+        "should return previous value if index is valid",
+        () {
+          final prevNumber = numbers.previousOrNull(1);
+          expect(prevNumber, numbers[0]);
+        },
+      );
+
+      test(
+        "should return null if index is of first element",
+        () {
+          final prev = numbers.previousOrNull(0);
+          expect(prev, isNull);
+        },
+      );
+
+      test(
+        "should return null if index is out of range",
+        () {
+          final prev = numbers.previousOrNull(10);
+          expect(prev, isNull);
+        },
+      );
+
+      test(
+        "should return null if index is negative",
+        () {
+          final prev = numbers.previousOrNull(-5);
+          expect(prev, isNull);
+        },
+      );
+
+      test(
+        "should return null if list is empty",
+        () {
+          final empty = List<int>.empty();
+          final prev = empty.previousOrNull(12);
+          expect(prev, isNull);
+        },
+      );
+    },
+  );
 }
