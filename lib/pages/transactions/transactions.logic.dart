@@ -35,10 +35,20 @@ class TransactionsLogic extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> delete(int id) async {
-    await _dao.deleteTransaction(id);
-    history.removeWhere((e) => e.id == id);
-    planned.removeWhere((e) => e.id == id);
+  Future<void> delete({
+    required int? id,
+    required String? transferId,
+  }) async {
+    await _dao.deleteTransaction(
+      id: id,
+      transferId: transferId,
+    );
+    history.removeWhere(
+      (e) => e.id == id.toString() || e.id == transferId,
+    );
+    planned.removeWhere(
+      (e) => e.id == id.toString() || e.id == transferId,
+    );
 
     notifyListeners();
     eventBus.fire(FetchAccountBalances());

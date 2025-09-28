@@ -1,3 +1,4 @@
+import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
@@ -136,7 +137,10 @@ class _TransactionListView extends StatelessWidget {
         return ListTile(
           //TODO: Delete should be SOFT
           onLongPress: () => DeleteTransactionSheet(
-            onDelete: () => controller.delete(transaction.id),
+            onDelete: () => controller.delete(
+              id: transaction.id.toIntOrNull(),
+              transferId: transaction.transferId,
+            ),
           ).show(context),
           leading: Container(
             decoration: ShapeDecoration(

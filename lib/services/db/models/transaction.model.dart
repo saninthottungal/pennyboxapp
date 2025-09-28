@@ -9,7 +9,7 @@ part 'transaction.model.g.dart';
 @freezed
 abstract class Transaction with _$Transaction {
   const factory Transaction({
-    required int id,
+    required String id,
     required double amount,
     String? description,
     required Account account,
@@ -17,6 +17,7 @@ abstract class Transaction with _$Transaction {
     required DateTime transactionAt,
     Party? party,
     required Account? transferredTo,
+    required String? transferId,
   }) = _Transaction;
 
   factory Transaction.fromJson(Map<String, Object?> json) =>

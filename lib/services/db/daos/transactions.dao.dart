@@ -176,11 +176,23 @@ GROUP BY AC.id;
     return res.map(AccountwBalance.fromJson).toList();
   }
 
-  Future<void> deleteTransaction(int id) {
-    return _db.rawDelete(
-      'DELETE FROM transactions WHERE id = ?',
-      [id],
-    );
+  Future<void> deleteTransaction({
+    required int? id,
+    required String? transferId,
+  }) async {
+    assert(id == null || transferId == null);
+
+    if (id != null) {
+      await _db.rawDelete(
+        'DELETE FROM transactions WHERE id = ?',
+        [id],
+      );
+    } else if (transferId != null) {
+      await _db.rawDelete(
+        'DELETE FROM transactions WHERE transfer_id = ?',
+        [transferId],
+      );
+    }
   }
 
   Future<List<model.Transaction>> getTransactions({
@@ -190,43 +202,67 @@ GROUP BY AC.id;
     final limitClause = limit != null ? 'LIMIT $limit' : '';
     final timeOperator = isPlanned ? '>' : '<=';
     final res = await _db.rawQuery('''
-SELECT 
+SELECT * FROM
+(
+SELECT
 
-T.id, 
-T.amount, 
-T.description, 
-T.transfer_id,
+T.id AS id,
+T.amount AS amount,
+T.transaction_at AS transaction_at,
+T.description AS description,
 AC.id AS account_id,
 AC.name AS account_name,
 TY.id AS transaction_type_id,
 TY.kind AS transaction_type,
-T.transaction_at,
 P.id AS party_id,
 P.name AS party_name,
-AC2.id  AS transfer_account_id,
-AC2.name AS transfer_account_name
+NULL AS transferred_to_account_id,
+NULL AS transferred_to_account_name
 
-FROM 
-transactions AS T
+FROM transactions AS T
 INNER JOIN
 accounts AS AC
-ON T.account_id = AC.id
+ON AC.id = T.account_id
 INNER JOIN
 transaction_types AS TY
-ON T.transaction_type_id = TY.id
+ON TY.id = T.transaction_type_id
 LEFT OUTER JOIN
 parties AS P
-ON T.party_id = P.id
-LEFT OUTER JOIN
-transactions AS T2
-ON T.transfer_id = T2.transfer_id
-AND T.id != T2.id
-LEFT OUTER JOIN 
-accounts AS AC2
-ON T2.account_id = AC2.id
+ON P.id = T.party_id
 
-WHERE T.transaction_at $timeOperator(strftime('%Y-%m-%dT%H:%M:%f', 'now') || 'Z')
-ORDER BY T.transaction_at DESC;
+WHERE T.transfer_id IS NULL
+
+UNION ALL
+
+SELECT
+T.transfer_id AS id,
+min(T.amount) AS amount,
+min(T.transaction_at) AS transaction_at,
+min(T.description) AS description,
+min(CASE WHEN TY.kind = 'Expense' THEN AC.id ELSE NULL END) AS account_id,
+min(CASE WHEN TY.kind = 'Expense' THEN AC.name ELSE NULL END) AS account_name,
+
+3 AS transaction_type_id,
+'Transfer' AS transaction_type,
+NULL AS party_id,
+NULL AS party_name,
+min(CASE WHEN TY.kind = 'Income' THEN AC.id ELSE NULL END) AS transferred_to_account_id,
+min(CASE WHEN TY.kind = 'Income' THEN AC.name  ELSE NULL END) AS transferred_to_account_name
+
+FROM transactions AS T
+INNER JOIN 
+accounts AS AC
+ON AC.id = T.account_id
+INNER JOIN
+transaction_types AS TY
+ON TY.id = T.transaction_type_id
+
+WHERE T.transfer_id IS NOT NULL
+GROUP BY transfer_id
+) 
+
+WHERE transaction_at $timeOperator(strftime('%Y-%m-%dT%H:%M:%f', 'now') || 'Z')
+ORDER BY transaction_at DESC;
 $limitClause;
 ''');
 
@@ -244,14 +280,14 @@ $limitClause;
               name: row['party_name']! as String,
             )
           : null;
-      final transferredTo = row['transfer_account_id'] != null
+      final transferredTo = row['transferred_to_account_id'] != null
           ? Account(
-              id: row['transfer_account_id']! as int,
-              name: row['transfer_account_name']! as String,
+              id: row['transferred_to_account_id']! as int,
+              name: row['transferred_to_account_name']! as String,
             )
           : null;
       return model.Transaction(
-        id: row['id']! as int,
+        id: row['id']! is int ? row['id']!.toString() : row['id']! as String,
         amount: row['amount']! as double,
         account: account,
         type: type,
@@ -260,6 +296,8 @@ $limitClause;
         ).toLocal(),
         party: party,
         transferredTo: transferredTo,
+        description: row['description'] as String?,
+        transferId: row['tranfer_id'] as String?,
       );
     }).toList();
   }
