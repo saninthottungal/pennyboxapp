@@ -153,8 +153,22 @@ class _TransactionListView extends StatelessWidget {
               size: 20,
             ),
           ),
-          title: Text(
-            transaction.party?.name ?? transaction.account.name,
+          title: Text.rich(
+            TextSpan(
+              text: transaction.party?.name ?? transaction.account.name,
+              children: [
+                if (transaction.transferredTo != null) ...[
+                  const WidgetSpan(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4),
+                      child: Icon(Icons.arrow_forward_outlined),
+                    ),
+                    alignment: PlaceholderAlignment.middle,
+                  ),
+                  TextSpan(text: transaction.transferredTo!.name),
+                ],
+              ],
+            ),
           ),
           subtitle: Text.rich(
             overflow: TextOverflow.ellipsis,
