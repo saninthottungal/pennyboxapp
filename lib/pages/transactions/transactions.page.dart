@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
+import 'package:flutter_launcher_icons/utils.dart';
 import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/utils/app_date.utils.dart';
 import 'package:pennyboxapp/core/utils/context.utils.dart';
@@ -133,7 +136,7 @@ class _TransactionListView extends StatelessWidget {
       separatorBuilder: (_, _) => const Divider(),
       itemBuilder: (context, index) {
         final transaction = transactions[index];
-
+        log(prettifyJsonEncode(transaction.toJson()));
         return ListTile(
           //TODO: Delete should be SOFT
           onLongPress: () => DeleteTransactionSheet(
@@ -151,9 +154,7 @@ class _TransactionListView extends StatelessWidget {
             ),
           ),
           title: Text(
-            transaction.party?.name ??
-                transaction.transferredTo?.name ??
-                transaction.id.toString(),
+            transaction.party?.name ?? transaction.account.name,
           ),
           subtitle: Text.rich(
             overflow: TextOverflow.ellipsis,
