@@ -188,7 +188,7 @@ GROUP BY AC.id;
     int? limit,
   }) async {
     final limitClause = limit != null ? 'LIMIT $limit' : '';
-
+    final timeOperator = isPlanned ? '>' : '<=';
     final res = await _db.rawQuery('''
 SELECT 
 
@@ -225,11 +225,12 @@ LEFT OUTER JOIN
 accounts AS AC2
 ON T2.account_id = AC2.id
 
-ORDER BY T.transaction_at DESC
+WHERE T.transaction_at $timeOperator(strftime('%Y-%m-%dT%H:%M:%f', 'now') || 'Z')
+ORDER BY T.transaction_at DESC;
 $limitClause;
 ''');
 
-    final transactions = res.map((row) {
+    return res.map((row) {
       final account = Account(
         id: row['account_id']! as int,
         name: row['account_name']! as String,
@@ -260,16 +261,6 @@ $limitClause;
         party: party,
         transferredTo: transferredTo,
       );
-    });
-
-    //TODO: filtering should be on the sql level
-    if (isPlanned) {
-      return transactions
-          .where((e) => e.transactionAt.isAfter(DateTime.now()))
-          .toList();
-    }
-    return transactions
-        .where((e) => e.transactionAt.isBefore(DateTime.now()))
-        .toList();
+    }).toList();
   }
 }
