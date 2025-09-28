@@ -15,6 +15,7 @@ void main() async {
 
   runApp(
     AccountsProvider(
+      controller: AccountsLogic(AppDatabase().transactionDao),
       child: TransactionsProvider(
         child: const MyApp(),
       ),

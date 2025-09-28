@@ -2,13 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:pennyboxapp/services/db/daos/transactions.dao.dart';
-import 'package:pennyboxapp/services/db/db.dart';
 import 'package:pennyboxapp/services/db/models/account_with_balance.model.dart';
 import 'package:pennyboxapp/services/event_bus/event_bus.dart';
 
 class AccountsLogic extends ChangeNotifier {
-  AccountsLogic() {
-    _dao = AppDatabase().transactionDao;
+  AccountsLogic(this._dao) {
     getAccountBalances();
     _eventSub = eventBus.on<FetchAccountBalances>().listen(
       (_) => getAccountBalances(),
@@ -48,9 +46,10 @@ class AccountsLogic extends ChangeNotifier {
 }
 
 class AccountsProvider extends InheritedWidget {
-  AccountsProvider({
+  const AccountsProvider({
+    required this.controller,
     required super.child,
-  }) : controller = AccountsLogic();
+  });
 
   final AccountsLogic controller;
 
