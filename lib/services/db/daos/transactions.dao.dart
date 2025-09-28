@@ -297,7 +297,6 @@ $limitClause;
         party: party,
         transferredTo: transferredTo,
         description: row['description'] as String?,
-        transferId: row['tranfer_id'] as String?,
       );
     }).toList();
   }

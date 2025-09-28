@@ -139,7 +139,7 @@ class _TransactionListView extends StatelessWidget {
           onLongPress: () => DeleteTransactionSheet(
             onDelete: () => controller.delete(
               id: transaction.id.toIntOrNull(),
-              transferId: transaction.transferId,
+              transferId: transaction.id,
             ),
           ).show(context),
           leading: Container(

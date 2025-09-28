@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Transaction {
 
- String get id; double get amount; String? get description; Account get account; TxnType get type; DateTime get transactionAt; Party? get party; Account? get transferredTo; String? get transferId;
+ String get id; double get amount; String? get description; Account get account; TxnType get type; DateTime get transactionAt; Party? get party; Account? get transferredTo;
 /// Create a copy of Transaction
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $TransactionCopyWith<Transaction> get copyWith => _$TransactionCopyWithImpl<Tran
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Transaction&&(identical(other.id, id) || other.id == id)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.description, description) || other.description == description)&&(identical(other.account, account) || other.account == account)&&(identical(other.type, type) || other.type == type)&&(identical(other.transactionAt, transactionAt) || other.transactionAt == transactionAt)&&(identical(other.party, party) || other.party == party)&&(identical(other.transferredTo, transferredTo) || other.transferredTo == transferredTo)&&(identical(other.transferId, transferId) || other.transferId == transferId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Transaction&&(identical(other.id, id) || other.id == id)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.description, description) || other.description == description)&&(identical(other.account, account) || other.account == account)&&(identical(other.type, type) || other.type == type)&&(identical(other.transactionAt, transactionAt) || other.transactionAt == transactionAt)&&(identical(other.party, party) || other.party == party)&&(identical(other.transferredTo, transferredTo) || other.transferredTo == transferredTo));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,amount,description,account,type,transactionAt,party,transferredTo,transferId);
+int get hashCode => Object.hash(runtimeType,id,amount,description,account,type,transactionAt,party,transferredTo);
 
 @override
 String toString() {
-  return 'Transaction(id: $id, amount: $amount, description: $description, account: $account, type: $type, transactionAt: $transactionAt, party: $party, transferredTo: $transferredTo, transferId: $transferId)';
+  return 'Transaction(id: $id, amount: $amount, description: $description, account: $account, type: $type, transactionAt: $transactionAt, party: $party, transferredTo: $transferredTo)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $TransactionCopyWith<$Res>  {
   factory $TransactionCopyWith(Transaction value, $Res Function(Transaction) _then) = _$TransactionCopyWithImpl;
 @useResult
 $Res call({
- String id, double amount, String? description, Account account, TxnType type, DateTime transactionAt, Party? party, Account? transferredTo, String? transferId
+ String id, double amount, String? description, Account account, TxnType type, DateTime transactionAt, Party? party, Account? transferredTo
 });
 
 
@@ -65,7 +65,7 @@ class _$TransactionCopyWithImpl<$Res>
 
 /// Create a copy of Transaction
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? amount = null,Object? description = freezed,Object? account = null,Object? type = null,Object? transactionAt = null,Object? party = freezed,Object? transferredTo = freezed,Object? transferId = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? amount = null,Object? description = freezed,Object? account = null,Object? type = null,Object? transactionAt = null,Object? party = freezed,Object? transferredTo = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
@@ -75,8 +75,7 @@ as Account,type: null == type ? _self.type : type // ignore: cast_nullable_to_no
 as TxnType,transactionAt: null == transactionAt ? _self.transactionAt : transactionAt // ignore: cast_nullable_to_non_nullable
 as DateTime,party: freezed == party ? _self.party : party // ignore: cast_nullable_to_non_nullable
 as Party?,transferredTo: freezed == transferredTo ? _self.transferredTo : transferredTo // ignore: cast_nullable_to_non_nullable
-as Account?,transferId: freezed == transferId ? _self.transferId : transferId // ignore: cast_nullable_to_non_nullable
-as String?,
+as Account?,
   ));
 }
 /// Create a copy of Transaction
@@ -194,10 +193,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  double amount,  String? description,  Account account,  TxnType type,  DateTime transactionAt,  Party? party,  Account? transferredTo,  String? transferId)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  double amount,  String? description,  Account account,  TxnType type,  DateTime transactionAt,  Party? party,  Account? transferredTo)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Transaction() when $default != null:
-return $default(_that.id,_that.amount,_that.description,_that.account,_that.type,_that.transactionAt,_that.party,_that.transferredTo,_that.transferId);case _:
+return $default(_that.id,_that.amount,_that.description,_that.account,_that.type,_that.transactionAt,_that.party,_that.transferredTo);case _:
   return orElse();
 
 }
@@ -215,10 +214,10 @@ return $default(_that.id,_that.amount,_that.description,_that.account,_that.type
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  double amount,  String? description,  Account account,  TxnType type,  DateTime transactionAt,  Party? party,  Account? transferredTo,  String? transferId)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  double amount,  String? description,  Account account,  TxnType type,  DateTime transactionAt,  Party? party,  Account? transferredTo)  $default,) {final _that = this;
 switch (_that) {
 case _Transaction():
-return $default(_that.id,_that.amount,_that.description,_that.account,_that.type,_that.transactionAt,_that.party,_that.transferredTo,_that.transferId);case _:
+return $default(_that.id,_that.amount,_that.description,_that.account,_that.type,_that.transactionAt,_that.party,_that.transferredTo);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -235,10 +234,10 @@ return $default(_that.id,_that.amount,_that.description,_that.account,_that.type
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  double amount,  String? description,  Account account,  TxnType type,  DateTime transactionAt,  Party? party,  Account? transferredTo,  String? transferId)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  double amount,  String? description,  Account account,  TxnType type,  DateTime transactionAt,  Party? party,  Account? transferredTo)?  $default,) {final _that = this;
 switch (_that) {
 case _Transaction() when $default != null:
-return $default(_that.id,_that.amount,_that.description,_that.account,_that.type,_that.transactionAt,_that.party,_that.transferredTo,_that.transferId);case _:
+return $default(_that.id,_that.amount,_that.description,_that.account,_that.type,_that.transactionAt,_that.party,_that.transferredTo);case _:
   return null;
 
 }
@@ -250,7 +249,7 @@ return $default(_that.id,_that.amount,_that.description,_that.account,_that.type
 @JsonSerializable()
 
 class _Transaction implements Transaction {
-  const _Transaction({required this.id, required this.amount, this.description, required this.account, required this.type, required this.transactionAt, this.party, required this.transferredTo, required this.transferId});
+  const _Transaction({required this.id, required this.amount, this.description, required this.account, required this.type, required this.transactionAt, this.party, required this.transferredTo});
   factory _Transaction.fromJson(Map<String, dynamic> json) => _$TransactionFromJson(json);
 
 @override final  String id;
@@ -261,7 +260,6 @@ class _Transaction implements Transaction {
 @override final  DateTime transactionAt;
 @override final  Party? party;
 @override final  Account? transferredTo;
-@override final  String? transferId;
 
 /// Create a copy of Transaction
 /// with the given fields replaced by the non-null parameter values.
@@ -276,16 +274,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Transaction&&(identical(other.id, id) || other.id == id)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.description, description) || other.description == description)&&(identical(other.account, account) || other.account == account)&&(identical(other.type, type) || other.type == type)&&(identical(other.transactionAt, transactionAt) || other.transactionAt == transactionAt)&&(identical(other.party, party) || other.party == party)&&(identical(other.transferredTo, transferredTo) || other.transferredTo == transferredTo)&&(identical(other.transferId, transferId) || other.transferId == transferId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Transaction&&(identical(other.id, id) || other.id == id)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.description, description) || other.description == description)&&(identical(other.account, account) || other.account == account)&&(identical(other.type, type) || other.type == type)&&(identical(other.transactionAt, transactionAt) || other.transactionAt == transactionAt)&&(identical(other.party, party) || other.party == party)&&(identical(other.transferredTo, transferredTo) || other.transferredTo == transferredTo));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,amount,description,account,type,transactionAt,party,transferredTo,transferId);
+int get hashCode => Object.hash(runtimeType,id,amount,description,account,type,transactionAt,party,transferredTo);
 
 @override
 String toString() {
-  return 'Transaction(id: $id, amount: $amount, description: $description, account: $account, type: $type, transactionAt: $transactionAt, party: $party, transferredTo: $transferredTo, transferId: $transferId)';
+  return 'Transaction(id: $id, amount: $amount, description: $description, account: $account, type: $type, transactionAt: $transactionAt, party: $party, transferredTo: $transferredTo)';
 }
 
 
@@ -296,7 +294,7 @@ abstract mixin class _$TransactionCopyWith<$Res> implements $TransactionCopyWith
   factory _$TransactionCopyWith(_Transaction value, $Res Function(_Transaction) _then) = __$TransactionCopyWithImpl;
 @override @useResult
 $Res call({
- String id, double amount, String? description, Account account, TxnType type, DateTime transactionAt, Party? party, Account? transferredTo, String? transferId
+ String id, double amount, String? description, Account account, TxnType type, DateTime transactionAt, Party? party, Account? transferredTo
 });
 
 
@@ -313,7 +311,7 @@ class __$TransactionCopyWithImpl<$Res>
 
 /// Create a copy of Transaction
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? amount = null,Object? description = freezed,Object? account = null,Object? type = null,Object? transactionAt = null,Object? party = freezed,Object? transferredTo = freezed,Object? transferId = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? amount = null,Object? description = freezed,Object? account = null,Object? type = null,Object? transactionAt = null,Object? party = freezed,Object? transferredTo = freezed,}) {
   return _then(_Transaction(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
@@ -323,8 +321,7 @@ as Account,type: null == type ? _self.type : type // ignore: cast_nullable_to_no
 as TxnType,transactionAt: null == transactionAt ? _self.transactionAt : transactionAt // ignore: cast_nullable_to_non_nullable
 as DateTime,party: freezed == party ? _self.party : party // ignore: cast_nullable_to_non_nullable
 as Party?,transferredTo: freezed == transferredTo ? _self.transferredTo : transferredTo // ignore: cast_nullable_to_non_nullable
-as Account?,transferId: freezed == transferId ? _self.transferId : transferId // ignore: cast_nullable_to_non_nullable
-as String?,
+as Account?,
   ));
 }
 
