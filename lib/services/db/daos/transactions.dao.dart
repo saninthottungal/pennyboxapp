@@ -174,13 +174,16 @@ SELECT
 T.id, 
 T.amount, 
 T.description, 
-AC.id as account_id,
-AC.name as account_name,
-TY.id as transaction_type_id,
-TY.kind as transaction_type,
+T.transfer_id,
+AC.id AS account_id,
+AC.name AS account_name,
+TY.id AS transaction_type_id,
+TY.kind AS transaction_type,
 T.transaction_at,
-P.id as party_id,
-P.name as party_name
+P.id AS party_id,
+P.name AS party_name,
+AC2.id  AS transfer_account_id,
+AC2.name AS transfer_account_name
 
 FROM 
 transactions AS T
@@ -193,6 +196,13 @@ ON T.transaction_type_id = TY.id
 LEFT OUTER JOIN
 parties AS P
 ON T.party_id = P.id
+LEFT OUTER JOIN
+transactions AS T2
+ON T.transfer_id = T2.transfer_id
+AND T.id != T2.id
+LEFT OUTER JOIN 
+accounts AS AC2
+ON T2.account_id = AC2.id
 
 ORDER BY T.transaction_at DESC
 $limitClause;
@@ -212,6 +222,12 @@ $limitClause;
               name: row['party_name']! as String,
             )
           : null;
+      final transferredTo = row['transfer_account_id'] != null
+          ? Account(
+              id: row['transfer_account_id']! as int,
+              name: row['transfer_account_name']! as String,
+            )
+          : null;
       return model.Transaction(
         id: row['id']! as int,
         amount: row['amount']! as double,
@@ -221,6 +237,7 @@ $limitClause;
           row['transaction_at']! as String,
         ).toLocal(),
         party: party,
+        transferredTo: transferredTo,
       );
     });
 
