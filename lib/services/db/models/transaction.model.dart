@@ -9,7 +9,7 @@ part 'transaction.model.g.dart';
 @freezed
 abstract class Transaction with _$Transaction {
   const factory Transaction({
-    required int id,
+    required String id,
     required double amount,
     String? description,
     required Account account,

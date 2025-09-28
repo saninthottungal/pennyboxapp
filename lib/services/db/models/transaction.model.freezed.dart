@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Transaction {
 
- int get id; double get amount; String? get description; Account get account; TxnType get type; DateTime get transactionAt; Party? get party; Account? get transferredTo;
+ String get id; double get amount; String? get description; Account get account; TxnType get type; DateTime get transactionAt; Party? get party; Account? get transferredTo;
 /// Create a copy of Transaction
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $TransactionCopyWith<$Res>  {
   factory $TransactionCopyWith(Transaction value, $Res Function(Transaction) _then) = _$TransactionCopyWithImpl;
 @useResult
 $Res call({
- int id, double amount, String? description, Account account, TxnType type, DateTime transactionAt, Party? party, Account? transferredTo
+ String id, double amount, String? description, Account account, TxnType type, DateTime transactionAt, Party? party, Account? transferredTo
 });
 
 
@@ -68,7 +68,7 @@ class _$TransactionCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? amount = null,Object? description = freezed,Object? account = null,Object? type = null,Object? transactionAt = null,Object? party = freezed,Object? transferredTo = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as int,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
+as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as double,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,account: null == account ? _self.account : account // ignore: cast_nullable_to_non_nullable
 as Account,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
@@ -193,7 +193,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  double amount,  String? description,  Account account,  TxnType type,  DateTime transactionAt,  Party? party,  Account? transferredTo)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  double amount,  String? description,  Account account,  TxnType type,  DateTime transactionAt,  Party? party,  Account? transferredTo)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Transaction() when $default != null:
 return $default(_that.id,_that.amount,_that.description,_that.account,_that.type,_that.transactionAt,_that.party,_that.transferredTo);case _:
@@ -214,7 +214,7 @@ return $default(_that.id,_that.amount,_that.description,_that.account,_that.type
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  double amount,  String? description,  Account account,  TxnType type,  DateTime transactionAt,  Party? party,  Account? transferredTo)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  double amount,  String? description,  Account account,  TxnType type,  DateTime transactionAt,  Party? party,  Account? transferredTo)  $default,) {final _that = this;
 switch (_that) {
 case _Transaction():
 return $default(_that.id,_that.amount,_that.description,_that.account,_that.type,_that.transactionAt,_that.party,_that.transferredTo);case _:
@@ -234,7 +234,7 @@ return $default(_that.id,_that.amount,_that.description,_that.account,_that.type
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  double amount,  String? description,  Account account,  TxnType type,  DateTime transactionAt,  Party? party,  Account? transferredTo)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  double amount,  String? description,  Account account,  TxnType type,  DateTime transactionAt,  Party? party,  Account? transferredTo)?  $default,) {final _that = this;
 switch (_that) {
 case _Transaction() when $default != null:
 return $default(_that.id,_that.amount,_that.description,_that.account,_that.type,_that.transactionAt,_that.party,_that.transferredTo);case _:
@@ -252,7 +252,7 @@ class _Transaction implements Transaction {
   const _Transaction({required this.id, required this.amount, this.description, required this.account, required this.type, required this.transactionAt, this.party, required this.transferredTo});
   factory _Transaction.fromJson(Map<String, dynamic> json) => _$TransactionFromJson(json);
 
-@override final  int id;
+@override final  String id;
 @override final  double amount;
 @override final  String? description;
 @override final  Account account;
@@ -294,7 +294,7 @@ abstract mixin class _$TransactionCopyWith<$Res> implements $TransactionCopyWith
   factory _$TransactionCopyWith(_Transaction value, $Res Function(_Transaction) _then) = __$TransactionCopyWithImpl;
 @override @useResult
 $Res call({
- int id, double amount, String? description, Account account, TxnType type, DateTime transactionAt, Party? party, Account? transferredTo
+ String id, double amount, String? description, Account account, TxnType type, DateTime transactionAt, Party? party, Account? transferredTo
 });
 
 
@@ -314,7 +314,7 @@ class __$TransactionCopyWithImpl<$Res>
 @override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? amount = null,Object? description = freezed,Object? account = null,Object? type = null,Object? transactionAt = null,Object? party = freezed,Object? transferredTo = freezed,}) {
   return _then(_Transaction(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as int,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
+as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as double,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,account: null == account ? _self.account : account // ignore: cast_nullable_to_non_nullable
 as Account,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
