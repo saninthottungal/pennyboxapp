@@ -5,19 +5,19 @@ import 'package:pennyboxapp/services/db/daos/transactions.dao.dart';
 import 'package:pennyboxapp/services/db/db_migrations.dart';
 import 'package:sqflite/sqflite.dart';
 
-class AppDatabase {
-  factory AppDatabase() {
+class AppDb {
+  factory AppDb() {
     return _instance;
   }
 
-  AppDatabase._();
+  AppDb._();
 
-  static final _instance = AppDatabase._();
+  static final _instance = AppDb._();
 
   late final Database _db;
   Database get db => _db;
 
-  late final TransactionDao transactionDao;
+  late final TnxDao transactionDao;
 
   Future<Database> open() async {
     final dbFolder = await getApplicationDocumentsDirectory();
@@ -45,7 +45,7 @@ class AppDatabase {
       },
     );
 
-    transactionDao = TransactionDao(_db);
+    transactionDao = TnxDao(_db);
     return _db;
   }
 }

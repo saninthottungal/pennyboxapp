@@ -5,11 +5,11 @@ import 'package:pennyboxapp/services/db/models/account.model.dart';
 
 class SelectTransferLogic extends ChangeNotifier {
   SelectTransferLogic() {
-    _dao = AppDatabase().transactionDao;
+    _dao = AppDb().transactionDao;
     getAccounts();
   }
 
-  late final TransactionDao _dao;
+  late final TnxDao _dao;
   List<Account> accounts = [];
 
   Future<void> getAccounts() async {

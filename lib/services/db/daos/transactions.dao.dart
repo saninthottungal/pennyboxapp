@@ -6,8 +6,8 @@ import 'package:pennyboxapp/services/db/models/transaction.model.dart' as model;
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 
-class TransactionDao {
-  TransactionDao(this._db);
+class TnxDao {
+  TnxDao(this._db);
 
   final Database _db;
 

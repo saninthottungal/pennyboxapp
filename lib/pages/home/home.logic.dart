@@ -8,7 +8,7 @@ import 'package:pennyboxapp/services/event_bus/event_bus.dart';
 class AccountsLogic extends ChangeNotifier {
   AccountsLogic(this._dao);
 
-  late final TransactionDao _dao;
+  late final TnxDao _dao;
   StreamSubscription<FetchAccountBalances>? _eventSub;
 
   List<AccountwBalance> balances = [];
