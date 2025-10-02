@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
 import 'package:pennyboxapp/services/db/models/account.model.dart';
 import 'package:pennyboxapp/services/db/models/account_with_balance.model.dart';
@@ -260,9 +262,11 @@ GROUP BY transfer_id
 ) 
 
 WHERE transaction_at $timeOperator(strftime('%Y-%m-%dT%H:%M:%f', 'now') || 'Z')
-ORDER BY transaction_at DESC;
+ORDER BY transaction_at DESC
 $limitClause;
 ''');
+
+    log(res.length.toString());
 
     return res.map((row) {
       final account = Account(
