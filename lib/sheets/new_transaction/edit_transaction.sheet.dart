@@ -12,7 +12,12 @@ import 'package:pennyboxapp/sheets/select_party/select_party.sheet.dart';
 import 'package:pennyboxapp/sheets/select_transfer_account/select_transfer_account.sheet.dart';
 
 class EditTransactionSheet extends StatefulWidget with SheetMixin {
-  const EditTransactionSheet({super.key});
+  const EditTransactionSheet({
+    super.key,
+    required this.transactionId,
+  });
+
+  final String transactionId;
 
   @override
   bool get resizeToAvoidBottomInset => false;
@@ -29,9 +34,7 @@ class _EditTransactionSheetState extends State<EditTransactionSheet> {
   @override
   void initState() {
     super.initState();
-    controller = NewTransactionLogic()
-      ..getAccounts()
-      ..getTrancationTypes();
+    controller = NewTransactionLogic();
 
     noteController = TextEditingController();
   }
