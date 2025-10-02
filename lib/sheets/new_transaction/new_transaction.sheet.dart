@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
-import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
 import 'package:pennyboxapp/core/mixins/modal_sheet.mixin.dart';
 import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/core/utils/number.utils.dart';
-import 'package:pennyboxapp/services/db/models/account.model.dart';
-import 'package:pennyboxapp/services/db/models/party.model.dart';
 import 'package:pennyboxapp/sheets/new_transaction/new_transaction.logic.dart';
 import 'package:pennyboxapp/sheets/new_transaction/widgets/tnx_account_tnx_type_selector.dart';
 import 'package:pennyboxapp/sheets/new_transaction/widgets/tnx_actions_row.dart';
 import 'package:pennyboxapp/sheets/new_transaction/widgets/tnx_numpad.dart';
+import 'package:pennyboxapp/sheets/new_transaction/widgets/tnx_other_party_selector.dart';
 import 'package:pennyboxapp/sheets/select_party/select_party.sheet.dart';
 import 'package:pennyboxapp/sheets/select_transfer_account/select_transfer_account.sheet.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -107,23 +105,7 @@ class _NewTransactionSheetState extends State<NewTransactionSheet> {
                   builder: (context, child) {
                     final amount = double.tryParse(controller.amount) ?? 0;
 
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: context.gutter),
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          amount.toMoney(),
-                          maxLines: 1,
-                          style: context.textTheme.displayLarge?.copyWith(
-                            color: amount == 0
-                                ? context.colorScheme.primary.withValues(
-                                    alpha: 0.3,
-                                  )
-                                : context.colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                    );
+                    return AmountWidget(amount: amount);
                   },
                 ),
 
@@ -160,51 +142,25 @@ class _NewTransactionSheetState extends State<NewTransactionSheet> {
   }
 }
 
-class OtherPartySelector extends StatelessWidget {
-  const OtherPartySelector({
+class AmountWidget extends StatelessWidget {
+  const AmountWidget({
     super.key,
-    required this.onTap,
-    required this.selectedParty,
-    required this.transferringTo,
-    required this.selectedTxnType,
+    required this.amount,
   });
 
-  final VoidCallback onTap;
-
-  final Party? selectedParty;
-  final Account? transferringTo;
-  final TxnType? selectedTxnType;
+  final double amount;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.translucent,
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 8,
-          vertical: 2,
-        ),
-        decoration: selectedParty != null || transferringTo != null
-            ? null
-            : BoxDecoration(
-                border: Border.all(
-                  //! needs to define a color for this
-                  color: context.colorScheme.primary.withValues(
-                    alpha: 0.2,
-                  ),
-                ),
-                borderRadius: UiConsts.borderRadius,
-              ),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: context.gutter),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
         child: Text(
-          '${selectedTxnType?.actionLabel}'
-          ' ${selectedTxnType == TxnType.transfer ? transferringTo?.name ?? '?' : selectedParty?.name ?? '?'}',
-          textAlign: TextAlign.center,
-          //! needs to define a color for this
-          style: context.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: selectedParty == null
-                //! needs to define a color for this
+          amount.toMoney(),
+          maxLines: 1,
+          style: context.textTheme.displayLarge?.copyWith(
+            color: amount == 0
                 ? context.colorScheme.primary.withValues(
                     alpha: 0.3,
                   )
