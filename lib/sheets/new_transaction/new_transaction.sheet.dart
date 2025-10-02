@@ -5,11 +5,12 @@ import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
 import 'package:pennyboxapp/core/mixins/modal_sheet.mixin.dart';
 import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/core/utils/number.utils.dart';
-import 'package:pennyboxapp/services/db/models/account.model.dart';
 import 'package:pennyboxapp/sheets/new_transaction/new_transaction.logic.dart';
+import 'package:pennyboxapp/sheets/new_transaction/widgets/tnx_account_tnx_type_selector.dart';
+import 'package:pennyboxapp/sheets/new_transaction/widgets/tnx_actions_row.dart';
+import 'package:pennyboxapp/sheets/new_transaction/widgets/tnx_numpad.dart';
 import 'package:pennyboxapp/sheets/select_party/select_party.sheet.dart';
 import 'package:pennyboxapp/sheets/select_transfer_account/select_transfer_account.sheet.dart';
-import 'package:pennyboxapp/widgets/date_time_picker.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class NewTransactionSheet extends StatefulWidget with SheetMixin {
@@ -52,58 +53,18 @@ class _NewTransactionSheetState extends State<NewTransactionSheet> {
         mainAxisSize: MainAxisSize.min,
         spacing: context.gutter,
         children: [
-          Row(
-            spacing: context.gutter,
-            children: [
-              //* Account Types
-              ListenableBuilder(
-                listenable: controller,
-                builder: (context, _) {
-                  return ShadSelect<Account>(
-                    initialValue: controller.selectedAccount,
-                    placeholder: const Text("Account"),
-                    selectedOptionBuilder: (context, value) {
-                      return Text(value.name);
-                    },
-                    options: controller.accounts.map((e) {
-                      return ShadOption(
-                        value: e,
-                        child: Text(e.name),
-                      );
-                    }).toList(),
-                    onChanged: controller.updateSelectedAccount,
-                  );
-                },
-              ),
-
-              //* TransactionTypes
-              ListenableBuilder(
-                listenable: controller,
-                builder: (context, child) {
-                  return ShadSelect<TxnType>(
-                    initialValue: controller.selectedTxnType,
-                    placeholder: const Text("Transaction"),
-                    selectedOptionBuilder: (context, value) {
-                      return Text(value.asText);
-                    },
-                    options: controller.transactionTypes.map((e) {
-                      return ShadOption(
-                        value: e,
-                        child: Text(e.asText),
-                      );
-                    }).toList(),
-                    onChanged: controller.updateSelectedTransactionType,
-                  );
-                },
-              ),
-
-              const Spacer(),
-
-              ShadIconButton.outline(
-                onPressed: Navigator.of(context).pop,
-                icon: const Icon(Icons.close),
-              ),
-            ],
+          ListenableBuilder(
+            listenable: controller,
+            builder: (context, child) {
+              return TnxAccountTnxTypeSelector(
+                accounts: controller.accounts,
+                tnxTypes: controller.transactionTypes,
+                initialAccount: controller.selectedAccount,
+                initialTnx: controller.selectedTxnType,
+                onAccountSelected: controller.updateSelectedAccount,
+                onTnxTypeSelected: controller.updateSelectedTransactionType,
+              );
+            },
           ),
 
           //* Other Party/ Transfer Account
@@ -219,93 +180,28 @@ class _NewTransactionSheetState extends State<NewTransactionSheet> {
           ),
 
           /// Actions row
-          Row(
-            children: [
-              Expanded(
-                flex: 2,
-                child: ShadDateTimePicker(
-                  initialDateTime: transactionAt,
-                  margin: EdgeInsets.only(right: context.gutterSmall),
-                  onChanged: (value) => transactionAt = value,
-                ),
-              ),
-
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(left: context.gutterSmall),
-                  child: ShadIconButton.secondary(
-                    onPressed: controller.backSpace,
-                    onLongPress: controller.clear,
-                    icon: const Icon(Icons.backspace_outlined),
-                  ),
-                ),
-              ),
-            ],
+          TnxActionsRow(
+            initialDateTime: transactionAt,
+            onChanged: (value) => transactionAt = value,
+            onBackSpace: controller.backSpace,
+            onClear: controller.clear,
           ),
 
           /// Number pad
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: context.gutter,
-              crossAxisSpacing: context.gutter,
-              mainAxisExtent: 60,
-            ),
-            itemCount: _chars.length,
-            itemBuilder: (context, index) {
-              final char = _chars[index];
-              final isDoneBtn = index == _chars.length - 1;
+          TnxNumPad(
+            onPressed: controller.append,
+            onDone: () async {
+              final note = noteController.text.trim();
 
-              return ShadButton.raw(
-                onPressed: () async {
-                  if (isDoneBtn) {
-                    final note = noteController.text.trim();
-
-                    final success = await controller.addTransaction(
-                      transactionAt: transactionAt,
-                      description: note.isNotEmpty ? note : null,
-                    );
-                    if (context.mounted && success) Navigator.pop(context);
-                  } else {
-                    controller.append(char);
-                  }
-                },
-                variant: isDoneBtn
-                    ? ShadButtonVariant.primary
-                    : ShadButtonVariant.outline,
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: isDoneBtn
-                      ? const Icon(Icons.done, size: 34)
-                      : Text(
-                          char,
-                          style: context.textTheme.displayMedium?.copyWith(
-                            color: context.colorScheme.primary,
-                          ),
-                        ),
-                ),
+              final success = await controller.addTransaction(
+                transactionAt: transactionAt,
+                description: note.isNotEmpty ? note : null,
               );
+              if (context.mounted && success) Navigator.pop(context);
             },
           ),
         ],
       ),
     );
   }
-
-  static const List<String> _chars = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '.',
-    '0',
-    '',
-  ];
 }
