@@ -5,6 +5,8 @@ import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
 import 'package:pennyboxapp/core/mixins/modal_sheet.mixin.dart';
 import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/core/utils/number.utils.dart';
+import 'package:pennyboxapp/services/db/models/account.model.dart';
+import 'package:pennyboxapp/services/db/models/party.model.dart';
 import 'package:pennyboxapp/sheets/new_transaction/new_transaction.logic.dart';
 import 'package:pennyboxapp/sheets/new_transaction/widgets/tnx_account_tnx_type_selector.dart';
 import 'package:pennyboxapp/sheets/new_transaction/widgets/tnx_actions_row.dart';
@@ -80,7 +82,7 @@ class _NewTransactionSheetState extends State<NewTransactionSheet> {
                       return const SizedBox.shrink();
                     }
 
-                    return GestureDetector(
+                    return OtherPartySelector(
                       onTap: () {
                         if (controller.selectedTxnType == TxnType.transfer) {
                           SelectTransferAccountSheet(
@@ -92,41 +94,9 @@ class _NewTransactionSheetState extends State<NewTransactionSheet> {
                           ).show(context);
                         }
                       },
-                      behavior: HitTestBehavior.translucent,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 2,
-                        ),
-                        decoration:
-                            controller.selectedParty != null ||
-                                controller.transferringTo != null
-                            ? null
-                            : BoxDecoration(
-                                border: Border.all(
-                                  //! needs to define a color for this
-                                  color: context.colorScheme.primary.withValues(
-                                    alpha: 0.2,
-                                  ),
-                                ),
-                                borderRadius: UiConsts.borderRadius,
-                              ),
-                        child: Text(
-                          '${controller.selectedTxnType?.actionLabel}'
-                          ' ${controller.selectedTxnType == TxnType.transfer ? controller.transferringTo?.name ?? '?' : controller.selectedParty?.name ?? '?'}',
-                          textAlign: TextAlign.center,
-                          //! needs to define a color for this
-                          style: context.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: controller.selectedParty == null
-                                //! needs to define a color for this
-                                ? context.colorScheme.primary.withValues(
-                                    alpha: 0.3,
-                                  )
-                                : context.colorScheme.primary,
-                          ),
-                        ),
-                      ),
+                      selectedParty: controller.selectedParty,
+                      transferringTo: controller.transferringTo,
+                      selectedTxnType: controller.selectedTxnType,
                     );
                   },
                 ),
@@ -158,23 +128,7 @@ class _NewTransactionSheetState extends State<NewTransactionSheet> {
                 ),
 
                 //* add a note
-                IntrinsicWidth(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minWidth: 100,
-                      maxWidth: context.mdSize.width * 0.7,
-                    ),
-                    child: ShadInput(
-                      controller: noteController,
-                      textCapitalization: TextCapitalization.sentences,
-                      placeholderAlignment: Alignment.center,
-                      textAlign: TextAlign.center,
-                      placeholder: const Text("Add note"),
-                      minLines: 1,
-                      maxLines: 2,
-                    ),
-                  ),
-                ),
+                AddNoteWidget(noteController: noteController),
               ],
             ),
           ),
@@ -201,6 +155,92 @@ class _NewTransactionSheetState extends State<NewTransactionSheet> {
             },
           ),
         ],
+      ),
+    );
+  }
+}
+
+class OtherPartySelector extends StatelessWidget {
+  const OtherPartySelector({
+    super.key,
+    required this.onTap,
+    required this.selectedParty,
+    required this.transferringTo,
+    required this.selectedTxnType,
+  });
+
+  final VoidCallback onTap;
+
+  final Party? selectedParty;
+  final Account? transferringTo;
+  final TxnType? selectedTxnType;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.translucent,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 8,
+          vertical: 2,
+        ),
+        decoration: selectedParty != null || transferringTo != null
+            ? null
+            : BoxDecoration(
+                border: Border.all(
+                  //! needs to define a color for this
+                  color: context.colorScheme.primary.withValues(
+                    alpha: 0.2,
+                  ),
+                ),
+                borderRadius: UiConsts.borderRadius,
+              ),
+        child: Text(
+          '${selectedTxnType?.actionLabel}'
+          ' ${selectedTxnType == TxnType.transfer ? transferringTo?.name ?? '?' : selectedParty?.name ?? '?'}',
+          textAlign: TextAlign.center,
+          //! needs to define a color for this
+          style: context.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: selectedParty == null
+                //! needs to define a color for this
+                ? context.colorScheme.primary.withValues(
+                    alpha: 0.3,
+                  )
+                : context.colorScheme.primary,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AddNoteWidget extends StatelessWidget {
+  const AddNoteWidget({
+    super.key,
+    required this.noteController,
+  });
+
+  final TextEditingController noteController;
+
+  @override
+  Widget build(BuildContext context) {
+    return IntrinsicWidth(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minWidth: 100,
+          maxWidth: context.mdSize.width * 0.7,
+        ),
+        child: ShadInput(
+          controller: noteController,
+          textCapitalization: TextCapitalization.sentences,
+          placeholderAlignment: Alignment.center,
+          textAlign: TextAlign.center,
+          placeholder: const Text("Add note"),
+          minLines: 1,
+          maxLines: 2,
+        ),
       ),
     );
   }
