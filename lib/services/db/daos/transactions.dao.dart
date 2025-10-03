@@ -179,4 +179,45 @@ class TnxDao {
       );
     }).toList();
   }
+
+  Future<model.Transaction?> getSingleTransaction(int transactionId) async {
+    final res = await _db.rawQuery(
+      TnxQuery.getSingleTransaction,
+      [transactionId],
+    );
+    final tnx = res.singleOrNull;
+    if (tnx == null) return null;
+
+    final account = Account(
+      id: tnx['account_id']! as int,
+      name: tnx['account_name']! as String,
+    );
+
+    final type = TxnType.fromId(tnx['transaction_type_id']! as int);
+
+    final party = tnx['party_id'] != null
+        ? Party(
+            id: tnx['party_id']! as int,
+            name: tnx['party_name']! as String,
+          )
+        : null;
+    final transferredTo = tnx['transferred_to_account_id'] != null
+        ? Account(
+            id: tnx['transferred_to_account_id']! as int,
+            name: tnx['transferred_to_account_name']! as String,
+          )
+        : null;
+    return model.Transaction(
+      id: tnx['id']! is int ? tnx['id']!.toString() : tnx['id']! as String,
+      amount: tnx['amount']! as double,
+      account: account,
+      type: type,
+      transactionAt: DateTime.parse(
+        tnx['transaction_at']! as String,
+      ).toLocal(),
+      party: party,
+      transferredTo: transferredTo,
+      description: tnx['description'] as String?,
+    );
+  }
 }
