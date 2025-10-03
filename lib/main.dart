@@ -11,11 +11,11 @@ void main() async {
   final binding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: binding);
 
-  await AppDatabase().open();
+  await AppDb().open();
 
   runApp(
     AccountsProvider(
-      controller: AccountsLogic(AppDatabase().transactionDao),
+      controller: AccountsLogic(AppDb().transactionDao),
       child: TransactionsProvider(
         child: const MyApp(),
       ),

@@ -5,10 +5,10 @@ import 'package:pennyboxapp/services/db/models/party.model.dart';
 
 class SelectPartyLogic extends ChangeNotifier {
   SelectPartyLogic() {
-    _dao = AppDatabase().transactionDao;
+    _dao = AppDb().transactionDao;
     getParties();
   }
-  late final TransactionDao _dao;
+  late final TnxDao _dao;
 
   List<Party> parties = [];
 

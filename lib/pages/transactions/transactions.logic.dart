@@ -8,7 +8,7 @@ import 'package:pennyboxapp/services/event_bus/event_bus.dart';
 
 class TransactionsLogic extends ChangeNotifier {
   TransactionsLogic() {
-    _dao = AppDatabase().transactionDao;
+    _dao = AppDb().transactionDao;
 
     getHistory();
     getPlanned();
@@ -18,7 +18,7 @@ class TransactionsLogic extends ChangeNotifier {
     );
   }
 
-  late final TransactionDao _dao;
+  late final TnxDao _dao;
   StreamSubscription<FetchTransactions>? _event;
 
   List<Transaction> history = [];
