@@ -8,7 +8,9 @@ import 'package:pennyboxapp/core/utils/number.utils.dart';
 import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
 import 'package:pennyboxapp/services/db/models/transaction.model.dart';
 import 'package:pennyboxapp/sheets/delete_transaction/delete_transaction.sheet.dart';
+import 'package:pennyboxapp/sheets/new_transaction/edit_transaction.sheet.dart';
 import 'package:pennyboxapp/sheets/new_transaction/new_transaction.sheet.dart';
+import 'package:pennyboxapp/sheets/transaction_action.sheet.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class TransactionsPage extends StatelessWidget {
@@ -136,11 +138,20 @@ class _TransactionListView extends StatelessWidget {
         final transaction = transactions[index];
         return ListTile(
           //TODO: Delete should be SOFT
-          onLongPress: () => DeleteTransactionSheet(
-            onDelete: () => controller.delete(
-              id: transaction.id.toIntOrNull(),
-              transferId: transaction.id,
+          onLongPress: () => TransactionActionSheet(
+            onEdit: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (context) => EditTransactionPage(
+                  transactionId: transaction.id,
+                ),
+              ),
             ),
+            onDelete: () => DeleteTransactionSheet(
+              onDelete: () => controller.delete(
+                id: transaction.id.toIntOrNull(),
+                transferId: transaction.id,
+              ),
+            ).show(context),
           ).show(context),
           leading: Container(
             decoration: ShapeDecoration(

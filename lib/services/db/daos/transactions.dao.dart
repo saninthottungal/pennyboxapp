@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
 import 'package:pennyboxapp/services/db/daos/transactions.queries.dart';
 import 'package:pennyboxapp/services/db/models/account.model.dart';
@@ -143,8 +141,6 @@ class TnxDao {
       ),
     );
 
-    log(res.length.toString());
-
     return res.map((row) {
       final account = Account(
         id: row['account_id']! as int,
@@ -180,7 +176,7 @@ class TnxDao {
     }).toList();
   }
 
-  Future<model.Transaction?> getSingleTransaction(int transactionId) async {
+  Future<model.Transaction?> getSingleTransaction(dynamic transactionId) async {
     final res = await _db.rawQuery(
       TnxQuery.getSingleTransaction,
       [transactionId],

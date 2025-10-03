@@ -128,4 +128,17 @@ class NewTransactionLogic extends ChangeNotifier {
 
     return true;
   }
+
+  Future<void> getSingleTransaction(String id) async {
+    final idNumber = int.tryParse(id);
+    final tnx = await _dao.getSingleTransaction(idNumber ?? id);
+    if (tnx == null) throw Exception("Transaction not found");
+
+    selectedAccount = tnx.account;
+    selectedTxnType = tnx.type;
+    selectedParty = tnx.party;
+    amount = tnx.amount.toString();
+    //description
+    //time
+  }
 }
