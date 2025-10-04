@@ -139,13 +139,18 @@ class _TransactionListView extends StatelessWidget {
         return ListTile(
           //TODO: Delete should be SOFT
           onLongPress: () => TransactionActionSheet(
-            onEdit: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (context) => EditTransactionPage(
-                  transactionId: transaction.id,
+            onEdit: () {
+              //TODO: Editing transfer
+              if (transaction.type.isTransfer) return;
+
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (context) => EditTransactionPage(
+                    transactionId: transaction.id,
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
             onDelete: () => DeleteTransactionSheet(
               onDelete: () => controller.delete(
                 id: transaction.id.toIntOrNull(),
