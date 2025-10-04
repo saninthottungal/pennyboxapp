@@ -10,11 +10,13 @@ class ShadDateTimePicker extends StatefulWidget {
     required this.initialDateTime,
     required this.onChanged,
     this.margin,
+    this.runClock = true,
   });
 
   final DateTime initialDateTime;
   final ValueChanged<DateTime> onChanged;
   final EdgeInsets? margin;
+  final bool runClock;
 
   @override
   State<ShadDateTimePicker> createState() => _ShadDateTimePickerState();
@@ -28,15 +30,17 @@ class _ShadDateTimePickerState extends State<ShadDateTimePicker> {
   void initState() {
     _selected = widget.initialDateTime;
 
-    _timer = Timer.periodic(
-      const Duration(seconds: 1),
-      (_) => setState(
-        () {
-          _selected = DateTime.now();
-          widget.onChanged(_selected);
-        },
-      ),
-    );
+    if (widget.runClock) {
+      _timer = Timer.periodic(
+        const Duration(seconds: 1),
+        (_) => setState(
+          () {
+            _selected = DateTime.now();
+            widget.onChanged(_selected);
+          },
+        ),
+      );
+    }
     super.initState();
   }
 

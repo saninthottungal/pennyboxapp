@@ -11,12 +11,14 @@ class TnxActionsRow extends StatelessWidget {
     required this.onChanged,
     required this.onBackSpace,
     required this.onClear,
+    required this.runClock,
   });
 
   final DateTime initialDateTime;
   final ValueChanged<DateTime> onChanged;
   final VoidCallback onBackSpace;
   final VoidCallback onClear;
+  final bool runClock;
 
   @override
   Widget build(BuildContext context) {

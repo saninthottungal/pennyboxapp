@@ -30,10 +30,12 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
   @override
   void initState() {
     super.initState();
-    controller = NewTransactionLogic()
-      ..getSingleTransaction(widget.transactionId);
-
     noteController = TextEditingController();
+
+    controller = NewTransactionLogic();
+    controller.getSingleTransaction(widget.transactionId).then((tnx) {
+      if (context.mounted) noteController.text = tnx?.description ?? '';
+    });
   }
 
   @override
@@ -117,11 +119,17 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
               ),
 
               /// Actions row
-              TnxActionsRow(
-                initialDateTime: transactionAt,
-                onChanged: (value) => transactionAt = value,
-                onBackSpace: controller.backSpace,
-                onClear: controller.clear,
+              ListenableBuilder(
+                listenable: controller,
+                builder: (context, child) {
+                  return TnxActionsRow(
+                    initialDateTime: controller.transactionAt ?? transactionAt,
+                    runClock: false,
+                    onChanged: (value) => transactionAt = value,
+                    onBackSpace: controller.backSpace,
+                    onClear: controller.clear,
+                  );
+                },
               ),
 
               /// Number pad

@@ -118,6 +118,7 @@ class _NewTransactionSheetState extends State<NewTransactionSheet> {
           /// Actions row
           TnxActionsRow(
             initialDateTime: transactionAt,
+            runClock: true,
             onChanged: (value) => transactionAt = value,
             onBackSpace: controller.backSpace,
             onClear: controller.clear,

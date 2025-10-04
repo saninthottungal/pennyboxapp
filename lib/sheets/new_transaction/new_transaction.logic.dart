@@ -4,6 +4,7 @@ import 'package:pennyboxapp/services/db/daos/transactions.dao.dart';
 import 'package:pennyboxapp/services/db/db.dart';
 import 'package:pennyboxapp/services/db/models/account.model.dart';
 import 'package:pennyboxapp/services/db/models/party.model.dart';
+import 'package:pennyboxapp/services/db/models/transaction.model.dart';
 import 'package:pennyboxapp/services/event_bus/event_bus.dart';
 
 class NewTransactionLogic extends ChangeNotifier {
@@ -129,7 +130,9 @@ class NewTransactionLogic extends ChangeNotifier {
     return true;
   }
 
-  Future<void> getSingleTransaction(String id) async {
+  DateTime? transactionAt;
+
+  Future<Transaction?> getSingleTransaction(String id) async {
     final idNumber = int.tryParse(id);
     final tnx = await _dao.getSingleTransaction(idNumber ?? id);
     if (tnx == null) throw Exception("Transaction not found");
@@ -138,7 +141,7 @@ class NewTransactionLogic extends ChangeNotifier {
     selectedTxnType = tnx.type;
     selectedParty = tnx.party;
     amount = tnx.amount.toString();
-    //description
-    //time
+    transactionAt = tnx.transactionAt;
+    return tnx;
   }
 }
