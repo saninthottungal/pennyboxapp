@@ -48,11 +48,9 @@ class OtherPartySelector extends StatelessWidget {
           //! needs to define a color for this
           style: context.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
-            color: selectedParty == null
+            color: selectedParty == null && transferringTo == null
                 //! needs to define a color for this
-                ? context.colorScheme.primary.withValues(
-                    alpha: 0.3,
-                  )
+                ? context.colorScheme.primary.withValues(alpha: 0.3)
                 : context.colorScheme.primary,
           ),
         ),
