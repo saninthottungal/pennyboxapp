@@ -220,7 +220,7 @@ class TnxDao {
 
   Future<bool> editTransaction(
     String transactionId, {
-    DbValue<int> amount = const DbValue.absent(),
+    DbValue<double> amount = const DbValue.absent(),
     DbValue<DateTime> transactionAt = const DbValue.absent(),
     DbValue<int> accountId = const DbValue.absent(),
     DbValue<int> transactionTypeId = const DbValue.absent(),

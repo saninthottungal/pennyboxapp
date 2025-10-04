@@ -144,4 +144,39 @@ class NewTransactionLogic extends ChangeNotifier {
     transactionAt = tnx.transactionAt;
     return tnx;
   }
+
+  Future<bool> editTransaction(
+    String id, {
+    required DateTime transactionAt,
+    required String? description,
+  }) async {
+    if (selectedAccount == null ||
+        selectedTxnType == null ||
+        double.tryParse(amount) == null ||
+        (selectedParty == null && transferringTo == null) ||
+        double.tryParse(amount) == null ||
+        selectedAccount?.id == transferringTo?.id) {
+      return false;
+    }
+    final isSuccess = await _dao.editTransaction(
+      id,
+      amount: DbValue(double.parse(amount)),
+      accountId: DbValue(selectedAccount?.id),
+      description: DbValue(description),
+      partyId: DbValue(selectedParty?.id),
+      transactionAt: DbValue(transactionAt),
+      transactionTypeId: DbValue(selectedTxnType?.id),
+      transferId: DbValue(transferringTo?.id),
+    );
+
+    eventBus
+      ..fire(FetchAccountBalances())
+      ..fire(
+        FetchTransactions(
+          planned: transactionAt.isAfter(DateTime.now()),
+        ),
+      );
+
+    return isSuccess;
+  }
 }

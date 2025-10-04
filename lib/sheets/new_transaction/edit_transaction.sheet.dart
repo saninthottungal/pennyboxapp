@@ -32,7 +32,10 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
     super.initState();
     noteController = TextEditingController();
 
-    controller = NewTransactionLogic();
+    controller = NewTransactionLogic()
+      ..getAccounts()
+      ..getTrancationTypes();
+
     controller.getSingleTransaction(widget.transactionId).then((tnx) {
       if (context.mounted) noteController.text = tnx?.description ?? '';
     });
@@ -136,11 +139,11 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
               TnxNumPad(
                 onPressed: controller.append,
 
-                //! change onDone
                 onDone: () async {
                   final note = noteController.text.trim();
 
-                  final success = await controller.addTransaction(
+                  final success = await controller.editTransaction(
+                    widget.transactionId,
                     transactionAt: transactionAt,
                     description: note.isNotEmpty ? note : null,
                   );
