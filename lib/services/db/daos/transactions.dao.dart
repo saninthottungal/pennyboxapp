@@ -1,5 +1,6 @@
 import 'package:pennyboxapp/core/enums/transaction_type.enum.dart';
 import 'package:pennyboxapp/services/db/daos/transactions.queries.dart';
+import 'package:pennyboxapp/services/db/db.dart';
 import 'package:pennyboxapp/services/db/models/account.model.dart';
 import 'package:pennyboxapp/services/db/models/account_with_balance.model.dart';
 import 'package:pennyboxapp/services/db/models/party.model.dart';
@@ -215,5 +216,43 @@ class TnxDao {
       transferredTo: transferredTo,
       description: tnx['description'] as String?,
     );
+  }
+
+  Future<bool> editTransaction(
+    String transactionId, {
+    DbValue<int> amount = const DbValue.absent(),
+    DbValue<DateTime> transactionAt = const DbValue.absent(),
+    DbValue<int> accountId = const DbValue.absent(),
+    DbValue<int> transactionTypeId = const DbValue.absent(),
+    DbValue<int> partyId = const DbValue.absent(),
+    DbValue<int> transferId = const DbValue.absent(),
+    DbValue<String> description = const DbValue.absent(),
+  }) async {
+    final updates = <String, dynamic>{};
+
+    if (amount.isSet) updates['amount'] = amount.value;
+    if (description.isSet) updates['description'] = description.value;
+    if (transactionAt.isSet) {
+      updates['transaction_at'] = transactionAt.value
+          ?.toUtc()
+          .toIso8601String();
+    }
+    if (accountId.isSet) updates['account_id'] = accountId.value;
+    if (transactionTypeId.isSet) {
+      updates['transaction_type_id'] = transactionTypeId.value;
+    }
+    if (partyId.isSet) updates['party_id'] = partyId.value;
+    if (transferId.isSet) updates['transfer_id'] = transferId.value;
+
+    if (updates.isEmpty) return false;
+
+    final count = await _db.update(
+      'transactions',
+      updates,
+      where: 'id = ?',
+      whereArgs: [transactionId],
+    );
+
+    return count > 0;
   }
 }

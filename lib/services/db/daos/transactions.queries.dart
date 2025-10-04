@@ -211,6 +211,20 @@ VALUES
 ''';
   }
 
+  static String get editTransaction {
+    return '''
+UPDATE transactions
+SET amount = ?,
+description = ?,
+transaction_at = ?,
+account_id = ?,
+transaction_type_id = ?,
+party_id = ?,
+transfer_id = ?
+WHERE id = ?
+''';
+  }
+
   //* Helper Methods
   static String limitClause(int? limit) {
     if (limit == null || limit == 0) return '';

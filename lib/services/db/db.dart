@@ -49,3 +49,11 @@ class AppDb {
     return _db;
   }
 }
+
+class DbValue<T> {
+  final T? value;
+  final bool isSet;
+
+  const DbValue(this.value) : isSet = true;
+  const DbValue.absent() : isSet = false, value = null;
+}
