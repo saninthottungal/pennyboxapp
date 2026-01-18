@@ -5,6 +5,7 @@ import 'package:pennyboxapp/core/constants/ui_conts.dart';
 import 'package:pennyboxapp/core/utils/app_date.utils.dart';
 import 'package:pennyboxapp/core/utils/context.utils.dart';
 import 'package:pennyboxapp/core/utils/number.utils.dart';
+import 'package:pennyboxapp/pages/home/home.page.dart';
 import 'package:pennyboxapp/pages/transactions/transactions.logic.dart';
 import 'package:pennyboxapp/services/db/models/transaction.model.dart';
 import 'package:pennyboxapp/sheets/delete_transaction/delete_transaction.sheet.dart';
@@ -46,26 +47,35 @@ class TransactionsPage extends StatelessWidget {
                 ],
               ),
 
+              SliverPadding(
+                padding: EdgeInsets.symmetric(vertical: context.gutter),
+                sliver: const Accounts(),
+              ),
+
               SliverAppBar(
                 primary: false,
                 titleSpacing: 0,
                 floating: true,
                 snap: true,
-                title: Row(
-                  spacing: context.gutter,
-                  children: const [
-                    Expanded(
-                      child: ShadInput(
-                        placeholder: Text("Search Transactions"),
-                        leading: Icon(Icons.search),
-                      ),
-                    ),
 
-                    ShadIconButton.outline(
-                      icon: Icon(Icons.filter_list),
-                    ),
-                  ],
-                ),
+                toolbarHeight: 0,
+
+                // !Search and filter commented temporarly
+                // title: Row(
+                //   spacing: context.gutter,
+                //   children: const [
+                //     Expanded(
+                //       child: ShadInput(
+                //         placeholder: Text("Search Transactions"),
+                //         leading: Icon(Icons.search),
+                //       ),
+                //     ),
+
+                //     ShadIconButton.outline(
+                //       icon: Icon(Icons.filter_list),
+                //     ),
+                //   ],
+                // ),
                 surfaceTintColor: context.colorScheme.surface,
                 bottom: PreferredSize(
                   preferredSize: const Size.fromHeight(kToolbarHeight),

@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
         slivers: [
           SizedBox(height: context.mdPadding.top + context.gutter).asSliver(),
 
-          const _Accounts(),
+          const Accounts(),
 
           const Gutter.large().asSliver(),
           Row(
@@ -142,14 +142,14 @@ class _QuickAction extends StatelessWidget {
   }
 }
 
-class _Accounts extends StatefulWidget {
-  const _Accounts();
+class Accounts extends StatefulWidget {
+  const Accounts();
 
   @override
   _AccountsState createState() => _AccountsState();
 }
 
-class _AccountsState extends State<_Accounts> {
+class _AccountsState extends State<Accounts> {
   @override
   Widget build(BuildContext context) {
     final controller = AccountsProvider.of(context)
