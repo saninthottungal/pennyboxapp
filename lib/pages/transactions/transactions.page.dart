@@ -140,6 +140,10 @@ class _TransactionListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = TransactionsProvider.of(context);
 
+    if (transactions.isEmpty) {
+      return const _TransactionsEmpty();
+    }
+
     return ListView.separated(
       padding: EdgeInsets.zero,
       itemCount: transactions.length,
@@ -227,6 +231,33 @@ class _TransactionListView extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _TransactionsEmpty extends StatelessWidget {
+  const _TransactionsEmpty();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: .center,
+      children: [
+        Icon(
+          Icons.disabled_by_default_outlined,
+          color: Colors.grey.withValues(alpha: 0.5),
+          size: MediaQuery.sizeOf(context).height * .2,
+        ),
+        Text(
+          "No Transactions yet, try adding one!",
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.grey.withValues(alpha: 0.5),
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }
