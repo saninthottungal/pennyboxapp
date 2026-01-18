@@ -48,8 +48,7 @@ class DbMigrations {
     '''
         INSERT INTO transaction_types (kind) VALUES 
         ("Income"),
-        ("Expense"),
-        ("Transfer");
+        ("Expense");
         ''',
   ];
 

@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pennyboxapp/services/db/daos/transactions.dao.dart';
@@ -23,11 +23,11 @@ class AppDb {
     final dbFolder = await getApplicationDocumentsDirectory();
     final String path;
 
-    if (kDebugMode) {
-      path = '/Users/paiteq/Developer/personal/dbs/pennybox.sqlite';
-    } else {
-      path = join(dbFolder.path, 'pennyboxdb.sqlite');
-    }
+    // if (kDebugMode) {
+    //   path = '/Users/paiteq/Developer/personal/dbs/pennybox.sqlite';
+    // } else {
+    path = join(dbFolder.path, 'pennyboxdb.sqlite');
+    // }
 
     _db = await openDatabase(
       path,
